@@ -15,6 +15,26 @@ const routes = [
     name: "Login",
     component: () => import("../views/Auth/Login.vue"),
   },
+  {
+    path: "/verify",
+    name: "Verify",
+    component: () => import("../views/Auth/verify.vue"),
+  },
+  {
+    path: "/forgetpassword",
+    name: "ForgetPassword",
+    component: () => import("../views/Auth/forgetpassword.vue"),
+  },
+  {
+    path: "/changepassword",
+    name: "Changepassword",
+    component: () => import("../views/Auth/changepassword.vue"),
+  },
+  {
+    path: "/main",
+    name: "Main",
+    component: () => import("../views/main.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

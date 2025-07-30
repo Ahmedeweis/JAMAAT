@@ -37,3 +37,9 @@ src/
 │
 ├── App.vue
 └── main.js
+amd 
+amd
+amd@gmail.com
+01153161437
+12345678
+email=amd2@gmail.com

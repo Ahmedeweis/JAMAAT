@@ -63,9 +63,12 @@ v-model="fname"
 </template>
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import bg from '../../assets/imgs/splash.png'
+import { useToast } from 'vue-toastification'
 import { register } from '../../services/authService'
-// البيانات
+const router = useRouter()
+const toast = useToast()
 const fname = ref('')
 const lname = ref('')
 const fullName = computed(() => `${fname.value} ${lname.value}`)
@@ -76,9 +79,9 @@ const phone = ref('')
 const country_code = "+20"
 const handleRegister = async () => {
   if (password.value !== confirmPassword.value) {
-  console.error("كلمة المرور وتأكيدها غير متطابقين")
-  return
-}
+    toast.error('كلمة المرور غير متطابقة')
+    return
+  }
   try {
     const res = await register({
       name: fullName.value,
@@ -88,9 +91,15 @@ const handleRegister = async () => {
       lang: "en",
       password: password.value
     })
-    console.log('✅ تم التسجيل بنجاح:', res.data)
+    toast.success(res.data.message || 'تم التسجيل بنجاح')
+    setTimeout(() => {
+      router.push({
+      path: '/verify',
+      query: { email: email.value }
+    })
+    }, 2000)
   } catch (err) {
-    console.error('❌ فشل التسجيل:', err.response?.data)
+    toast.error(err.response?.data?.message || 'حدث خطأ في التسجيل')
   }
 }
 </script>
