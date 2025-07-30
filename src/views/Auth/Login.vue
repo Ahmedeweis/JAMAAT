@@ -25,7 +25,7 @@
                             class="p-2 placeholder-[#D5C1EE] text-[#24054C] text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
                             placeholder="كلمة المرور">
                     </div>
-                    <router-link to="forgetPassword" class="text-[#E3614E]  mt-[10px] block text-right">
+                    <router-link to="/forgetpassword" class="text-[#E3614E]  mt-[10px] block text-right">
                         هل نسيت كلمة المرور ؟
                     </router-link>
                 </form>
