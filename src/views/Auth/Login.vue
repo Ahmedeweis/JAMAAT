@@ -1,6 +1,6 @@
 <template>
     <div class="bg-cover bg-center min-h-screen" :style="`background-image: url(${bg});`">
-        <div class="  flex items-center justify-around  w-full  pt-[15px]  flex-col md:flex-row  gap-8">
+        <div class="  flex items-center justify-around  w-full  pt-[30px]  flex-col md:flex-row  gap-8">
             <!-- <h1 class="text-5xl md:text-6xl font-bold text-yellow-500 mb-8">JAMAAT</h1> -->
             <div>
                 <img src="../../assets/imgs/logo.png">
