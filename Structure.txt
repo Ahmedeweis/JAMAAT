@@ -1,0 +1,39 @@
+src/
+│
+├── assets/               # صور ثابتة وأيقونات وصوتيات
+│
+├── components/           # كمبوننتات عامة
+│   ├── BaseButton.vue
+│   ├── QuestionCard.vue
+│   └── GameHeader.vue
+│
+├── views/                # صفحات رئيسية
+│   ├── Home.vue
+│   ├── GameOne.vue       # اللعبة الأولى
+│   ├── GameTwo.vue       # اللعبة الثانية
+│   └── Profile.vue       # حساب المستخدم
+│
+├── layout/               # شكل التطبيق العام (Header / Footer)
+│   └── DefaultLayout.vue
+│
+├── router/               # إعداد الراوتر
+│   └── index.js
+│
+├── store/                # Pinia/Vuex لتخزين الحالة
+│   └── user.js
+│   └── game.js
+│
+├── services/             # التعامل مع الـ API
+│   └── authService.js
+│   └── categoryService.js
+│   └── questionService.js
+│
+├── composables/          # منطق الألعاب (Game Logic)
+│   └── useGameOne.js
+│   └── useGameTwo.js
+│
+├── utils/                # أدوات مساعدة (مثل formatDate، shuffleArray)
+│   └── helpers.js
+│
+├── App.vue
+└── main.js
