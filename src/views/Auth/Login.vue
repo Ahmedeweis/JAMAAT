@@ -11,7 +11,7 @@
                     <router-link to="/signup">إنشاء حساب</router-link>
                     <router-link to="/login" class="text-[#E3614E]">تسجيل الدخول</router-link>
                 </div>
-                <form class="bg-white rounded-3xl p-6 w-[full] h-[430px] max-w-md shadow-lg"
+             <form class="bg-white rounded-3xl p-6 w-full h-[250px] md:h-[430px] max-w-md shadow-lg"
                     style="font-family: 'Cairo', sans-serif;">
                     <div class="flex flex-col text-right">
                         <label class="text-purple-800 mb-1">البريد الإلكتروني أو الهاتف</label>
