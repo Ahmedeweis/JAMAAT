@@ -24,6 +24,7 @@
   <div class="flex flex-col text-right">
     <label class="text-[#663D9C] mb-1">إسم العائلة</label>
 <input
+v-model="fname"
   type="text"
   class="p-2 rounded-3xl text-[#24054C] bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none text-right placeholder-[#D5C1EE]"
   placeholder="سجل الإسم"
@@ -32,38 +33,66 @@
   <!-- الاسم الأول -->
   <div class="flex flex-col text-right">
     <label class="text-[#663D9C] mb-1">الإسم الأول</label>
-    <input type="text"  class="p-2  placeholder-[#D5C1EE] text-[#24054C]  rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none text-right" placeholder="سجل الإسم">
+    <input v-model="lname" type="text"  class="p-2  placeholder-[#D5C1EE] text-[#24054C]  rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none text-right" placeholder="سجل الإسم">
   </div>
 </div>
   <div class="flex flex-col text-right">
           <label class="text-purple-800 mb-1">البريد الإلكتروني</label>
-  <input type="text"  class="p-2  placeholder-[#D5C1EE] text-[#24054C] font-bold text-left rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" placeholder="Mayada123@gmail.com" value="Mayada123@gmail.com">
+  <input type="email" v-model="email" class="p-2  placeholder-[#D5C1EE] text-[#24054C] font-bold text-left rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" placeholder="Mayada123@gmail.com" value="Mayada123@gmail.com">
         </div>
                 <div class="flex flex-col text-right">
           <label class="text-purple-800 mb-1">رقم الجوال</label>
-          <input type="tel" class="p-2 placeholder-[#D5C1EE] text-[#24054C]  text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" placeholder="رقم الجوال">
+          <input type="tel" v-model="phone" class="p-2 placeholder-[#D5C1EE] text-[#24054C]  text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" placeholder="رقم الجوال">
         </div>
           <div class="flex flex-col text-right">
           <label class="text-purple-800 mb-1">كلمة المرور</label>
-          <input type="password" class="p-2 placeholder-[#D5C1EE] text-[#24054C] text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" placeholder="كلمة المرور">
+          <input type="password" v-model="password" class="p-2 placeholder-[#D5C1EE] text-[#24054C] text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" placeholder="كلمة المرور">
         </div>
         <div class="flex flex-col text-right">
           <label class="text-purple-800 mb-1">تأكيد كلمة المرور</label>
-          <input type="password" class="p-2 placeholder-[#D5C1EE] text-[#24054C]  text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"placeholder="تأكيد كلمة المرور">
+          <input type="password" v-model="confirmPassword" class="p-2 placeholder-[#D5C1EE] text-[#24054C]  text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"placeholder="تأكيد كلمة المرور">
         </div>
       </div>
     </form>
-    <router-link to="/dashboard">
-        <button class="w-full bg-[#E3614E] text-white p-3 rounded-4xl mt-6 hover:bg-red-600 transition duration-200">
+        <button @click="handleRegister" class="w-full cursor-pointer bg-[#E3614E] text-white p-3 rounded-4xl mt-6 hover:bg-red-600 transition duration-200">
           إنشاء حساب
         </button>
-      </router-link>
     </div>
   </div>
    </div>
 </template>
 <script setup>
+import { ref, computed } from 'vue'
 import bg from '../../assets/imgs/splash.png'
+import { register } from '../../services/authService'
+// البيانات
+const fname = ref('')
+const lname = ref('')
+const fullName = computed(() => `${fname.value} ${lname.value}`)
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
+const phone = ref('')
+const country_code = "+20"
+const handleRegister = async () => {
+  if (password.value !== confirmPassword.value) {
+  console.error("كلمة المرور وتأكيدها غير متطابقين")
+  return
+}
+  try {
+    const res = await register({
+      name: fullName.value,
+      email: email.value,
+      phone: phone.value,
+      country_code: country_code,
+      lang: "en",
+      password: password.value
+    })
+    console.log('✅ تم التسجيل بنجاح:', res.data)
+  } catch (err) {
+    console.error('❌ فشل التسجيل:', err.response?.data)
+  }
+}
 </script>
 <style scoped>
 /* Additional custom styles if needed */

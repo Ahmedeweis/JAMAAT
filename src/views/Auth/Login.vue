@@ -41,6 +41,18 @@
 </template>
 <script setup>
 import bg from '../../assets/imgs/splash.png'
+import { login } from '../../services/authService'
+const handleLogin = async () => {
+  try {
+    const res = await login({
+      email: email.value,
+      password: password.value
+    })
+    console.log(res.data)
+  } catch (err) {
+    console.error('فشل تسجيل الدخول', err)
+  }
+}
 </script>
 <style scoped>
 /* Additional custom styles if needed */
