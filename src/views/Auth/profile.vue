@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <div class=" bg-white bg-opacity-90 shadow-lg m-4 rounded-4xl  flex flex-col items-center justify-between">
+        <div class=" bg-white bg-opacity-90 shadow-lg m-4 rounded-4xl overlay flex flex-col items-center justify-between">
             <side />
         </div>
     </div>
