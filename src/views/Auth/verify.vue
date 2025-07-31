@@ -57,9 +57,9 @@ const handleVerify = async () => {
     const otp = verificationCode.value;
     const response = await verifyOTP(otp, email);
     const token = response.data.access_token;
-    localStorage.setItem("token", token); // ✅ حفظ التوكن
+    localStorage.setItem("token", token);
     toast.success('✅ تم التحقق بنجاح');
-    router.push('/main'); // ✅ توجيه المستخدم للصفحة الرئيسية
+    router.push('/main');
   } catch (err) {
     toast.error(err.response?.data?.message || '❌ رمز التحقق غير صحيح');
   }

@@ -14,5 +14,4 @@
   </div>
 </template>
 <script setup>
-// لا حاجة لأي منطق هنا الآن
 </script>

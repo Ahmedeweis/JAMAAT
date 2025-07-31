@@ -61,7 +61,6 @@ const handleLogin = async () => {
             password: password.value
         })
         const data = res.data
-        // تأكد إن فيه توكن ورجع المستخدم
         if (data?.token && data?.user) {
 if (data?.token && data?.user) {
   // حفظ البيانات في Pinia

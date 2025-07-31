@@ -113,11 +113,9 @@ const handleFileUpload = async (event) => {
   const file = event.target.files[0]
   if (!file) return
   try {
-    // عرض مؤقت للصورة أثناء الرفع
     const previewImage = URL.createObjectURL(file)
     imageUrl.value = previewImage
     const res = await uploadAvatar(file)
-    // نحصل على الرابط الحقيقي من الريسبونس
     const uploadedUrl = res.data.avatar_url
     if (uploadedUrl) {
 const cleanUrl = uploadedUrl.replace(/([^:]\/)\/+/g, "$1")

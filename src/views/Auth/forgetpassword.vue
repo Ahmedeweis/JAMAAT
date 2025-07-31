@@ -43,10 +43,9 @@ const handleForgotPassword = async () => {
 }
     await resendOTP(email.value)
     toast.success('✅ تم إرسال كود التحقق إلى بريدك الإلكتروني')
-    // ✅ التوجيه لصفحة التحقق وتمرير الإيميل
     router.push({
       path: '/verify-otp',
-      query: { email: email.value, from: 'forgot' } // ممكن نستخدم from للتمييز لاحقًا
+      query: { email: email.value, from: 'forgot' }
     })
   } catch (err) {
     toast.error(err.response?.data?.message || '❌ فشل في إرسال الكود')
