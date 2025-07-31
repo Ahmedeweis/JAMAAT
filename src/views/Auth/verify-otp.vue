@@ -46,6 +46,8 @@ const router = useRouter()
 const route = useRoute()
 import bg from '../../assets/imgs/splash.png'
 import { useToast } from 'vue-toastification'
+import { useUserStore } from '../../stores/user'
+const userStore = useUserStore()
 const toast = useToast()
 const email = route.query.email || ''
 const code = ref(['', '', '', '','',''])
@@ -57,13 +59,17 @@ const handleVerify = async () => {
     const otp = verificationCode.value;
     const response = await verifyOTP(otp, email);
     const token = response.data.access_token;
-    localStorage.setItem("token", token); // ✅ حفظ التوكن
+    const user = response.data.user
+    localStorage.setItem("token", token)
+    localStorage.setItem("user", JSON.stringify(user))
+    // ✅ تحديث Pinia كمان
+    userStore.setUserData({ token, user })
     toast.success('✅ تم التحقق بنجاح');
-    router.push('/main'); // ✅ توجيه المستخدم للصفحة الرئيسية
+    router.push('/changepassword')
   } catch (err) {
     toast.error(err.response?.data?.message || '❌ رمز التحقق غير صحيح');
   }
-};
+}
 const focusNext = (event, index) => {
   const input = event.target
   if (input.value.length === 1 && index < code.value.length - 1) {

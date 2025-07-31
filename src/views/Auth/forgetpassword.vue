@@ -14,12 +14,12 @@
                     style="font-family: 'Cairo', sans-serif;">
                     <div class="flex flex-col text-right">
                         <label class="text-purple-800 mb-5">البريد الإلكتروني  </label>
-                        <input type="text" v-model="emailOrPhone"
+                        <input type="text" v-model="email"
                             class="p-2  placeholder-[#D5C1EE]  text-[#24054C] font-bold text-left rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
                             placeholder="Mayada123@gmail.com">
                     </div>
                 </form>
-      <button @click="handleResend()" class="w-[300px] cursor-pointer bg-[#E3614E] text-white p-3 rounded-4xl mt-6 hover:bg-red-600 transition duration-200">
+      <button @click="handleForgotPassword" class="w-[300px] cursor-pointer bg-[#E3614E] text-white p-3 rounded-4xl mt-6 hover:bg-red-600 transition duration-200">
         إرسال
       </button>
 </div>
@@ -27,9 +27,29 @@
    </div>
 </template>
 <script setup>
-// import { ref, computed, onMounted  } from 'vue'
-// import { useToast } from 'vue-toastification'
+import {resendOTP } from '../../services/authService.js'
+import { ref } from 'vue'
 import bg from '../../assets/imgs/splash.png'
-import { useRoute } from 'vue-router'
-const route = useRoute()
+import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
+const router = useRouter()
+const email = ref('')
+const handleForgotPassword = async () => {
+  try {
+    if (!email.value) {
+  toast.error('❌ يرجى إدخال بريد إلكتروني أولاً')
+  return
+}
+    await resendOTP(email.value)
+    toast.success('✅ تم إرسال كود التحقق إلى بريدك الإلكتروني')
+    // ✅ التوجيه لصفحة التحقق وتمرير الإيميل
+    router.push({
+      path: '/verify-otp',
+      query: { email: email.value, from: 'forgot' } // ممكن نستخدم from للتمييز لاحقًا
+    })
+  } catch (err) {
+    toast.error(err.response?.data?.message || '❌ فشل في إرسال الكود')
+  }
+}
 </script>

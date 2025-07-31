@@ -21,6 +21,11 @@ const routes = [
     component: () => import("../views/Auth/verify.vue"),
   },
   {
+    path: "/verify-otp",
+    name: "Verify-otp",
+    component: () => import("../views/Auth/verify-otp.vue"),
+  },
+  {
     path: "/forgetpassword",
     name: "ForgetPassword",
     component: () => import("../views/Auth/forgetpassword.vue"),
@@ -34,6 +39,11 @@ const routes = [
     path: "/main",
     name: "Main",
     component: () => import("../views/main.vue"),
+  },
+  {
+    path: "/profile",
+    name: "Profile",
+    component: () => import("../views/Auth/profile.vue"),
   },
 ];
 const router = createRouter({

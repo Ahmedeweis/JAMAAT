@@ -43,3 +43,6 @@ amd@gmail.com
 01153161437
 12345678
 email=amd2@gmail.com
+
+admin@app.com
+12345678

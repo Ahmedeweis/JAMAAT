@@ -4,6 +4,7 @@
     :style="`background-image: url(${bg});`"
   >
     <div class="text-center space-y-4">
+      <router-link to="/profile" class="text-white">البروفايل</router-link>
       <h1 class="text-3xl md:text-4xl font-bold text-white">الصفحة الرئيسية تحت الإنشاء</h1>
       <h2 class="text-white mt-6">نقوم حالياً بتجهيز الصفحة، شكرًا لصبرك ❤️</h2>
       <button @click="handleLogout" class="text-white underline hover:text-yellow-300 transition duration-200">

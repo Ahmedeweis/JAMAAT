@@ -8,8 +8,29 @@ export const login = (payload) => {
 export const resendVerificationCode = (email) => {
   return api.get(`/auth/resend-otp/${email}`);
 };
-export const verifyOTP = (payload) => {
-  return api.post("/auth/verify-otp", payload);
+export const verifyOTP = (otp, email) => {
+  const formData = new FormData();
+  formData.append("otp", otp);
+  return api.post(`/auth/verifyToken/${otp}/${email}`, formData);
+};
+export const updateProfile = (payload) => {
+  return api.put("/profile/update", payload, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+};
+export const uploadAvatar = (file) => {
+  const formData = new FormData();
+  formData.append("avatar", file);
+  return api.post("/profile/upload-avatar", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+export const resendOTP = (email) => {
+  return api.post(`/auth/resend-otp/${email}`);
 };
 export const getProfile = () => {
   return api.get("/user");
