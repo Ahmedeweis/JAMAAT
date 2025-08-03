@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen bg-cover bg-center flex" :style="`background-image: url(${bg});`">
         <div class="flex-1 pl-2 pb-2 pr-0 pt-0 rounded-3xl">
-            <div class="min-h-screen mt-4  rounded-3xl bg-white flex flex-col items-center justify-start p-4">
+            <div class="min-h-screen mt-4 mr-[5px] rounded-3xl bg-white flex flex-col items-center justify-start p-4">
                 <h1 class="text-3xl md:text-4xl font-bold mb-8">حسابي</h1>
                 <div class="relative w-32 h-32 mx-auto">
                     <!-- الصورة الشخصية -->
@@ -57,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <div class=" bg-white bg-opacity-90 shadow-lg m-4 rounded-4xl overlay flex flex-col items-center justify-between">
+    <div class="bg-white bg-opacity-90 shadow-lg my-4 mx-0 sm:mx-4 rounded-4xl overlay flex flex-col items-center justify-between">
             <side />
         </div>
     </div>

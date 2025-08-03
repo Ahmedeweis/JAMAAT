@@ -45,6 +45,16 @@ const routes = [
     name: "Profile",
     component: () => import("../views/Auth/profile.vue"),
   },
+  {
+    path: "/FAQ",
+    name: "FAQ",
+    component: () => import("../views/Addtions/FAQ.vue"),
+  },
+  {
+    path: "/Contact",
+    name: "Contact",
+    component: () => import("../views/Addtions/Contact.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

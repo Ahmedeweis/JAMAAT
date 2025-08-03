@@ -16,9 +16,13 @@
       <img src="../assets/imgs/side4.png" class="w-8 h-8 mb-1" />
       <h2 class="text-lg text-gray-700">حسابي</h2>
     </router-link>
-    <router-link to="" class="flex flex-col items-center w-full py-3 px-2">
+    <router-link to="/Contact" class="flex flex-col items-center w-full py-3 px-2">
       <img src="../assets/imgs/side5.png" class="w-8 h-8 mb-1 " />
       <h2 class="text-lg text-gray-700">تواصل</h2>
+    </router-link>
+        <router-link to="/FAQ" class="flex flex-col items-center w-full py-3 px-2">
+      <!-- <img src="../assets/imgs/question-mark.png" class="w-8 h-8 mb-1 " /> -->
+      <h2 class="text-xl text-white font-bold bg-[#010061] flex justify-center items-center rounded-full w-3 h-3 p-3">?</h2>
     </router-link>
   </div>
 </template>
