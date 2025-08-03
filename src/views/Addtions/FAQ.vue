@@ -13,7 +13,7 @@
               >
                 <button
                 @click="toggleFAQ(index)"
-                class="w-full text-xl  cursor-pointer flex justify-between text-right font-semibold rounded-xl focus:outline-none px-3 pb-4 pt-4 transition-colors duration-300"
+                class="w-full text-xl cursor-pointer flex justify-between items-start text-right font-semibold rounded-xl focus:outline-none px-3 pb-4 pt-4 transition-colors duration-300"
                 :class="faq.open ? 'bg-[#01004C] text-white' : 'text-[#3F0092] bg-white'"
                 >
                 <span :class="{ 'rotate-180': faq.open }" class="inline-block mr-2 transition-transform">
@@ -55,8 +55,10 @@ onMounted(async () => {
     console.error('حدث خطأ أثناء تحميل الأسئلة:', error)
   }
 })
-// لتبديل فتح وغلق السؤال
 const toggleFAQ = (index) => {
-  faqs.value[index].open = !faqs.value[index].open
+  faqs.value = faqs.value.map((item, i) => ({
+    ...item,
+    open: i === index ? !item.open : false
+  }))
 }
 </script>
