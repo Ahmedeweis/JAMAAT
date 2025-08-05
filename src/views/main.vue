@@ -50,7 +50,7 @@
     </router-link>
   </div>
 </div>
-        <h1 class="flex justify-center"> <router-link to="/apitest" class="text-white teext-center">api test</router-link></h1>
+        <!-- <h1 class="flex justify-center"> <router-link to="/apitest" class="text-white teext-center">api test</router-link></h1> -->
         <div class="bg-white text-gray-800 rounded-2xl p-6 mb-4 text-center"  style="margin: 20px 10px;">
           <router-link to="">
                       <h2 class="text-2xl font-bold  text-purple-700" style="font-family: 'Rubik';  "> JAMAAT مكتبة ألعاب</h2>
