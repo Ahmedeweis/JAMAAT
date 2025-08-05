@@ -55,6 +55,16 @@ const routes = [
     name: "Contact",
     component: () => import("../views/Addtions/Contact.vue"),
   },
+  {
+    path: "/MakeGame",
+    name: "MakeGame",
+    component: () => import("../views/Games/MakeGame.vue"),
+  },
+  {
+    path: "/apitest",
+    name: "Apitest",
+    component: () => import("../views/test/apitest.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col h-full  items-center justify-center shadow-md">
+  <div :class="['flex flex-col h-full items-center shadow-md', justifyClass]">
     <router-link to="/main" class="flex flex-col items-center w-full py-3 px-2">
       <img src="../assets/imgs/side1.png" class="w-8 h-8 mb-1" />
       <h2 class="text-lg text-gray-700">الرئيسية</h2>
@@ -27,4 +27,10 @@
   </div>
 </template>
 <script setup>
+defineProps({
+  justifyClass: {
+    type: String,
+    default: 'justify-center'
+  }
+})
 </script>

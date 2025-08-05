@@ -47,3 +47,5 @@ email=amd2@gmail.com
 admin@app.com
 12345678
 693131
+
+cursor-pointer
