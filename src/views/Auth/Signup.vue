@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-cover bg-center min-h-screen"
+  <div class="bg-cover bg-center min-h-screen flex justify-center items-center"
    :style="`background-image: url(${bg});`">
 <div
-  class="  flex items-center justify-around  w-full  pt-[30px] flex-col md:flex-row  gap-8"
+  class=" flex items-center justify-around  w-full  pt-[30px] flex-col md:flex-row  gap-8"
 >
     <!-- <h1 class="text-5xl md:text-6xl font-bold text-yellow-500 mb-8">JAMAAT</h1> -->
     <div >
@@ -38,7 +38,7 @@ v-model="fname"
 </div>
   <div class="flex flex-col text-right">
           <label class="text-purple-800 mb-1">البريد الإلكتروني</label>
-  <input type="email" v-model="email" class="p-2  placeholder-[#D5C1EE] text-[#24054C] font-bold text-left rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" placeholder="Mayada123@gmail.com" value="Mayada123@gmail.com">
+  <input type="email" v-model="email" class="p-2  placeholder-[#D5C1EE] text-[#24054C] font-bold text-left rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" placeholder="Ali123@gmail.com" value="Ali123@gmail.com">
         </div>
                 <div class="flex flex-col text-right">
           <label class="text-purple-800 mb-1">رقم الجوال</label>

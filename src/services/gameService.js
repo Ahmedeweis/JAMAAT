@@ -3,7 +3,6 @@ import api from "./axios";
 export const getGames = () => {
   return api.get('/game')
 }
-// Get a game by ID
 export const getGameById = (id) => {
   return api.get(`/game/${id}`)
 }
@@ -11,3 +10,7 @@ export const getGameById = (id) => {
 export const createGame = (data) => {
   return api.post('/game-category', data)
 }
+// ✅ Get games assigned to current user
+export const getUserGames = () => {
+  return api.get('/user-game');
+};

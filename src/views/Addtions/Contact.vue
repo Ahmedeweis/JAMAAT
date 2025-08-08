@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen bg-cover bg-center flex" :style="`background-image: url(${bg});`">
         <div class="flex-1 pl-2 pb-2 pr-0 pt-0 rounded-3xl">
-            <div class="min-h-screen mt-4 mr-[5px] rounded-3xl bg-white flex flex-col items-center justify-start p-4">
+            <div class="min-h-screen mt-4 mr-[5px] rounded-3xl bg-white flex flex-col items-center justify-center p-4">
                 <h1 class="text-3xl md:text-4xl font-bold mb-8" style="font-family: 'Kufam', sans-serif;" >تواصل معنا</h1>
                 <div class="w-full max-w-md space-y-4 ">
                     <div class="flex flex-col text-right">
@@ -49,14 +49,12 @@ import { useToast } from 'vue-toastification'
 import { ContactUs } from '../../services/supportService.js'
 import side from '../../components/side.vue'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '../../stores/user.js'
 const name = ref('')
 const email = ref('')
 // const phone = ref('')
 const message = ref('')
 const toast = useToast()
 const router = useRouter()
-const userStore = useUserStore()
 const handleSubmit = async () => {
   const payload = {
     name: name.value.trim(),

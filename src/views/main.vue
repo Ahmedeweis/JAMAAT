@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen w-full bg-cover bg-center flex" :style="`background-image: url(${bg});`">
+    <div class="min-h-screen w-full bg-cover bg-center flex" :style="`background-image: url(${bg});`" >
 <div class="flex-1  rounded-2xl sm:rounded-3xl"  :style="`background-image: url(${bg});`">
 <div class="flex flex-col md:flex-row gap-4 px-2 sm:px-4">
   <!--  البلوك الأول -->
@@ -7,7 +7,8 @@
     <div class="flex md:flex-row items-center justify-between gap-4">
       <button
         @click="confirmCoupon"
-        class="bg-red-500 mt-[35px] text-white px-3 py-1 sm:px-6 sm:py-2 text-sm sm:text-base rounded-full font-semibold hover:bg-red-600 transition duration-200"
+        class="cursor-pointer bg-red-500 mt-[35px] text-white px-3 py-1 sm:px-6 sm:py-2 text-sm sm:text-base rounded-full font-semibold hover:bg-red-600 transition duration-200"
+        :disabled="!couponCode"
       >
         تأكيد
       </button>
@@ -51,35 +52,52 @@
   </div>
 </div>
         <!-- <h1 class="flex justify-center"> <router-link to="/apitest" class="text-white teext-center">api test</router-link></h1> -->
-        <div class="bg-white text-gray-800 rounded-2xl p-6 mb-4 text-center"  style="margin: 20px 10px;">
+        <div class="bg-white text-gray-800 rounded-2xl p-6 mb-4 text-center"   style="font-family: 'Kufam', sans-serif;margin: 20px 10px;">
           <router-link to="">
                       <h2 class="text-2xl font-bold  text-purple-700" style="font-family: 'Rubik';  "> JAMAAT مكتبة ألعاب</h2>
           <p>يمكنك العثور على جميع الالعاب التي قام جامات بإضافتها و شرائها </p>
           </router-link>
         </div>
-        <div class="bg-white rounded-2xl p-2 mb-4"  style="margin: 20px 10px;">
-          <div class="flex justify-center font-bold gap-3">
-            <button class="w-1/2 text-gray-500 py-3 rounded-2xl cursor-pointer hover:bg-red-100">ألعابي</button>
-            <button class="w-1/2 bg-red-100 text-red-500 py-3 rounded-2xl font-bold cursor-pointer">جميع الفئات</button>
+        <div class="bg-white rounded-2xl p-2 mb-4"   style="font-family: 'Kufam', sans-serif;margin: 20px 10px;">
+          <div class="flex justify-center font-bold gap-3 text-xl">
+  <button
+    @click="setActiveTab('games')"
+    :class="[
+      'w-1/2 py-3 rounded-2xl font-bold cursor-pointer transition',
+      activeTab === 'games'
+        ? 'bg-red-100 text-red-500'
+        : 'text-gray-500 hover:bg-red-100'
+    ]"
+  >
+    ألعابي
+  </button>
+  <button
+    @click="setActiveTab('categories')"
+    :class="[
+      'w-1/2 py-3 rounded-2xl font-bold cursor-pointer transition',
+      activeTab === 'categories'
+        ? 'bg-red-100 text-red-500'
+        : 'text-gray-500 hover:bg-red-100'
+    ]"
+  >
+    جميع الفئات
+  </button>
           </div>
         </div>
- <div class="space-y-6 my-3" style="margin: 20px 10px;">
-    <!-- لوب على كل مجموعة من 10 -->
-    <div v-for="(group, groupIndex) in chunkedCategories" :key="groupIndex" class="bg-white p-3 rounded-2xl">
+<div  class="space-y-6 my-3" style="margin: 20px 10px;">
+    <div v-if="activeTab === 'categories'" v-for="(group, groupIndex) in chunkedCategories" :key="groupIndex" class="bg-white p-3 rounded-2xl">
       <div class="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-        <!-- لوب على العناصر داخل كل مجموعة -->
         <div
           v-for="category in group"
           :key="category.id"
-          class="bg-[#FAFBF5] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group"
+          class="grid grid-cols-1 gap-2 sm:gap-4
+ bg-[#FAFBF5] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group"
         >
-          <!-- صورة -->
           <img
             :src="category.image_url"
             alt="صورة التصنيف"
             class="w-full h-36 object-contain mb-4 rounded-xl"
           />
-          <!-- عنوان + زر التلميح -->
           <div class="flex items-center justify-between mb-2 p-2">
             <button
               @click="toggleHint(category.id)"
@@ -89,13 +107,12 @@
               i
             </button>
             <h5
-              class="text-xg font-bold bg-gray-800/60 text-white px-3 py-1 rounded-lg line-clamp-2 text-end ml-[5px] truncate"
+              class="text-[12px] font-bold bg-gray-800/60 text-white px-3 py-1 rounded-lg line-clamp-2 text-end ml-[5px] truncate"
               dir="rtl"
             >
               {{ category.name }}
             </h5>
           </div>
-          <!-- التلميح -->
           <div
             v-if="activeHintId === category.id"
             class="bg-purple-100 text-purple-800 text-sm mt-2 p-2 rounded"
@@ -105,6 +122,57 @@
         </div>
       </div>
     </div>
+<div v-else v-for="game in games" :key="game.id" class="mb-6 bg-white p-3 rounded-2xl">
+  <div class="  bg-[#FEF2E7] p-4 rounded-2xl shadow-md ">
+       <div class="flex items-center justify-between mb-4">
+<router-link
+  :to="{
+    name: 'StartGame',
+    query: { id: game.game.id }
+  }"
+  class="cursor-pointer bg-red-500 w-25 text-center text-white px-3 py-1 sm:px-6 sm:py-2 text-sm sm:text-base rounded-full font-semibold hover:text-red-600 hover:bg-white transition duration-200"
+>
+  ابدأ
+</router-link>
+       <h2 class="text-2xl font-bold mb-4 text-purple-700 text-end">  {{ game.game.name }}</h2>
+     </div>
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 " dir="rtl">
+    <div
+      v-for="categoryWrapper in game.game.game_category"
+      :key="categoryWrapper.category.id"
+      class="rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group p-4 bg-white"
+    >
+      <img
+        :src="categoryWrapper.category.image_url"
+        alt="صورة التصنيف"
+        class="w-full h-36 object-contain mb-4 rounded-xl"
+      />
+      <div class="flex items-center justify-between mb-2 p-2">
+        <h5
+          class="text-[14px] font-bold bg-gray-800/60 text-white px-3 py-1 rounded-lg line-clamp-2 text-end ml-[5px] truncate"
+          dir="rtl"
+        >
+          {{ categoryWrapper.category.name }}
+        </h5>
+        <button
+  @click="toggleHint(categoryWrapper.category.id)"
+  class="text-white cursor-pointer hover:text-purple-800 text-xl bg-purple-400 rounded-full px-[10px] font-bold focus:outline-none"
+  title="عرض التلميح"
+>
+  i
+</button>
+      </div>
+      <div
+        v-if="activeHintId === categoryWrapper.category.id"
+        class="bg-purple-100 text-purple-800 text-sm mt-2 p-2 rounded"
+        dir="rtl"
+      >
+        {{ categoryWrapper.category.hint }}
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
   </div>
       </div>
 <div class="bg-white bg-opacity-90 shadow-lg my-4 mx-0 sm:mx-4 rounded-4xl overlay flex flex-col pt-64">
@@ -115,8 +183,13 @@
 <script setup>
 import { ref, onMounted ,computed} from 'vue'
 import { getCategories } from '../services/categoryService'
+import { getUserGames } from '../services/gameService'
 import side from '../components/side.vue'
 import bg from '../assets/imgs/splash.png'
+const activeTab = ref('categories')
+const setActiveTab = (tabName) => {
+  activeTab.value = tabName
+}
 const balance = ref(10000);
 const couponCode = ref('');
 const categories = ref([]);
@@ -150,6 +223,15 @@ const confirmCoupon = () => {
     alert('يرجى إدخال كوبون صالح');
   }
 };
+const games = ref([])
+onMounted(async () => {
+  try {
+    const res = await getUserGames()
+    games.value = res.data.data || []
+  } catch (error) {
+    console.error('❌ فشل جلب الألعاب:', error)
+  }
+})
 </script>
 <style scoped>
 @keyframes fade-in {

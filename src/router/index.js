@@ -65,6 +65,21 @@ const routes = [
     name: "Apitest",
     component: () => import("../views/test/apitest.vue"),
   },
+    {
+    path: "/startgame",
+    name: "StartGame",
+    component: () => import("../views/Games/Game1/Gameintro.vue"),
+  },
+  {
+    path: "/Homescreen",
+    name: "Homescreen",
+    component: () => import("../views/Games/Game1/Homescreen.vue"),
+  },
+    {
+    path: "/QuizGame",
+    name: "QuizGame",
+    component: () => import("../views/Games/Game1/QuizGame.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

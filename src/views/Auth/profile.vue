@@ -66,19 +66,13 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import { updateProfile } from '../../services/authService'
+import { updateProfile, uploadAvatar } from '../../services/authService'
 import bg from '../../assets/imgs/splash.png'
 import profileImg from '../../assets/imgs/profile.png'
 import side from '../../components/side.vue'
-import { useUserStore } from '../../stores/user.js'
-import { uploadAvatar } from '../../services/authService'
-import { storeToRefs } from 'pinia'
-// المتغيرات والمخازن
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
 const router = useRouter()
 const toast = useToast()
-// البيانات المُعروضة في الفورم
+// البيانات
 const fname = ref('')
 const lname = ref('')
 const email = ref('')
@@ -87,28 +81,17 @@ const password = ref('')
 const imageUrl = ref('')
 const defaultAvatar = profileImg
 const country_code = '+20'
+// ✅ عند تحميل الصفحة، نجيب البيانات من localStorage
 onMounted(() => {
-  if (!user.value) {
-    userStore.setUserData({
-      token: localStorage.getItem('token') || '',
-      user: {
-        id: localStorage.getItem('userId') || '',
-        name: localStorage.getItem('name') || '',
-        email: localStorage.getItem('email') || '',
-        phone: localStorage.getItem('phone') || '',
-        user_type: localStorage.getItem('userType') || '',
-        avatar: localStorage.getItem('imageUrl') || ''
-      }
-    })
-  }
-  const nameParts = (user.value?.name || '').split(' ')
+  const name = localStorage.getItem('name') || ''
+  const nameParts = name.split(' ')
   fname.value = nameParts[0] || ''
   lname.value = nameParts[1] || ''
-  email.value = user.value?.email || ''
-  phone.value = user.value?.phone || ''
-  // استخدم الرابط من Pinia مباشرة
-  imageUrl.value = user.value?.avatar || defaultAvatar
+  email.value = localStorage.getItem('email') || ''
+  phone.value = localStorage.getItem('phone') || ''
+  imageUrl.value = localStorage.getItem('imageUrl') || defaultAvatar
 })
+// ✅ رفع صورة جديدة
 const handleFileUpload = async (event) => {
   const file = event.target.files[0]
   if (!file) return
@@ -116,27 +99,23 @@ const handleFileUpload = async (event) => {
     const previewImage = URL.createObjectURL(file)
     imageUrl.value = previewImage
     const res = await uploadAvatar(file)
-    const uploadedUrl = res.data.avatar_url
-    if (uploadedUrl) {
-const cleanUrl = uploadedUrl.replace(/([^:]\/)\/+/g, "$1")
-imageUrl.value = cleanUrl
-localStorage.setItem('imageUrl', cleanUrl)
-      localStorage.setItem('imageUrl', uploadedUrl)
-      userStore.setUserData({
-        token: userStore.token,
-        user: {
-          ...user.value,
-          avatar: uploadedUrl
-        }
-      })
-      toast.success('✅ تم رفع الصورة بنجاح')
-    } else {
+console.log("✅ Avatar upload response:", res.data)
+if (avatar) {
+  // Update UI & localStorage
+  imageUrl.value = avatar
+  localStorage.setItem('imageUrl', avatar)
+  // ⏬ إعادة جلب البروفايل من السيرفر لو حابب
+  const profileRes = await getProfile()
+  console.log("📥 Fetched profile:", profileRes.data)
+}
+ else {
       throw new Error('❌ لم يتم استلام رابط الصورة من السيرفر')
     }
   } catch (err) {
     toast.error(err.response?.data?.message || '❌ فشل رفع الصورة')
   }
 }
+// ✅ حفظ التعديلات على البيانات
 const handleUpdateProfile = async () => {
   try {
     const payload = {
@@ -146,30 +125,22 @@ const handleUpdateProfile = async () => {
       country_code,
       lang: 'en'
     }
-    // إضافة الباسورد فقط لو المستخدم كتبه
     if (password.value.trim()) {
       payload.password = password.value.trim()
     }
     const res = await updateProfile(payload)
     toast.success(res.data.message || '✅ تم تحديث بياناتك بنجاح')
-    // تحديث البيانات في Pinia
-    userStore.setUserData({
-      token: userStore.token,
-      user: {
-        ...user.value,
-        name: payload.name,
-        email: payload.email,
-        phone: payload.phone
-      }
-    })
+    // تحديث البيانات في localStorage
+    localStorage.setItem('name', payload.name)
+    localStorage.setItem('email', payload.email)
+    localStorage.setItem('phone', payload.phone)
   } catch (err) {
     toast.error(err.response?.data?.message || '❌ فشل التحديث')
   }
 }
-// تسجيل الخروج
+// ✅ تسجيل الخروج
 const handleLogout = () => {
   localStorage.clear()
-  userStore.clearUserData()
   toast.info('تم تسجيل الخروج')
   router.push('/login')
 }

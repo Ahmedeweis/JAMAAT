@@ -13,8 +13,8 @@
                                                     <label class="text-[#663D9C] mb-3 text-xl sm:text-3xl  font-bold">إسم اللعبة</label> <!-- زر الإنشاء -->
 <button
   @click="createGameHandler"
-  class="cursor-pointer bg-purple-600 hover:bg-black  text-white py-2 sm:py-3 rounded-xl font-bold text-base sm:text-lg transition duration-200 hover:shadow-lg
-  block shadow-[5px_5px_15px_#01004C] px-6"
+  class="cursor-pointer bg-red-500 hover:bg-white hover:text-red-500 text-white py-2 sm:py-3 rounded-xl font-bold text-base sm:text-lg transition duration-300 hover:shadow-lg
+  block shadow-[5px_1px_15px_#FB2C36] px-6"
 >
   إنشاء اللعبة
 </button>
@@ -88,6 +88,8 @@ import { getCategories } from '../../services/categoryService'
 import side from '../../components/side.vue'
 import bg from '../../assets/imgs/splash.png'
 import { createGame } from '../../services/gameService'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 const gameName = ref('')
 const activeHintId = ref(null);
 const categories = ref([])
@@ -96,7 +98,11 @@ const toggleCategory = (id) => {
   if (selectedCategories.value.includes(id)) {
     selectedCategories.value = selectedCategories.value.filter((i) => i !== id)
   } else {
-    selectedCategories.value.push(id)
+    if (selectedCategories.value.length < 6) {
+      selectedCategories.value.push(id)
+    } else {
+      toast.info('لا يمكنك اختيار أكثر من 6 تصنيفات')
+    }
   }
 }
 const toggleHint = (id) => {
@@ -111,7 +117,11 @@ const chunkedCategories = computed(() => {
 })
 const createGameHandler = async () => {
   if (!gameName.value.trim()) {
-    alert('يرجى إدخال اسم اللعبة')
+    toast.info(' يرجى إدخال اسم اللعبة')
+    return
+  }
+  if (selectedCategories.value.length === 0) {
+    toast.info(' يرجى اختيار تصنيف واحد على الأقل')
     return
   }
   try {
@@ -120,17 +130,24 @@ const createGameHandler = async () => {
       categories: selectedCategories.value,
     }
     const response = await createGame(payload)
-    console.log('✅ تم إنشاء اللعبة:', response.data)
-    alert('✔️ تم إنشاء اللعبة بنجاح!')
-  }catch (error) {
-  if (error.response) {
-    console.error('❌ Response error:', error.response.data)
-    alert(error.response.data.errors || 'حدث خطأ أثناء إنشاء اللعبة.')
-  } else {
-    console.error('❌ Error:', error.message)
-    alert('لم يتم الاتصال بالسيرفر.')
+    console.log(' تم إنشاء اللعبة:', response.data)
+    toast.success(' تم إنشاء اللعبة بنجاح!')
+    gameName.value = ''
+    selectedCategories.value = []
+  } catch (error) {
+    if (error.response) {
+      console.error(' Response error:', error.response.data)
+  const errMsg = error.response.data.errors
+              if (errMsg === 'you have no remaining games') {
+        toast.info('ليس لديك رصيد كافٍ لإنشاء ألعاب جديدة.')
+      } else {
+        toast.error(errMsg || ' حدث خطأ أثناء إنشاء اللعبة.')
+      }
+    } else {
+      console.error(' Error:', error.message)
+      toast.error('لم يتم الاتصال بالسيرفر.')
+    }
   }
-}
 }
 onMounted(async () => {
   const res = await getCategories()
