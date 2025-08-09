@@ -74,7 +74,7 @@ const handleLogin = async () => {
       localStorage.setItem('userType', data.user.user_type || '')
       localStorage.setItem('phone', data.user.phone || '')
       toast.success('✅ تم تسجيل الدخول بنجاح')
-      router.push('/main')
+      router.push('/ChooseGame')
     } else {
       throw new Error('الرد من السيرفر غير متوقع')
     }

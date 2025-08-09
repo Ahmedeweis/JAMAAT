@@ -48,7 +48,8 @@
 <script setup>
 import { ref } from 'vue'
 import bg from '../../../assets/imgs/splash.png'
-import { useRoute } from 'vue-router'
+import { useRoute ,useRouter } from 'vue-router'
+const router = useRouter()
 const route = useRoute()
 const gameId = route.query.id
 console.log('📌 معرف اللعبة:', gameId)

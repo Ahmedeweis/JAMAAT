@@ -71,14 +71,19 @@ const routes = [
     component: () => import("../views/Games/Game1/Gameintro.vue"),
   },
   {
+    path: "/ChooseGame",
+    name: "ChooseGame",
+    component: () => import("../views/Games/ChooseGame.vue"),
+  },
+  {
     path: "/Homescreen",
     name: "Homescreen",
     component: () => import("../views/Games/Game1/Homescreen.vue"),
   },
     {
-    path: "/QuizGame",
-    name: "QuizGame",
-    component: () => import("../views/Games/Game1/QuizGame.vue"),
+    path: "/WinGame",
+    name: "WinGame",
+    component: () => import("../views/Games/Game1/WinGame.vue"),
   },
 ];
 const router = createRouter({

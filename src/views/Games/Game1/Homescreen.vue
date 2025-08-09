@@ -20,16 +20,28 @@
     لعبة الذكاء
   </h1>
   <!-- أزرار التحكم -->
-  <div class="flex flex-wrap justify-center sm:space-x-4 sm:space-x-reverse gap-2 sm:gap-0">
-    <button class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base">
+ <div class="flex flex-wrap justify-center sm:space-x-4 sm:space-x-reverse gap-2 sm:gap-0">
+    <!-- زر الرجوع للوحة -->
+    <button
+      @click="goTo('/main')"
+      class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
+    >
       <img src="../../../assets/imgs/back.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
       <span class="c24054D">الرجوع للوحة</span>
     </button>
-    <button class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base">
+    <!-- زر الخروج -->
+    <button
+      @click="goTo('/main')"
+      class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
+    >
       <img src="../../../assets/imgs/door.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
       <span class="c24054D ml-2">خروج</span>
     </button>
-    <button class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base">
+    <!-- زر إنهاء اللعبة -->
+    <button
+      @click="goTo('/WinGame')"
+      class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
+    >
       <img src="../../../assets/imgs/End.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
       <span class="c24054D">إنهاء اللعبة</span>
     </button>
@@ -176,9 +188,9 @@ class="cursor-pointer"
 </div>
 </template>
 <script setup>
-/* -------------------- 1. الإستيراد -------------------- */
+/* -------------------- 1. الإستيراد -------------------- */i
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute , useRouter} from 'vue-router';
 import { getUserGames } from '../../../services/gameService.js';
 import placeholderImg from '../../../assets/imgs/upload.png';
 import playIcon from '../../../assets/imgs/play.png';
@@ -189,6 +201,7 @@ import bg from '../../../assets/imgs/splash.png';
 const doublePoints = ref(false);
 const blockPoints = ref(false);
 // بيانات اللعبة
+const router = useRouter();
 const route = useRoute();
 const gameId = route.query.id;
 const gameData = ref(null);
@@ -274,6 +287,9 @@ const closeModal = () => {
     score2.value += pointsToAdd;
   }
   toggleTeam();
+};
+const goTo = (path) => {
+  router.push(path);
 };
 // التحكم اليدوي بالنقاط
 const increaseScore1 = () => score1.value += 10;
