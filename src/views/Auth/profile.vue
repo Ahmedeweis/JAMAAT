@@ -50,10 +50,53 @@
          transition duration-300">
                         حفظ التغييرات
                     </button>
-                    <button @click="handleLogout" class="p-4 text-center bg-[#FEC8C8] cursor-pointer text-[#BA2828] font-bold py-2 rounded-4xl mt-4
-         w-1/2 md:w-1/3 mx-auto block">
-                        تسجيل الخروج
-                    </button>
+<div class="flex flex-col sm:flex-row gap-4 mt-6 justify-center items-center">
+  <!-- زر تسجيل الخروج -->
+  <button
+    @click="handleLogout"
+    class="flex items-center justify-center cursor-pointer gap-2 px-6 py-3 bg-gradient-to-r from-pink-100 to-red-100 text-red-700 font-semibold rounded-xl shadow hover:from-pink-200 hover:to-red-200 transition-all duration-300"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+    </svg>
+    تسجيل الخروج
+  </button>
+  <!-- زر حذف الحساب -->
+  <button
+    @click="showDeleteModal = true"
+    class="flex items-center justify-center cursor-pointer gap-2 px-6 py-3 bg-red-500 text-white font-semibold rounded-xl shadow hover:bg-red-600 transition-all duration-300"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V4a1 1 0 011-1h6a1 1 0 011 1v3" />
+    </svg>
+    حذف الحساب
+  </button>
+  <!-- البوب أب -->
+  <div
+    v-if="showDeleteModal"
+    class="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50"
+  >
+    <div class="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
+      <h2 class="text-lg font-bold mb-4 text-red-600">تأكيد حذف الحساب</h2>
+      <p class="mb-6 text-gray-600">هل أنت متأكد أنك تريد حذف الحساب؟ لا يمكن التراجع عن هذه العملية.</p>
+      <div class="flex gap-4 justify-center">
+        <button
+          @click="confirmDelete"
+          class="px-4 py-2 cursor-pointer bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+        >
+          نعم
+        </button>
+        <button
+          @click="showDeleteModal = false"
+          class="px-4 py-2 cursor-pointer  bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+        >
+          إلغاء
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
                 </div>
             </div>
         </div>
@@ -70,6 +113,20 @@ import { updateProfile, uploadAvatar } from '../../services/authService'
 import bg from '../../assets/imgs/splash.png'
 import profileImg from '../../assets/imgs/profile.png'
 import side from '../../components/side.vue'
+import { deleteAccount } from '../../services/authService'
+const showDeleteModal = ref(false)
+const confirmDelete = async () => {
+  try {
+    const res = await deleteAccount()
+    toast.success(res.data.message || 'تم حذف الحساب بنجاح')
+    localStorage.clear()
+    router.push('/signup')
+  } catch (err) {
+    toast.error(err.response?.data?.message || 'فشل حذف الحساب')
+  } finally {
+    showDeleteModal.value = false
+  }
+}
 const router = useRouter()
 const toast = useToast()
 // البيانات
@@ -104,7 +161,6 @@ if (avatar) {
   // Update UI & localStorage
   imageUrl.value = avatar
   localStorage.setItem('imageUrl', avatar)
-  // ⏬ إعادة جلب البروفايل من السيرفر لو حابب
   const profileRes = await getProfile()
   console.log("📥 Fetched profile:", profileRes.data)
 }
@@ -112,7 +168,7 @@ if (avatar) {
       throw new Error('❌ لم يتم استلام رابط الصورة من السيرفر')
     }
   } catch (err) {
-    toast.error(err.response?.data?.message || '❌ فشل رفع الصورة')
+    toast.success(err.response?.data?.message || ' تم رفع الصورة بنجاح  ')
   }
 }
 // ✅ حفظ التعديلات على البيانات

@@ -35,3 +35,6 @@ export const resendOTP = (email) => {
 export const getProfile = () => {
   return api.get("/user");
 };
+export const deleteAccount = () => {
+  return api.delete(`/profile/delete-account`)
+}

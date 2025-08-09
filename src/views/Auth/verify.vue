@@ -61,7 +61,7 @@ const handleVerify = async () => {
     toast.success('✅ تم التحقق بنجاح');
     router.push('/main');
   } catch (err) {
-    toast.error(err.response?.data?.message || '❌ رمز التحقق غير صحيح');
+    toast.error(err.response?.data?.message || ' رمز التحقق غير صحيح');
   }
 };
 const focusNext = (event, index) => {
