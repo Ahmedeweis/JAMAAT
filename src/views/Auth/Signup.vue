@@ -79,7 +79,7 @@ const phone = ref('')
 const country_code = "+20"
 const handleRegister = async () => {
   if (password.value !== confirmPassword.value) {
-    toast.error('كلمة المرور غير متطابقة')
+    toast.error(' كلمة المرور غير متطابقة')
     return
   }
   try {
@@ -91,15 +91,25 @@ const handleRegister = async () => {
       lang: "en",
       password: password.value
     })
-    toast.success(res.data.message || 'تم التسجيل بنجاح')
+    toast.success(res.data.message || ' تم التسجيل بنجاح')
     setTimeout(() => {
       router.push({
-      path: '/verify',
-      query: { email: email.value }
-    })
+        path: '/verify',
+        query: { email: email.value }
+      })
     }, 2000)
   } catch (err) {
-    toast.error(err.response?.data?.message || 'حدث خطأ في التسجيل')
+    const errors = err.response?.data
+    if (errors && typeof errors === 'object') {
+      // لو الأخطاء جاية في شكل object زي { email: ["message"] }
+      Object.values(errors).forEach(errorArray => {
+        if (Array.isArray(errorArray)) {
+          errorArray.forEach(msg => toast.error(` ${msg}`))
+        }
+      })
+    } else {
+      toast.error(err.response?.data?.message || ' حدث خطأ في التسجيل')
+    }
   }
 }
 </script>

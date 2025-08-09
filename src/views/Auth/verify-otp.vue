@@ -40,69 +40,36 @@
    </div>
 </template>
 <script setup>
-import { ref, computed, onMounted  } from 'vue'
+import bg from '../../assets/imgs/splash.png'
+import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useToast } from 'vue-toastification'
+import { verifyOTP } from '../../services/authService'
 const router = useRouter()
 const route = useRoute()
-import bg from '../../assets/imgs/splash.png'
-import { useToast } from 'vue-toastification'
-import { useUserStore } from '../../stores/user'
-const userStore = useUserStore()
 const toast = useToast()
 const email = route.query.email || ''
-const code = ref(['', '', '', '','',''])
-// const timer = ref(2)
-import { verifyOTP } from '../../services/authService';
-// const isWaiting = computed(() => timer.value > 0)
+const code = ref(['', '', '', '', '', ''])
+const verificationCode = computed(() => code.value.join(''))
 const handleVerify = async () => {
   try {
-    const otp = verificationCode.value;
-    const response = await verifyOTP(otp, email);
-    const token = response.data.access_token;
+    const otp = verificationCode.value
+    const response = await verifyOTP(otp, email)
+    const token = response.data.access_token
     const user = response.data.user
-    localStorage.setItem("token", token)
-    localStorage.setItem("user", JSON.stringify(user))
-    // ✅ تحديث Pinia كمان
-    userStore.setUserData({ token, user })
-    toast.success('✅ تم التحقق بنجاح');
+    // تخزين في localStorage
+    localStorage.setItem('token', token)
+    localStorage.setItem('user', JSON.stringify(user))
+    toast.success(' تم التحقق بنجاح')
     router.push('/changepassword')
   } catch (err) {
-    toast.error(err.response?.data?.message || '❌ رمز التحقق غير صحيح');
+    toast.error(err.response?.data?.message || ' رمز التحقق غير صحيح')
   }
 }
 const focusNext = (event, index) => {
-  const input = event.target
-  if (input.value.length === 1 && index < code.value.length - 1) {
+  if (event.target.value.length === 1 && index < code.value.length - 1) {
     const nextInput = document.getElementById(`code-${index + 1}`)
     nextInput?.focus()
   }
 }
-const verificationCode = computed(() => code.value.join(''))
-// const formattedTimer = computed(() => {
-//   const minutes = String(Math.floor(timer.value / 60)).padStart(2, '0')
-//   const seconds = String(timer.value % 60).padStart(2, '0')
-//   return `${minutes}:${seconds}`
-// })
-// const startTimer = () => {
-//   const countdown = setInterval(() => {
-//     if (timer.value > 0) {
-//       timer.value--
-//     } else {
-//       clearInterval(countdown)
-//     }
-//   }, 1000)
-// }
-// const handleResend = async () => {
-//   try {
-//     await resendVerificationCode(email)
-//     toast.success('✅ تم إرسال الكود مرة أخرى إلى بريدك الإلكتروني')
-//     timer.value = 60
-//     startTimer()
-//   } catch (err) {
-//     toast.error('❌ حدث خطأ أثناء إعادة الإرسال')
-//   }
-// }
-// onMounted(() => {
-//   startTimer()
-// })
 </script>

@@ -38,17 +38,17 @@ const email = ref('')
 const handleForgotPassword = async () => {
   try {
     if (!email.value) {
-  toast.error('❌ يرجى إدخال بريد إلكتروني أولاً')
+  toast.error(' يرجى إدخال بريد إلكتروني أولاً')
   return
 }
     await resendOTP(email.value)
-    toast.success('✅ تم إرسال كود التحقق إلى بريدك الإلكتروني')
+    toast.success(' تم إرسال كود التحقق إلى بريدك الإلكتروني')
     router.push({
       path: '/verify-otp',
       query: { email: email.value, from: 'forgot' }
     })
   } catch (err) {
-    toast.error(err.response?.data?.message || '❌ فشل في إرسال الكود')
+    toast.error(err.response?.data?.message || ' فشل في إرسال الكود')
   }
 }
 </script>

@@ -73,13 +73,13 @@ const handleLogin = async () => {
       localStorage.setItem('imageUrl', data.user.avatar || '')
       localStorage.setItem('userType', data.user.user_type || '')
       localStorage.setItem('phone', data.user.phone || '')
-      toast.success('✅ تم تسجيل الدخول بنجاح')
+      toast.success(' تم تسجيل الدخول بنجاح')
       router.push('/ChooseGame')
     } else {
       throw new Error('الرد من السيرفر غير متوقع')
     }
   } catch (err) {
-    console.error('❌ Login error:', err)
+    console.error(' Login error:', err)
     const errorMessage = err.response?.data?.message || 'فشل تسجيل الدخول. يرجى التحقق من البريد الإلكتروني وكلمة المرور.'
     error.value = errorMessage
     toast.error(errorMessage)

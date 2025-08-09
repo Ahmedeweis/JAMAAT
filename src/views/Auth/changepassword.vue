@@ -29,27 +29,24 @@
    </div>
 </template>
 <script setup>
-import { ref , onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useToast } from 'vue-toastification'
 import { updateProfile } from '../../services/authService'
 import { useRouter } from 'vue-router'
 import bg from '../../assets/imgs/splash.png'
-import { useUserStore } from '../../stores/user.js'
-import { storeToRefs } from 'pinia'
 const password = ref('')
 const confirmPassword = ref('')
 const toast = useToast()
 const router = useRouter()
-const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
+// هنجيب بيانات اليوزر من localStorage بدل الـ store
+const user = ref(null)
 const handleSetNewPassword = async () => {
-  // التحقق من الباسورد
   if (!password.value || password.value.length < 6) {
-    toast.error("❌ كلمة المرور ضعيفة أو غير مكتوبة")
+    toast.error(" كلمة المرور ضعيفة أو غير مكتوبة")
     return
   }
   if (password.value !== confirmPassword.value) {
-    toast.error("❌ كلمة المرور غير متطابقة")
+    toast.error(" كلمة المرور غير متطابقة")
     return
   }
   const payload = {
@@ -62,22 +59,20 @@ const handleSetNewPassword = async () => {
   }
   try {
     await updateProfile(payload)
-    toast.success("✅ تم تحديث كلمة المرور")
+    toast.success(" تم تحديث كلمة المرور")
     router.push('/main')
   } catch (err) {
-    toast.error(err.response?.data?.message || '❌ فشل التحديث')
+    toast.error(err.response?.data?.message || ' فشل التحديث')
   }
 }
 onMounted(() => {
-  if (!user.value) {
-    const savedUser = localStorage.getItem('user')
-    const token = localStorage.getItem('token')
-    if (savedUser && token) {
-      userStore.setUserData({ token, user: JSON.parse(savedUser) })
-    } else {
-      toast.error("❌ لم يتم تحميل بيانات المستخدم")
-      router.push('/login')
-    }
+  const savedUser = localStorage.getItem('user')
+  const token = localStorage.getItem('token')
+  if (savedUser && token) {
+    user.value = JSON.parse(savedUser)
+  } else {
+    toast.error(" لم يتم تحميل بيانات المستخدم")
+    router.push('/login')
   }
 })
 </script>

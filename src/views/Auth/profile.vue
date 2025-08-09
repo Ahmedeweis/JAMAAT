@@ -139,7 +139,7 @@ const handleUpdateProfile = async () => {
     localStorage.setItem('email', payload.email)
     localStorage.setItem('phone', payload.phone)
   } catch (err) {
-    toast.error(err.response?.data?.message || '❌ فشل التحديث')
+    toast.error(err.response?.data?.message || ' فشل التحديث')
   }
 }
 // ✅ تسجيل الخروج
