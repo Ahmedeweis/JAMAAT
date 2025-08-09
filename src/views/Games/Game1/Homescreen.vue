@@ -20,10 +20,10 @@
     لعبة الذكاء
   </h1>
   <!-- أزرار التحكم -->
- <div class="flex flex-wrap justify-center sm:space-x-4 sm:space-x-reverse gap-2 sm:gap-0">
+<div class="flex flex-wrap justify-center sm:space-x-4 sm:space-x-reverse gap-2 sm:gap-0">
     <!-- زر الرجوع للوحة -->
     <button
-      @click="goTo('/main')"
+      @click="goTo('/main', 'هل تريد الرجوع للوحة؟')"
       class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
     >
       <img src="../../../assets/imgs/back.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
@@ -31,20 +31,20 @@
     </button>
     <!-- زر الخروج -->
     <button
-      @click="goTo('/main')"
+      @click="goTo('/main', 'هل تريد الخروج؟')"
       class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
     >
       <img src="../../../assets/imgs/door.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
       <span class="c24054D ml-2">خروج</span>
     </button>
     <!-- زر إنهاء اللعبة -->
-    <button
-      @click="goTo('/WinGame')"
-      class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
-    >
-      <img src="../../../assets/imgs/End.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
-      <span class="c24054D">إنهاء اللعبة</span>
-    </button>
+<button
+ @click="goToWinGame('/main', 'هل تريد الخروج؟')"
+  class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
+>
+  <img src="../../../assets/imgs/End.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
+  <span class="c24054D">إنهاء اللعبة</span>
+</button>
   </div>
 </nav>
     <!-- Questions Grid -->
@@ -145,7 +145,7 @@ class="cursor-pointer"
       <button
         v-if="!showAnswer"
         @click="revealAnswer"
-        class="bg-[#24B758] hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition"
+        class="bg-[#24B758]  cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition"
       >
         أظهر الإجابة
       </button>
@@ -164,6 +164,7 @@ class="cursor-pointer"
 <!-- مضاعفة النقاط -->
 <button
   @click="doublePoints = !doublePoints"
+  class="cursor-pointer"
   :class="[
     'font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition',
     doublePoints ? 'bg-purple-600 text-white' : 'bg-[#F5E7FF] text-[#8B3DFF]'
@@ -175,6 +176,7 @@ class="cursor-pointer"
 <!-- منع النقاط -->
 <button
   @click="blockPoints = !blockPoints"
+   class="cursor-pointer"
   :class="[
     'font-bold py-2 rounded-lg flex items-center justify-center gap-2 transition',
     blockPoints ? 'bg-red-600 text-white' : 'bg-[#FFE4E4] text-[#FF4B4B]'
@@ -188,7 +190,7 @@ class="cursor-pointer"
 </div>
 </template>
 <script setup>
-/* -------------------- 1. الإستيراد -------------------- */i
+/* -------------------- 1. الإستيراد -------------------- */
 import { ref, onMounted } from 'vue';
 import { useRoute , useRouter} from 'vue-router';
 import { getUserGames } from '../../../services/gameService.js';
@@ -224,6 +226,12 @@ const selectedColumn = ref(null);
 const score1 = ref(0);
 const score2 = ref(0);
 /* -------------------- 3. الدوال -------------------- */
+const goToWinGame = () => {
+  router.push({
+    path: '/WinGame',
+    query: { score1: score1.value, score2: score2.value }
+  });
+};
 // بدء المؤقت
 const startTimer = () => {
   clearInterval(countdownInterval);
@@ -288,8 +296,10 @@ const closeModal = () => {
   }
   toggleTeam();
 };
-const goTo = (path) => {
-  router.push(path);
+const goTo = (path, message) => {
+  if (confirm(message)) {
+    router.push(path);
+  }
 };
 // التحكم اليدوي بالنقاط
 const increaseScore1 = () => score1.value += 10;

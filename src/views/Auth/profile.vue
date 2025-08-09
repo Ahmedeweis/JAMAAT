@@ -129,7 +129,11 @@ const handleUpdateProfile = async () => {
       payload.password = password.value.trim()
     }
     const res = await updateProfile(payload)
-    toast.success(res.data.message || '✅ تم تحديث بياناتك بنجاح')
+    let msg = res.data.message
+    if (msg === 'Profile updated successfully') {
+      msg = ' تم تحديث بياناتك بنجاح'
+    }
+    toast.success(msg)
     // تحديث البيانات في localStorage
     localStorage.setItem('name', payload.name)
     localStorage.setItem('email', payload.email)

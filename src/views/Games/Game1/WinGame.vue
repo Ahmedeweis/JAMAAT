@@ -16,9 +16,9 @@
       </button>
       <!-- العنوان -->
       <h1 class="text-3xl font-bold text-purple-800 mb-8 mt-2 text-center">
-        حظ سعيد للفريقين
+        {{ titleText }}
       </h1>
-      <!-- الصورة في المنتصف -->
+      <!-- الصورة -->
       <div class="flex justify-center mb-8">
         <img
           src="../../../assets/imgs/threestar.svg"
@@ -29,35 +29,58 @@
       <!-- النقاط -->
       <div class="flex justify-between gap-4 text-center">
         <div
-          class="bg-[#D5C1EE] rounded-xl px-6 py-4"
+          :class="[teamTwoBg, 'rounded-xl px-6 py-4 text-center']"
           style="width: -webkit-fill-available"
         >
-          <p class="text-purple-800 font-semibold mb-2">نقاط الفريق الأول</p>
-          <p
-            class="text-lg font-bold bg-[#ECE1FB] p-3 rounded-2xl"
-          >{{ teamOne }}</p>
+          <p class="text-white font-semibold mb-2">نقاط الفريق الثاني</p>
+          <p class="text-lg font-bold bg-[#ECE1FB] p-3 rounded-2xl">
+            {{ teamTwo }}
+          </p>
         </div>
-        <div
-          class="bg-[#D5C1EE] rounded-xl px-6 py-4 text-center"
+                <div
+          :class="[teamOneBg, 'rounded-xl px-6 py-4']"
           style="width: -webkit-fill-available"
         >
-          <p class="text-purple-800 font-semibold mb-2">نقاط الفريق الثاني</p>
-          <p
-            class="text-lg font-bold bg-[#ECE1FB] p-3 rounded-2xl"
-          >{{ teamTwo }}</p>
+          <p class="text-white font-semibold mb-2">نقاط الفريق الأول</p>
+          <p class="text-lg font-bold bg-[#ECE1FB] p-3 rounded-2xl">
+            {{ teamOne }}
+          </p>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
+import { ref, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import bg from "../../../assets/imgs/splash.png";
-const teamOne = ref(100);
-const teamTwo = ref(100);
 const router = useRouter();
+const route = useRoute();
+const teamOne = ref(Number(route.query.score1) || 0);
+const teamTwo = ref(Number(route.query.score2) || 0);
 const goToMain = () => {
   router.push("/main");
 };
+// تحديد الفائز أو التعادل
+const winner = computed(() => {
+  if (teamOne.value > teamTwo.value) return 1;
+  if (teamTwo.value > teamOne.value) return 2;
+  return 0; // تعادل
+});
+// نص العنوان
+const titleText = computed(() => {
+  if (winner.value === 0) return "حظ سعيد للفريقين";
+  return `تهانينا للفريق ${winner.value === 1 ? "الأول" : "الثاني"}`;
+});
+// ألوان الباكجراوند
+const teamOneBg = computed(() => {
+  if (winner.value === 1) return "bg-green-300";
+  if (winner.value === 2) return "bg-red-300";
+  return "bg-[#D5C1EE]";
+});
+const teamTwoBg = computed(() => {
+  if (winner.value === 2) return "bg-[#f4567f]"; // أخضر مضبوط
+  if (winner.value === 1) return "bg-red-500";   // أحمر مضبوط
+  return "bg-[#D5C1EE]";
+});
 </script>
