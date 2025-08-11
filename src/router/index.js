@@ -85,6 +85,11 @@ const routes = [
     name: "WinGame",
     component: () => import("../views/Games/Game1/WinGame.vue"),
   },
+      {
+    path: "/connectintro",
+    name: "connectintro",
+    component: () => import("../views/Games/Game2/connectintro.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

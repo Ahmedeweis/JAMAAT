@@ -9,7 +9,7 @@
     <img src="../../assets/imgs/play.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
     <span> لعبة 1 </span>
   </router-link>
-  <router-link to="" class="btn-gradient-border cursor-not-allowed px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-orange-500 text-2xl rounded-lg shadow-lg hover:bg-orange-600 transition">
+  <router-link to="/connectintro" class="btn-gradient-border cursor-pointer px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-orange-500 text-2xl rounded-lg shadow-lg hover:bg-orange-600 transition">
     <img src="../../assets/imgs/play.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
     <span>جمع أربعة</span>
   </router-link>

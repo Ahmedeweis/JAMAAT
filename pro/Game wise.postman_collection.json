@@ -1,0 +1,2633 @@
+{
+	"info": {
+		"_postman_id": "40eb6298-0875-4ed4-bb28-ce46c4084c1a",
+		"name": "Game wise",
+		"description": "API endpoints for the restaurant application.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27782819",
+		"_collection_link": "https://orange-meteor-603436.postman.co/workspace/My-Workspace~9af94098-0e62-41f0-89fc-5ca78ce83d0e/collection/27782819-40eb6298-0875-4ed4-bb28-ce46c4084c1a?action=share&source=collection_link&creator=27782819"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Cap. HASSAN\",\n    \"email\": \"hassan.goma.a.dev@gmail.com\",\n    \"phone\": \"0123456989\",\n    \"country_code\" : \"+20\",\n    \"lang\":\"en\",\n    \"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Register",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"John Doe\",\n\t\"email\": \"john7@example.com\",\n\t\"password\": \"password\",\n    \"user_type\" : \"casher\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{base_url}}/register",
+									"protocol": "http",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:24:46 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:24:46 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.2-1ubuntu2.14"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL3JlZ2lzdGVyIiwiaWF0IjoxNjkzMTM1NDg2LCJleHAiOjE2OTMxMzkwODYsIm5iZiI6MTY5MzEzNTQ4NiwianRpIjoielpVT0xHMmd5VHlyUHRjOCIsInN1YiI6IjE1MiIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.5sqL4tETwBtnxJQV7obgPxOvFJkYAFEzbGRcn3XD1sg\",\n    \"user\": {\n        \"name\": \"John Doe\",\n        \"email\": \"john7@example.com\",\n        \"user_type\": \"casher\",\n        \"updated_at\": \"2023-08-27T11:24:46.000000Z\",\n        \"created_at\": \"2023-08-27T11:24:46.000000Z\",\n        \"id\": 152\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract the token from the response body\r",
+									"var responseBody = pm.response.json();\r",
+									"var token = responseBody.token; // Adjust this according to your response structure\r",
+									"\r",
+									"// Set the token as the collection-level variable\r",
+									"pm.collectionVariables.set('jwt_token', token);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"emailOrPhone\": \"admin@app.com\",\n\t\"password\": \"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"john@example.com\",\n\t\"password\": \"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{base_url}}/login",
+									"protocol": "http",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:21:19 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:21:19 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.2-1ubuntu2.14"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgwMDAvYXBpL2xvZ2luIiwiaWF0IjoxNjkzMTM1Mjc5LCJleHAiOjE2OTMxMzg4NzksIm5iZiI6MTY5MzEzNTI3OSwianRpIjoiSHhUUWRzRXZMS0NqQ01wYyIsInN1YiI6IjE1MSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.5Bw4nmAnphxDefPIZoMw6fpANmLFHzraDMe_CI0aSJU\",\n    \"user\": {\n        \"id\": 151,\n        \"name\": \"John Doe\",\n        \"email\": \"john@example.com\",\n        \"email_verified_at\": null,\n        \"user_type\": null,\n        \"created_at\": \"2023-08-27T11:19:04.000000Z\",\n        \"updated_at\": \"2023-08-27T11:19:04.000000Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/logout",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Login Copy",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"email\": \"john@example.com\",\n\t\"password\": \"password\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{base_url}}/logout",
+									"protocol": "http",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"logout"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:44:48 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:44:48 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.2-1ubuntu2.14"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Logged out successfully\"\n}"
+						}
+					]
+				},
+				{
+					"name": "My profile",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"profile"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "My profile",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://{{base_url}}/profile",
+									"protocol": "http",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"profile"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:41:43 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:41:43 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.2-1ubuntu2.14"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"id\": 153,\n    \"name\": \"John Doe111111\",\n    \"email\": \"john1@example.com\",\n    \"email_verified_at\": null,\n    \"user_type\": \"customer11\",\n    \"created_at\": \"2023-08-27T11:40:14.000000Z\",\n    \"updated_at\": \"2023-08-27T11:41:31.000000Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "deleteAccount",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/profile/delete-account",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"profile",
+								"delete-account"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "deleteAccount",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/profile/delete-account",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"profile",
+										"delete-account"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 14 Sep 2024 00:11:40 GMT"
+								},
+								{
+									"key": "Server",
+									"value": "Apache/2.4.54 (Win64) OpenSSL/1.1.1q mod_fcgid/2.3.10-dev"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.18"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Vary",
+									"value": "Authorization"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=98"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Your account has been successfully deleted.\"\n}"
+						}
+					]
+				},
+				{
+					"name": "My profile Sanctum-api",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateMyprofile",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Cap. HASSAN\",\n    \"email\": \"hassango.maa.974@gmail.com\",\n    \"phone\": \"01234526789\",\n    \"country_code\" : \"+20\",\n    \"lang\":\"en\",\n    \"password\": \"12345678\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/profile/update",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"profile",
+								"update"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update profile",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"name\": \"John Doe111111\",\n\t\"email\": \"john1@example.com\",\n\t\"password\": \"password\",\n    \"user_type\" : \"customer11\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://{{base_url}}/profile/update",
+									"protocol": "http",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"profile",
+										"update"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:41:31 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Sun, 27 Aug 2023 11:41:31 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.2-1ubuntu2.14"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "57"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Profile updated successfully\",\n    \"user\": {\n        \"id\": 153,\n        \"name\": \"John Doe111111\",\n        \"email\": \"john1@example.com\",\n        \"email_verified_at\": null,\n        \"user_type\": \"customer11\",\n        \"created_at\": \"2023-08-27T11:40:14.000000Z\",\n        \"updated_at\": \"2023-08-27T11:41:31.000000Z\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "avatar user image",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "avatar",
+									"type": "file",
+									"src": "/C:/Users/Eng.HassanGomaa/Pictures/WhatsApp Image 2024-06-23 at 3.54.15 PM (2).jpeg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/profile/upload-avatar",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"profile",
+								"upload-avatar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "VRFY-user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract the token from the response body\r",
+									"var responseBody = pm.response.json();\r",
+									"var token = responseBody.access_token; // Adjust this according to your response structure\r",
+									"\r",
+									"// Set the token as the collection-level variable\r",
+									"pm.collectionVariables.set('jwt_token', token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "otp",
+									"value": "532947",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/verifyToken/554901/hassan.gomaa.dev@gmail.com",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"verifyToken",
+								"554901",
+								"hassan.gomaa.dev@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "resend-VRFY-OTP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract the token from the response body\r",
+									"var responseBody = pm.response.json();\r",
+									"var token = responseBody.access_token; // Adjust this according to your response structure\r",
+									"\r",
+									"// Set the token as the collection-level variable\r",
+									"pm.collectionVariables.set('jwt_token', token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "otp",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/resend-otp/hassangomaa974@gmail.com",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"resend-otp",
+								"hassangomaa974@gmail.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Reset-Password",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract the token from the response body\r",
+									"var responseBody = pm.response.json();\r",
+									"var token = responseBody.access_token; // Adjust this according to your response structure\r",
+									"\r",
+									"// Set the token as the collection-level variable\r",
+									"pm.collectionVariables.set('jwt_token', token);\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/resend-otp/hassan.gomaa.dev@gmail.com",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"auth",
+								"resend-otp",
+								"hassan.gomaa.dev@gmail.com"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "category",
+			"item": [
+				{
+					"name": "get all category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Virginie Wintheiser I",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Gabrielle Nader",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve a list of categories. The request includes query parameters for pagination, with a limit of 20 categories per page, and a specific category name to search for. The request does not include a request body.\n\n### Request Body\n\nThe request does not include a request body.\n\n### Response\n\nUpon successful execution, the endpoint returns a JSON response with a status code of 200. The response body contains an array of category objects, each including an id, name, image URL, creation timestamp, and update timestamp. Additionally, the response includes metadata such as the current page number, last page number, number of categories per page, and the total number of categories.\n\nExample response:\n\n``` json\n{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 20,\n            \"name\": \"Gabrielle Nader\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\",\n            \"created_at\": \"2024-08-17T14:16:40.000000Z\",\n            \"updated_at\": \"2024-08-17T14:16:40.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 20,\n        \"total\": 1\n    }\n}\n\n ```"
+					},
+					"response": [
+						{
+							"name": "get all category",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/categories?per_page=100",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"categories"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "100"
+										},
+										{
+											"key": "name",
+											"value": "Gabrielle Nader",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:33:13 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:33:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.10"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Gerson Hackett MD\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/008833?text=et\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Dr. Edmund Balistreri\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0099cc?text=molestiae\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Dr. Myriam Ernser\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00cc00?text=saepe\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 4,\n            \"name\": \"Anderson Kunze\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0088aa?text=at\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 5,\n            \"name\": \"Mervin Ruecker IV\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aaff?text=odit\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 6,\n            \"name\": \"Hershel O'Kon\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0066ff?text=nihil\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 7,\n            \"name\": \"Janick Kemmer\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/005588?text=autem\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 8,\n            \"name\": \"Claire Treutel\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/008866?text=ipsa\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 9,\n            \"name\": \"Nicolas Kreiger\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00bbbb?text=reiciendis\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 10,\n            \"name\": \"Prof. Jesse Bruen\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00ff66?text=veritatis\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 11,\n            \"name\": \"Delbert Frami PhD\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0022cc?text=enim\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 1,\n                    \"category_id\": 11,\n                    \"title\": \"Molestiae quas reiciendis doloribus ut sed est.\",\n                    \"question_text\": \"Ullam unde illo quibusdam atque aut sit quia ea. Quibusdam aliquam sapiente laborum quae corporis neque debitis sit. Et quaerat aut veritatis eligendi enim. Magnam et eos aliquam placeat non quia dolores.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0033cc?text=et\",\n                    \"question_video\": \"https://west.biz/asperiores-perspiciatis-neque-culpa-magnam-qui-molestiae.html\",\n                    \"question_audio\": \"http://www.parisian.com/pariatur-nemo-excepturi-placeat-explicabo-similique-ipsum-quos\",\n                    \"correct_answer\": \"praesentium\",\n                    \"points\": 37,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 12,\n            \"name\": \"Petra Goyette\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/003333?text=blanditiis\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 2,\n                    \"category_id\": 12,\n                    \"title\": \"Aspernatur commodi eum aut enim quaerat.\",\n                    \"question_text\": \"Nisi sint omnis qui ut rerum fugiat nesciunt. Sed sed assumenda eum. Amet eos eos earum et eos sed incidunt. Consequatur eum qui eius rerum in repellendus. Iure id in nobis dolorem numquam.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/003344?text=a\",\n                    \"question_video\": \"http://www.okuneva.com/quisquam-dolor-quia-sed-fugit-non\",\n                    \"question_audio\": \"http://kemmer.info/voluptatem-corrupti-nulla-totam-possimus-quaerat-corporis-perspiciatis\",\n                    \"correct_answer\": \"temporibus\",\n                    \"points\": 85,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 13,\n            \"name\": \"Dr. Sienna Stroman DVM\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00dd55?text=tempora\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 3,\n                    \"category_id\": 13,\n                    \"title\": \"Labore magnam facilis aut mollitia fugiat.\",\n                    \"question_text\": \"Et amet ut aut optio eum libero debitis impedit. Asperiores nam cumque est. Ab dolorem et enim sapiente inventore sunt.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00bbcc?text=tempora\",\n                    \"question_video\": \"https://bailey.com/aperiam-illo-minima-porro-qui-porro-hic-cum-quasi.html\",\n                    \"question_audio\": \"http://homenick.biz/molestiae-quam-distinctio-pariatur-error-impedit\",\n                    \"correct_answer\": \"sit\",\n                    \"points\": 59,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 14,\n            \"name\": \"Mrs. Fleta White\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00bbff?text=consequatur\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 4,\n                    \"category_id\": 14,\n                    \"title\": \"Officia quas sit numquam amet ex tempora.\",\n                    \"question_text\": \"Facere dolorem quis voluptatum voluptatibus doloremque sed quis tempora. Dolorem veritatis ipsum earum esse temporibus velit ullam. Animi nesciunt non ab quas magni impedit dolores.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00ccff?text=est\",\n                    \"question_video\": \"http://www.bednar.com/minima-expedita-fugit-qui-doloremque-voluptatem-nisi\",\n                    \"question_audio\": \"http://price.com/reiciendis-temporibus-pariatur-inventore-blanditiis-nostrum-tempora-ad\",\n                    \"correct_answer\": \"reprehenderit\",\n                    \"points\": 61,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 15,\n            \"name\": \"Eliseo Davis\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/004422?text=ut\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 5,\n                    \"category_id\": 15,\n                    \"title\": \"Eos aut sit voluptatem hic debitis.\",\n                    \"question_text\": \"Aliquam mollitia saepe qui iusto. Suscipit ullam nemo ut id atque. Voluptate ut enim vel quia error ea enim. Dolorum officia voluptas ad eum.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/009911?text=sunt\",\n                    \"question_video\": \"https://oconner.com/quis-qui-sit-accusantium-assumenda-dolorem.html\",\n                    \"question_audio\": \"http://www.mayer.org/ea-nemo-saepe-quo-est-adipisci-et-ut\",\n                    \"correct_answer\": \"et\",\n                    \"points\": 10,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 16,\n            \"name\": \"Myriam Carter\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/000077?text=suscipit\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 6,\n                    \"category_id\": 16,\n                    \"title\": \"Id eius sed corporis quia expedita.\",\n                    \"question_text\": \"Cum vel est quia optio. Libero non ab et dignissimos aspernatur dolorem. Est ipsa et eum sint quam ut laudantium.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0033aa?text=nobis\",\n                    \"question_video\": \"http://pollich.com/similique-soluta-nihil-veniam-quam-et-non-qui\",\n                    \"question_audio\": \"http://www.skiles.com/\",\n                    \"correct_answer\": \"itaque\",\n                    \"points\": 96,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 17,\n            \"name\": \"Ally Lynch\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=voluptatem\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 7,\n                    \"category_id\": 17,\n                    \"title\": \"Est quo aliquid dignissimos sint quisquam et.\",\n                    \"question_text\": \"Omnis mollitia est eum consequatur aut rerum. Eveniet eos omnis et at quisquam. Cumque voluptas aliquid ut blanditiis ad recusandae enim.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0022cc?text=nam\",\n                    \"question_video\": \"https://boyer.biz/amet-reprehenderit-voluptatibus-dolorem-et-omnis-occaecati-temporibus-animi.html\",\n                    \"question_audio\": \"https://bergnaum.org/praesentium-velit-quis-et-nam-est.html\",\n                    \"correct_answer\": \"voluptate\",\n                    \"points\": 9,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 18,\n            \"name\": \"Kaden Harber\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa99?text=enim\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 8,\n                    \"category_id\": 18,\n                    \"title\": \"Ullam earum necessitatibus quo consequatur molestias quo in earum.\",\n                    \"question_text\": \"Nesciunt expedita sit et sunt qui non. Quaerat dignissimos enim qui quasi autem quia. Commodi eos sunt in quod. Ad iure libero aspernatur quibusdam sit minima nam.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00ee33?text=amet\",\n                    \"question_video\": \"http://www.rosenbaum.biz/quis-eligendi-sequi-ipsum-dolorum-modi.html\",\n                    \"question_audio\": \"http://www.batz.info/dicta-excepturi-dicta-placeat-aut-delectus-veritatis-expedita-voluptatem\",\n                    \"correct_answer\": \"suscipit\",\n                    \"points\": 97,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 19,\n            \"name\": \"Garrett Thompson\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0066ee?text=omnis\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 9,\n                    \"category_id\": 19,\n                    \"title\": \"Iste commodi distinctio qui nemo.\",\n                    \"question_text\": \"Modi qui aliquam eos quia molestiae accusantium commodi. Est blanditiis sint sunt quia iste quae. Possimus eos sit facilis itaque dolore eligendi. Quis molestiae molestiae ipsam vel voluptatibus eaque at.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/009955?text=occaecati\",\n                    \"question_video\": \"http://murazik.com/labore-quis-aut-at-et\",\n                    \"question_audio\": \"http://cassin.org/aut-est-nemo-rerum-repellendus.html\",\n                    \"correct_answer\": \"ab\",\n                    \"points\": 31,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 20,\n            \"name\": \"Oceane Terry\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/000055?text=rerum\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 10,\n                    \"category_id\": 20,\n                    \"title\": \"Maxime eum facere dolorem minus animi accusamus non.\",\n                    \"question_text\": \"Ipsam illo non aspernatur culpa. Ab quia voluptatibus repudiandae. Doloribus unde quaerat molestias libero non sit eum.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0011aa?text=totam\",\n                    \"question_video\": \"http://www.pacocha.net/\",\n                    \"question_audio\": \"http://graham.com/ullam-aliquam-quo-ut-tempore-vel-et-placeat-voluptatum\",\n                    \"correct_answer\": \"dignissimos\",\n                    \"points\": 2,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 21,\n            \"name\": \"Ignatius Farrell\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00bb44?text=assumenda\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 11,\n                    \"category_id\": 21,\n                    \"title\": \"Iusto molestias soluta enim quam tenetur velit.\",\n                    \"question_text\": \"Alias et nulla quam labore nihil. Qui porro quidem illum neque accusantium mollitia.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0022cc?text=illo\",\n                    \"question_video\": \"https://www.goldner.com/perspiciatis-autem-omnis-velit-ipsum-quo-velit-non\",\n                    \"question_audio\": \"http://larson.info/\",\n                    \"correct_answer\": \"saepe\",\n                    \"points\": 57,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 22,\n            \"name\": \"Ruby Hill\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0055cc?text=illo\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 12,\n                    \"category_id\": 22,\n                    \"title\": \"Eos quia aut reiciendis blanditiis odit soluta non est.\",\n                    \"question_text\": \"Expedita omnis quasi numquam maiores architecto aperiam. Sit commodi recusandae quia in. Autem aut repudiandae explicabo. Cumque a tempore hic recusandae.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0022ee?text=voluptas\",\n                    \"question_video\": \"https://www.klocko.org/rerum-autem-minus-est-fugiat-qui-saepe\",\n                    \"question_audio\": \"http://www.oreilly.com/iure-et-cupiditate-deserunt-quibusdam.html\",\n                    \"correct_answer\": \"sed\",\n                    \"points\": 95,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 23,\n            \"name\": \"Conner West Jr.\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0055dd?text=consequatur\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 13,\n                    \"category_id\": 23,\n                    \"title\": \"Suscipit reiciendis placeat quasi.\",\n                    \"question_text\": \"Quidem sit molestias sint ea pariatur voluptas. Minima asperiores veniam ipsa nihil cumque. At est qui excepturi ut iusto consequatur necessitatibus.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00aa66?text=temporibus\",\n                    \"question_video\": \"https://senger.com/ipsa-quod-veniam-ex-dolorem-sunt.html\",\n                    \"question_audio\": \"http://www.ziemann.org/aut-vitae-expedita-non-illum-repellendus-rerum-numquam-in\",\n                    \"correct_answer\": \"quia\",\n                    \"points\": 100,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 24,\n            \"name\": \"Audie Schroeder\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/001100?text=eligendi\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 14,\n                    \"category_id\": 24,\n                    \"title\": \"Eius et voluptas tempora.\",\n                    \"question_text\": \"Quo deleniti tempore sed voluptate reiciendis. Eos minima animi necessitatibus sapiente. Est dolore facilis rerum harum saepe omnis dolores. Voluptas officiis et dolores ut dolore recusandae.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00dd00?text=enim\",\n                    \"question_video\": \"http://jones.com/soluta-quis-dolor-aut-id-tenetur-suscipit\",\n                    \"question_audio\": \"https://toy.com/dolor-sed-deserunt-molestiae-vitae-consequatur.html\",\n                    \"correct_answer\": \"et\",\n                    \"points\": 31,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 25,\n            \"name\": \"Prof. Monty Towne II\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00bb55?text=enim\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 15,\n                    \"category_id\": 25,\n                    \"title\": \"Magnam in non dicta et.\",\n                    \"question_text\": \"Fugit dolores doloremque dicta. Voluptatem tempore id beatae cumque commodi odio. Aut sint numquam natus ullam eius. Velit consectetur aliquid necessitatibus quibusdam consequatur aspernatur repudiandae tempore.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00aabb?text=sed\",\n                    \"question_video\": \"http://www.gerlach.com/quo-molestias-assumenda-hic-expedita-aspernatur-molestias-molestiae\",\n                    \"question_audio\": \"http://www.morissette.com/\",\n                    \"correct_answer\": \"distinctio\",\n                    \"points\": 50,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 26,\n            \"name\": \"Erich Stanton\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00ff44?text=nesciunt\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 16,\n                    \"category_id\": 26,\n                    \"title\": \"Enim aut vero eos earum voluptatem.\",\n                    \"question_text\": \"Iusto doloremque commodi rerum dolor quae. Autem illo pariatur qui repudiandae. Id ut veritatis deserunt et sequi soluta odio.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/007766?text=quasi\",\n                    \"question_video\": \"http://www.feil.com/vel-iure-quia-repellendus-in-occaecati\",\n                    \"question_audio\": \"http://pagac.info/molestias-id-est-velit-atque\",\n                    \"correct_answer\": \"perferendis\",\n                    \"points\": 35,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 27,\n            \"name\": \"Monica Wunsch Sr.\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/004411?text=et\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 17,\n                    \"category_id\": 27,\n                    \"title\": \"Est et distinctio et necessitatibus veniam.\",\n                    \"question_text\": \"Ut nisi suscipit culpa dolore nam doloribus expedita. Nihil natus aliquam accusantium consectetur quia. Fuga libero eos et id atque tempora voluptatem. Iste et nihil nihil.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/003311?text=sit\",\n                    \"question_video\": \"https://www.lemke.info/corporis-eos-a-nesciunt-eligendi\",\n                    \"question_audio\": \"http://www.rohan.com/eaque-doloribus-ipsam-laudantium.html\",\n                    \"correct_answer\": \"ab\",\n                    \"points\": 79,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 28,\n            \"name\": \"Dr. Jeanie Mosciski\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa55?text=id\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 18,\n                    \"category_id\": 28,\n                    \"title\": \"Nemo blanditiis non et animi porro ut.\",\n                    \"question_text\": \"Ipsa illo magnam repellendus aut repellendus ut hic eos. Suscipit velit cumque molestias nemo ullam id. Et qui aut consequatur aut aut amet necessitatibus. Ut est maiores odit quo.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00ffff?text=sit\",\n                    \"question_video\": \"https://yost.com/mollitia-ut-hic-vel-adipisci-reiciendis-qui-voluptas-perferendis.html\",\n                    \"question_audio\": \"http://cole.com/voluptas-minus-id-magni-ad-modi-non-sint.html\",\n                    \"correct_answer\": \"officia\",\n                    \"points\": 93,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 29,\n            \"name\": \"Prof. Luisa Denesik Jr.\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/000033?text=est\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 19,\n                    \"category_id\": 29,\n                    \"title\": \"Id quae odio dolorem et quod dolorem nulla.\",\n                    \"question_text\": \"Unde occaecati et perspiciatis sapiente. Eligendi porro eum ut dolorum quo. Repellat autem molestiae non quia ipsa.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/009900?text=occaecati\",\n                    \"question_video\": \"http://www.daugherty.com/\",\n                    \"question_audio\": \"http://satterfield.org/\",\n                    \"correct_answer\": \"odit\",\n                    \"points\": 99,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 30,\n            \"name\": \"Mrs. Tia Wuckert\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/002255?text=pariatur\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 20,\n                    \"category_id\": 30,\n                    \"title\": \"Impedit voluptatem distinctio vel id consequuntur dolor.\",\n                    \"question_text\": \"Omnis iure excepturi deserunt quasi temporibus ut numquam. Qui nesciunt illum facere molestias vitae. Similique necessitatibus neque voluptatem laudantium consequuntur.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00aa44?text=natus\",\n                    \"question_video\": \"http://www.kulas.org/ut-non-magnam-sed-quam-adipisci-et-recusandae-architecto.html\",\n                    \"question_audio\": \"http://www.kunze.com/dolorem-iure-consequatur-dolores-nesciunt-maxime-qui-quo\",\n                    \"correct_answer\": \"qui\",\n                    \"points\": 24,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 31,\n            \"name\": \"Armando Nikolaus\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/007755?text=eum\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 32,\n            \"name\": \"Prof. Angelina Kemmer\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0022aa?text=iste\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 33,\n            \"name\": \"Lisandro Wuckert\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00eeee?text=molestias\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 34,\n            \"name\": \"Abraham Kris\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/005522?text=laboriosam\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 35,\n            \"name\": \"Prof. Don Murray I\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00dd44?text=modi\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 36,\n            \"name\": \"Miguel Breitenberg\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/002244?text=corporis\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 37,\n            \"name\": \"Prof. Jerald Steuber IV\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/008855?text=placeat\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 38,\n            \"name\": \"Peter Upton\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aaaa?text=hic\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 39,\n            \"name\": \"Mr. Ismael Kuvalis\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa55?text=dolorem\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 40,\n            \"name\": \"Margaretta Ritchie\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/006644?text=tempora\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 41,\n            \"name\": \"Dr. Myrl O'Kon II\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/003311?text=quam\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 42,\n            \"name\": \"Erik Wyman\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa66?text=repellendus\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 43,\n            \"name\": \"Dock Nicolas\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00cc11?text=earum\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 44,\n            \"name\": \"Helmer Zulauf\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/008866?text=deleniti\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 45,\n            \"name\": \"Ms. Flossie VonRueden\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/003355?text=quis\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 46,\n            \"name\": \"Christopher Smith\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0022ff?text=deserunt\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 47,\n            \"name\": \"Sterling Gottlieb\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aaee?text=voluptas\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Dr. Korbin Haley V\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0088cc?text=a\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Talon Miller\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0000dd?text=omnis\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 50,\n            \"name\": \"Alexander Kris\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/007711?text=nisi\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 100,\n        \"total\": 50\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "categories/hierarchy/all",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Virginie Wintheiser I",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/hierarchy/all",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"hierarchy",
+								"all"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Gabrielle Nader",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve a list of categories. The request includes query parameters for pagination, with a limit of 20 categories per page, and a specific category name to search for. The request does not include a request body.\n\n### Request Body\n\nThe request does not include a request body.\n\n### Response\n\nUpon successful execution, the endpoint returns a JSON response with a status code of 200. The response body contains an array of category objects, each including an id, name, image URL, creation timestamp, and update timestamp. Additionally, the response includes metadata such as the current page number, last page number, number of categories per page, and the total number of categories.\n\nExample response:\n\n``` json\n{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 20,\n            \"name\": \"Gabrielle Nader\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\",\n            \"created_at\": \"2024-08-17T14:16:40.000000Z\",\n            \"updated_at\": \"2024-08-17T14:16:40.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 20,\n        \"total\": 1\n    }\n}\n\n ```"
+					},
+					"response": [
+						{
+							"name": "get all category",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/categories?per_page=100",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"categories"
+									],
+									"query": [
+										{
+											"key": "per_page",
+											"value": "100"
+										},
+										{
+											"key": "name",
+											"value": "Gabrielle Nader",
+											"disabled": true
+										},
+										{
+											"key": "page",
+											"value": "1",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:33:13 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:33:13 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.10"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Gerson Hackett MD\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/008833?text=et\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 2,\n            \"name\": \"Dr. Edmund Balistreri\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0099cc?text=molestiae\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 3,\n            \"name\": \"Dr. Myriam Ernser\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00cc00?text=saepe\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 4,\n            \"name\": \"Anderson Kunze\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0088aa?text=at\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 5,\n            \"name\": \"Mervin Ruecker IV\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aaff?text=odit\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 6,\n            \"name\": \"Hershel O'Kon\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0066ff?text=nihil\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 7,\n            \"name\": \"Janick Kemmer\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/005588?text=autem\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 8,\n            \"name\": \"Claire Treutel\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/008866?text=ipsa\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 9,\n            \"name\": \"Nicolas Kreiger\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00bbbb?text=reiciendis\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 10,\n            \"name\": \"Prof. Jesse Bruen\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00ff66?text=veritatis\",\n            \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 11,\n            \"name\": \"Delbert Frami PhD\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0022cc?text=enim\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 1,\n                    \"category_id\": 11,\n                    \"title\": \"Molestiae quas reiciendis doloribus ut sed est.\",\n                    \"question_text\": \"Ullam unde illo quibusdam atque aut sit quia ea. Quibusdam aliquam sapiente laborum quae corporis neque debitis sit. Et quaerat aut veritatis eligendi enim. Magnam et eos aliquam placeat non quia dolores.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0033cc?text=et\",\n                    \"question_video\": \"https://west.biz/asperiores-perspiciatis-neque-culpa-magnam-qui-molestiae.html\",\n                    \"question_audio\": \"http://www.parisian.com/pariatur-nemo-excepturi-placeat-explicabo-similique-ipsum-quos\",\n                    \"correct_answer\": \"praesentium\",\n                    \"points\": 37,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 12,\n            \"name\": \"Petra Goyette\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/003333?text=blanditiis\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 2,\n                    \"category_id\": 12,\n                    \"title\": \"Aspernatur commodi eum aut enim quaerat.\",\n                    \"question_text\": \"Nisi sint omnis qui ut rerum fugiat nesciunt. Sed sed assumenda eum. Amet eos eos earum et eos sed incidunt. Consequatur eum qui eius rerum in repellendus. Iure id in nobis dolorem numquam.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/003344?text=a\",\n                    \"question_video\": \"http://www.okuneva.com/quisquam-dolor-quia-sed-fugit-non\",\n                    \"question_audio\": \"http://kemmer.info/voluptatem-corrupti-nulla-totam-possimus-quaerat-corporis-perspiciatis\",\n                    \"correct_answer\": \"temporibus\",\n                    \"points\": 85,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 13,\n            \"name\": \"Dr. Sienna Stroman DVM\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00dd55?text=tempora\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 3,\n                    \"category_id\": 13,\n                    \"title\": \"Labore magnam facilis aut mollitia fugiat.\",\n                    \"question_text\": \"Et amet ut aut optio eum libero debitis impedit. Asperiores nam cumque est. Ab dolorem et enim sapiente inventore sunt.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00bbcc?text=tempora\",\n                    \"question_video\": \"https://bailey.com/aperiam-illo-minima-porro-qui-porro-hic-cum-quasi.html\",\n                    \"question_audio\": \"http://homenick.biz/molestiae-quam-distinctio-pariatur-error-impedit\",\n                    \"correct_answer\": \"sit\",\n                    \"points\": 59,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 14,\n            \"name\": \"Mrs. Fleta White\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00bbff?text=consequatur\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 4,\n                    \"category_id\": 14,\n                    \"title\": \"Officia quas sit numquam amet ex tempora.\",\n                    \"question_text\": \"Facere dolorem quis voluptatum voluptatibus doloremque sed quis tempora. Dolorem veritatis ipsum earum esse temporibus velit ullam. Animi nesciunt non ab quas magni impedit dolores.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00ccff?text=est\",\n                    \"question_video\": \"http://www.bednar.com/minima-expedita-fugit-qui-doloremque-voluptatem-nisi\",\n                    \"question_audio\": \"http://price.com/reiciendis-temporibus-pariatur-inventore-blanditiis-nostrum-tempora-ad\",\n                    \"correct_answer\": \"reprehenderit\",\n                    \"points\": 61,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 15,\n            \"name\": \"Eliseo Davis\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/004422?text=ut\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 5,\n                    \"category_id\": 15,\n                    \"title\": \"Eos aut sit voluptatem hic debitis.\",\n                    \"question_text\": \"Aliquam mollitia saepe qui iusto. Suscipit ullam nemo ut id atque. Voluptate ut enim vel quia error ea enim. Dolorum officia voluptas ad eum.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/009911?text=sunt\",\n                    \"question_video\": \"https://oconner.com/quis-qui-sit-accusantium-assumenda-dolorem.html\",\n                    \"question_audio\": \"http://www.mayer.org/ea-nemo-saepe-quo-est-adipisci-et-ut\",\n                    \"correct_answer\": \"et\",\n                    \"points\": 10,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 16,\n            \"name\": \"Myriam Carter\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/000077?text=suscipit\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 6,\n                    \"category_id\": 16,\n                    \"title\": \"Id eius sed corporis quia expedita.\",\n                    \"question_text\": \"Cum vel est quia optio. Libero non ab et dignissimos aspernatur dolorem. Est ipsa et eum sint quam ut laudantium.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0033aa?text=nobis\",\n                    \"question_video\": \"http://pollich.com/similique-soluta-nihil-veniam-quam-et-non-qui\",\n                    \"question_audio\": \"http://www.skiles.com/\",\n                    \"correct_answer\": \"itaque\",\n                    \"points\": 96,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 17,\n            \"name\": \"Ally Lynch\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=voluptatem\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 7,\n                    \"category_id\": 17,\n                    \"title\": \"Est quo aliquid dignissimos sint quisquam et.\",\n                    \"question_text\": \"Omnis mollitia est eum consequatur aut rerum. Eveniet eos omnis et at quisquam. Cumque voluptas aliquid ut blanditiis ad recusandae enim.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0022cc?text=nam\",\n                    \"question_video\": \"https://boyer.biz/amet-reprehenderit-voluptatibus-dolorem-et-omnis-occaecati-temporibus-animi.html\",\n                    \"question_audio\": \"https://bergnaum.org/praesentium-velit-quis-et-nam-est.html\",\n                    \"correct_answer\": \"voluptate\",\n                    \"points\": 9,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 18,\n            \"name\": \"Kaden Harber\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa99?text=enim\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 8,\n                    \"category_id\": 18,\n                    \"title\": \"Ullam earum necessitatibus quo consequatur molestias quo in earum.\",\n                    \"question_text\": \"Nesciunt expedita sit et sunt qui non. Quaerat dignissimos enim qui quasi autem quia. Commodi eos sunt in quod. Ad iure libero aspernatur quibusdam sit minima nam.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00ee33?text=amet\",\n                    \"question_video\": \"http://www.rosenbaum.biz/quis-eligendi-sequi-ipsum-dolorum-modi.html\",\n                    \"question_audio\": \"http://www.batz.info/dicta-excepturi-dicta-placeat-aut-delectus-veritatis-expedita-voluptatem\",\n                    \"correct_answer\": \"suscipit\",\n                    \"points\": 97,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 19,\n            \"name\": \"Garrett Thompson\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0066ee?text=omnis\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 9,\n                    \"category_id\": 19,\n                    \"title\": \"Iste commodi distinctio qui nemo.\",\n                    \"question_text\": \"Modi qui aliquam eos quia molestiae accusantium commodi. Est blanditiis sint sunt quia iste quae. Possimus eos sit facilis itaque dolore eligendi. Quis molestiae molestiae ipsam vel voluptatibus eaque at.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/009955?text=occaecati\",\n                    \"question_video\": \"http://murazik.com/labore-quis-aut-at-et\",\n                    \"question_audio\": \"http://cassin.org/aut-est-nemo-rerum-repellendus.html\",\n                    \"correct_answer\": \"ab\",\n                    \"points\": 31,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 20,\n            \"name\": \"Oceane Terry\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/000055?text=rerum\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 10,\n                    \"category_id\": 20,\n                    \"title\": \"Maxime eum facere dolorem minus animi accusamus non.\",\n                    \"question_text\": \"Ipsam illo non aspernatur culpa. Ab quia voluptatibus repudiandae. Doloribus unde quaerat molestias libero non sit eum.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0011aa?text=totam\",\n                    \"question_video\": \"http://www.pacocha.net/\",\n                    \"question_audio\": \"http://graham.com/ullam-aliquam-quo-ut-tempore-vel-et-placeat-voluptatum\",\n                    \"correct_answer\": \"dignissimos\",\n                    \"points\": 2,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 21,\n            \"name\": \"Ignatius Farrell\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00bb44?text=assumenda\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 11,\n                    \"category_id\": 21,\n                    \"title\": \"Iusto molestias soluta enim quam tenetur velit.\",\n                    \"question_text\": \"Alias et nulla quam labore nihil. Qui porro quidem illum neque accusantium mollitia.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0022cc?text=illo\",\n                    \"question_video\": \"https://www.goldner.com/perspiciatis-autem-omnis-velit-ipsum-quo-velit-non\",\n                    \"question_audio\": \"http://larson.info/\",\n                    \"correct_answer\": \"saepe\",\n                    \"points\": 57,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 22,\n            \"name\": \"Ruby Hill\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0055cc?text=illo\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 12,\n                    \"category_id\": 22,\n                    \"title\": \"Eos quia aut reiciendis blanditiis odit soluta non est.\",\n                    \"question_text\": \"Expedita omnis quasi numquam maiores architecto aperiam. Sit commodi recusandae quia in. Autem aut repudiandae explicabo. Cumque a tempore hic recusandae.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/0022ee?text=voluptas\",\n                    \"question_video\": \"https://www.klocko.org/rerum-autem-minus-est-fugiat-qui-saepe\",\n                    \"question_audio\": \"http://www.oreilly.com/iure-et-cupiditate-deserunt-quibusdam.html\",\n                    \"correct_answer\": \"sed\",\n                    \"points\": 95,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 23,\n            \"name\": \"Conner West Jr.\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0055dd?text=consequatur\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 13,\n                    \"category_id\": 23,\n                    \"title\": \"Suscipit reiciendis placeat quasi.\",\n                    \"question_text\": \"Quidem sit molestias sint ea pariatur voluptas. Minima asperiores veniam ipsa nihil cumque. At est qui excepturi ut iusto consequatur necessitatibus.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00aa66?text=temporibus\",\n                    \"question_video\": \"https://senger.com/ipsa-quod-veniam-ex-dolorem-sunt.html\",\n                    \"question_audio\": \"http://www.ziemann.org/aut-vitae-expedita-non-illum-repellendus-rerum-numquam-in\",\n                    \"correct_answer\": \"quia\",\n                    \"points\": 100,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 24,\n            \"name\": \"Audie Schroeder\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/001100?text=eligendi\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 14,\n                    \"category_id\": 24,\n                    \"title\": \"Eius et voluptas tempora.\",\n                    \"question_text\": \"Quo deleniti tempore sed voluptate reiciendis. Eos minima animi necessitatibus sapiente. Est dolore facilis rerum harum saepe omnis dolores. Voluptas officiis et dolores ut dolore recusandae.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00dd00?text=enim\",\n                    \"question_video\": \"http://jones.com/soluta-quis-dolor-aut-id-tenetur-suscipit\",\n                    \"question_audio\": \"https://toy.com/dolor-sed-deserunt-molestiae-vitae-consequatur.html\",\n                    \"correct_answer\": \"et\",\n                    \"points\": 31,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 25,\n            \"name\": \"Prof. Monty Towne II\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00bb55?text=enim\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 15,\n                    \"category_id\": 25,\n                    \"title\": \"Magnam in non dicta et.\",\n                    \"question_text\": \"Fugit dolores doloremque dicta. Voluptatem tempore id beatae cumque commodi odio. Aut sint numquam natus ullam eius. Velit consectetur aliquid necessitatibus quibusdam consequatur aspernatur repudiandae tempore.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00aabb?text=sed\",\n                    \"question_video\": \"http://www.gerlach.com/quo-molestias-assumenda-hic-expedita-aspernatur-molestias-molestiae\",\n                    \"question_audio\": \"http://www.morissette.com/\",\n                    \"correct_answer\": \"distinctio\",\n                    \"points\": 50,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 26,\n            \"name\": \"Erich Stanton\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00ff44?text=nesciunt\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 16,\n                    \"category_id\": 26,\n                    \"title\": \"Enim aut vero eos earum voluptatem.\",\n                    \"question_text\": \"Iusto doloremque commodi rerum dolor quae. Autem illo pariatur qui repudiandae. Id ut veritatis deserunt et sequi soluta odio.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/007766?text=quasi\",\n                    \"question_video\": \"http://www.feil.com/vel-iure-quia-repellendus-in-occaecati\",\n                    \"question_audio\": \"http://pagac.info/molestias-id-est-velit-atque\",\n                    \"correct_answer\": \"perferendis\",\n                    \"points\": 35,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 27,\n            \"name\": \"Monica Wunsch Sr.\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/004411?text=et\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 17,\n                    \"category_id\": 27,\n                    \"title\": \"Est et distinctio et necessitatibus veniam.\",\n                    \"question_text\": \"Ut nisi suscipit culpa dolore nam doloribus expedita. Nihil natus aliquam accusantium consectetur quia. Fuga libero eos et id atque tempora voluptatem. Iste et nihil nihil.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/003311?text=sit\",\n                    \"question_video\": \"https://www.lemke.info/corporis-eos-a-nesciunt-eligendi\",\n                    \"question_audio\": \"http://www.rohan.com/eaque-doloribus-ipsam-laudantium.html\",\n                    \"correct_answer\": \"ab\",\n                    \"points\": 79,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 28,\n            \"name\": \"Dr. Jeanie Mosciski\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa55?text=id\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 18,\n                    \"category_id\": 28,\n                    \"title\": \"Nemo blanditiis non et animi porro ut.\",\n                    \"question_text\": \"Ipsa illo magnam repellendus aut repellendus ut hic eos. Suscipit velit cumque molestias nemo ullam id. Et qui aut consequatur aut aut amet necessitatibus. Ut est maiores odit quo.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00ffff?text=sit\",\n                    \"question_video\": \"https://yost.com/mollitia-ut-hic-vel-adipisci-reiciendis-qui-voluptas-perferendis.html\",\n                    \"question_audio\": \"http://cole.com/voluptas-minus-id-magni-ad-modi-non-sint.html\",\n                    \"correct_answer\": \"officia\",\n                    \"points\": 93,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 29,\n            \"name\": \"Prof. Luisa Denesik Jr.\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/000033?text=est\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 19,\n                    \"category_id\": 29,\n                    \"title\": \"Id quae odio dolorem et quod dolorem nulla.\",\n                    \"question_text\": \"Unde occaecati et perspiciatis sapiente. Eligendi porro eum ut dolorum quo. Repellat autem molestiae non quia ipsa.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/009900?text=occaecati\",\n                    \"question_video\": \"http://www.daugherty.com/\",\n                    \"question_audio\": \"http://satterfield.org/\",\n                    \"correct_answer\": \"odit\",\n                    \"points\": 99,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 30,\n            \"name\": \"Mrs. Tia Wuckert\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/002255?text=pariatur\",\n            \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:57.000000Z\",\n            \"questions\": [\n                {\n                    \"id\": 20,\n                    \"category_id\": 30,\n                    \"title\": \"Impedit voluptatem distinctio vel id consequuntur dolor.\",\n                    \"question_text\": \"Omnis iure excepturi deserunt quasi temporibus ut numquam. Qui nesciunt illum facere molestias vitae. Similique necessitatibus neque voluptatem laudantium consequuntur.\",\n                    \"question_image\": \"https://via.placeholder.com/640x480.png/00aa44?text=natus\",\n                    \"question_video\": \"http://www.kulas.org/ut-non-magnam-sed-quam-adipisci-et-recusandae-architecto.html\",\n                    \"question_audio\": \"http://www.kunze.com/dolorem-iure-consequatur-dolores-nesciunt-maxime-qui-quo\",\n                    \"correct_answer\": \"qui\",\n                    \"points\": 24,\n                    \"created_at\": \"2024-08-20T11:47:57.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:57.000000Z\"\n                }\n            ]\n        },\n        {\n            \"id\": 31,\n            \"name\": \"Armando Nikolaus\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/007755?text=eum\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 32,\n            \"name\": \"Prof. Angelina Kemmer\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0022aa?text=iste\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 33,\n            \"name\": \"Lisandro Wuckert\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00eeee?text=molestias\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 34,\n            \"name\": \"Abraham Kris\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/005522?text=laboriosam\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 35,\n            \"name\": \"Prof. Don Murray I\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00dd44?text=modi\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 36,\n            \"name\": \"Miguel Breitenberg\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/002244?text=corporis\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 37,\n            \"name\": \"Prof. Jerald Steuber IV\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/008855?text=placeat\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 38,\n            \"name\": \"Peter Upton\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aaaa?text=hic\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 39,\n            \"name\": \"Mr. Ismael Kuvalis\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa55?text=dolorem\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 40,\n            \"name\": \"Margaretta Ritchie\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/006644?text=tempora\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 41,\n            \"name\": \"Dr. Myrl O'Kon II\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/003311?text=quam\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 42,\n            \"name\": \"Erik Wyman\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa66?text=repellendus\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 43,\n            \"name\": \"Dock Nicolas\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00cc11?text=earum\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 44,\n            \"name\": \"Helmer Zulauf\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/008866?text=deleniti\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 45,\n            \"name\": \"Ms. Flossie VonRueden\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/003355?text=quis\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 46,\n            \"name\": \"Christopher Smith\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0022ff?text=deserunt\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 47,\n            \"name\": \"Sterling Gottlieb\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aaee?text=voluptas\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 48,\n            \"name\": \"Dr. Korbin Haley V\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0088cc?text=a\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 49,\n            \"name\": \"Talon Miller\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/0000dd?text=omnis\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        },\n        {\n            \"id\": 50,\n            \"name\": \"Alexander Kris\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/007711?text=nisi\",\n            \"created_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:01.000000Z\",\n            \"questions\": []\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 100,\n        \"total\": 50\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "categories/groups",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Virginie Wintheiser I",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/groups/categories",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"groups",
+								"categories"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Gabrielle Nader",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve a list of categories. The request includes query parameters for pagination, with a limit of 20 categories per page, and a specific category name to search for. The request does not include a request body.\n\n### Request Body\n\nThe request does not include a request body.\n\n### Response\n\nUpon successful execution, the endpoint returns a JSON response with a status code of 200. The response body contains an array of category objects, each including an id, name, image URL, creation timestamp, and update timestamp. Additionally, the response includes metadata such as the current page number, last page number, number of categories per page, and the total number of categories.\n\nExample response:\n\n``` json\n{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 20,\n            \"name\": \"Gabrielle Nader\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\",\n            \"created_at\": \"2024-08-17T14:16:40.000000Z\",\n            \"updated_at\": \"2024-08-17T14:16:40.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 20,\n        \"total\": 1\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "categories/groups Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Virginie Wintheiser I",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/parent/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								"parent",
+								"1"
+							],
+							"query": [
+								{
+									"key": "per_page",
+									"value": "20",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Gabrielle Nader",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve a list of categories. The request includes query parameters for pagination, with a limit of 20 categories per page, and a specific category name to search for. The request does not include a request body.\n\n### Request Body\n\nThe request does not include a request body.\n\n### Response\n\nUpon successful execution, the endpoint returns a JSON response with a status code of 200. The response body contains an array of category objects, each including an id, name, image URL, creation timestamp, and update timestamp. Additionally, the response includes metadata such as the current page number, last page number, number of categories per page, and the total number of categories.\n\nExample response:\n\n``` json\n{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 20,\n            \"name\": \"Gabrielle Nader\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\",\n            \"created_at\": \"2024-08-17T14:16:40.000000Z\",\n            \"updated_at\": \"2024-08-17T14:16:40.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 20,\n        \"total\": 1\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "show one category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|uLAB8DB9MHRF9cAGVrRom8HBBAUJzWcKu4SVJuxja0451fc4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"name\": \"category one\",\r\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\"\r\n          \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/categories/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get question category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/categories/:id/questions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"categories",
+								":id",
+								"questions"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "21"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "game",
+			"item": [
+				{
+					"name": "get all game",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Virginie Wintheiser I",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/games",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"games"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Gabrielle Nader",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "9",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve a list of categories. The request includes query parameters for pagination, with a limit of 20 categories per page, and a specific category name to search for. The request does not include a request body.\n\n### Request Body\n\nThe request does not include a request body.\n\n### Response\n\nUpon successful execution, the endpoint returns a JSON response with a status code of 200. The response body contains an array of category objects, each including an id, name, image URL, creation timestamp, and update timestamp. Additionally, the response includes metadata such as the current page number, last page number, number of categories per page, and the total number of categories.\n\nExample response:\n\n``` json\n{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 20,\n            \"name\": \"Gabrielle Nader\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\",\n            \"created_at\": \"2024-08-17T14:16:40.000000Z\",\n            \"updated_at\": \"2024-08-17T14:16:40.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 20,\n        \"total\": 1\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "show one game",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|uLAB8DB9MHRF9cAGVrRom8HBBAUJzWcKu4SVJuxja0451fc4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"name\": \"category one\",\r\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\"\r\n          \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/games/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"games",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "52"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete game",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|uLAB8DB9MHRF9cAGVrRom8HBBAUJzWcKu4SVJuxja0451fc4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"name\": \"category one\",\r\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\"\r\n          \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/games/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"games",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "92"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update game",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"name\": \"amr\",\r\n    \"description\": \"Tempora ipsam dolores cupiditate.\",\r\n    \"is_free\": 1,\r\n    \"price\": 1.73\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/games/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"games",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "82"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "questions Copy",
+			"item": [
+				{
+					"name": "get all Question",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{base_url}}/questions?page=9&per_page=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"questions"
+							],
+							"query": [
+								{
+									"key": "category_id",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "9"
+								},
+								{
+									"key": "per_page",
+									"value": "10"
+								}
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve a list of categories. The request includes query parameters for pagination, with a limit of 20 categories per page, and a specific category name to search for. The request does not include a request body.\n\n### Request Body\n\nThe request does not include a request body.\n\n### Response\n\nUpon successful execution, the endpoint returns a JSON response with a status code of 200. The response body contains an array of category objects, each including an id, name, image URL, creation timestamp, and update timestamp. Additionally, the response includes metadata such as the current page number, last page number, number of categories per page, and the total number of categories.\n\nExample response:\n\n``` json\n{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 20,\n            \"name\": \"Gabrielle Nader\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\",\n            \"created_at\": \"2024-08-17T14:16:40.000000Z\",\n            \"updated_at\": \"2024-08-17T14:16:40.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 20,\n        \"total\": 1\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "create questions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|uLAB8DB9MHRF9cAGVrRom8HBBAUJzWcKu4SVJuxja0451fc4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n      \"title\": \"A ea ut est ullam voluptatem voluptas unde.\",\r\n            \"question_text\": \"Consequatur maiores eaque id quam. Sit nemo et natus debitis doloremque. Perspiciatis autem qui animi quae eos voluptas.\",\r\n            \"question_image\": \"https://via.placeholder.com/640x480.png/005588?text=molestias\",\r\n            \"question_video\": \"http://medhurst.biz/consectetur-at-eveniet-sunt-dolor-omnis-unde-quia-dolores\",\r\n            \"question_audio\": \"https://cruickshank.com/sint-est-qui-quia-odio-laboriosam-temporibus-optio.html\",\r\n            \"correct_answer\": \"hic\",\r\n            \"points\": 2,\r\n            \"category_id\" : 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/questions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show one questions",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|uLAB8DB9MHRF9cAGVrRom8HBBAUJzWcKu4SVJuxja0451fc4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"name\": \"category one\",\r\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\"\r\n          \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/questions/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"questions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "19"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete questions",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|uLAB8DB9MHRF9cAGVrRom8HBBAUJzWcKu4SVJuxja0451fc4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"name\": \"category one\",\r\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\"\r\n          \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/questions/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"questions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "19"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update game",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n            \"category_id\" : 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/questions/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"questions",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "game-category",
+			"item": [
+				{
+					"name": "get all game-category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Virginie Wintheiser I",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "20",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/questions",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"questions"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "Gabrielle Nader",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "9",
+									"disabled": true
+								}
+							]
+						},
+						"description": "This endpoint makes an HTTP GET request to retrieve a list of categories. The request includes query parameters for pagination, with a limit of 20 categories per page, and a specific category name to search for. The request does not include a request body.\n\n### Request Body\n\nThe request does not include a request body.\n\n### Response\n\nUpon successful execution, the endpoint returns a JSON response with a status code of 200. The response body contains an array of category objects, each including an id, name, image URL, creation timestamp, and update timestamp. Additionally, the response includes metadata such as the current page number, last page number, number of categories per page, and the total number of categories.\n\nExample response:\n\n``` json\n{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 20,\n            \"name\": \"Gabrielle Nader\",\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\",\n            \"created_at\": \"2024-08-17T14:16:40.000000Z\",\n            \"updated_at\": \"2024-08-17T14:16:40.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 1,\n        \"per_page\": 20,\n        \"total\": 1\n    }\n}\n\n ```"
+					},
+					"response": []
+				},
+				{
+					"name": "create game-category",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\" : \"Amr game\",\r\n    \"categories\" :[1,2,3]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/game-category",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"game-category"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "create game-category",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\" : \"Amr game\",\r\n    \"categories\" :[1,2,4]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/game-category",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"game-category"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:31:52 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:31:52 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.10"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 201,\n    \"message\": \"success\",\n    \"data\": {\n        \"game\": {\n            \"id\": 84,\n            \"name\": \"Amr game\",\n            \"price\": null,\n            \"created_at\": \"2024-08-20T12:31:52.000000Z\",\n            \"updated_at\": \"2024-08-20T12:31:52.000000Z\"\n        },\n        \"category\": [\n            {\n                \"category_id\": {\n                    \"id\": 1,\n                    \"name\": \"Gerson Hackett MD\",\n                    \"image_url\": \"https://via.placeholder.com/640x480.png/008833?text=et\",\n                    \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n                    \"questions\": []\n                }\n            },\n            {\n                \"category_id\": {\n                    \"id\": 2,\n                    \"name\": \"Dr. Edmund Balistreri\",\n                    \"image_url\": \"https://via.placeholder.com/640x480.png/0099cc?text=molestiae\",\n                    \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n                    \"questions\": []\n                }\n            },\n            {\n                \"category_id\": {\n                    \"id\": 4,\n                    \"name\": \"Anderson Kunze\",\n                    \"image_url\": \"https://via.placeholder.com/640x480.png/0088aa?text=at\",\n                    \"created_at\": \"2024-08-20T11:47:39.000000Z\",\n                    \"updated_at\": \"2024-08-20T11:47:39.000000Z\",\n                    \"questions\": []\n                }\n            }\n        ]\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "show one game-category",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|uLAB8DB9MHRF9cAGVrRom8HBBAUJzWcKu4SVJuxja0451fc4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"name\": \"category one\",\r\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\"\r\n          \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/game-category/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"game-category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "29"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete game-category",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|uLAB8DB9MHRF9cAGVrRom8HBBAUJzWcKu4SVJuxja0451fc4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n            \"name\": \"category one\",\r\n            \"image_url\": \"https://via.placeholder.com/640x480.png/00aa11?text=ullam\"\r\n          \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/game-category/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"game-category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "29"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update game-category",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n            //\"category_id\" : 10 \r\n          // \"game_id\" : 90\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/game-category/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"game-category",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "29"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "plane",
+			"item": [
+				{
+					"name": "get plane",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/plan",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"plan"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get plane",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/plan",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"plan"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:31:38 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:31:38 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.10"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"ut\",\n            \"price\": 38.29,\n            \"game_include\": 10\n        },\n        {\n            \"id\": 2,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"explicabo\",\n            \"price\": 15.04,\n            \"game_include\": 3\n        },\n        {\n            \"id\": 3,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"voluptas\",\n            \"price\": 53.8,\n            \"game_include\": 4\n        },\n        {\n            \"id\": 4,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"neque\",\n            \"price\": 40.24,\n            \"game_include\": 7\n        },\n        {\n            \"id\": 5,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"laboriosam\",\n            \"price\": 52.4,\n            \"game_include\": 6\n        },\n        {\n            \"id\": 6,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"dicta\",\n            \"price\": 83.05,\n            \"game_include\": 7\n        },\n        {\n            \"id\": 7,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"impedit\",\n            \"price\": 16.81,\n            \"game_include\": 8\n        },\n        {\n            \"id\": 8,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"ratione\",\n            \"price\": 43.29,\n            \"game_include\": 3\n        },\n        {\n            \"id\": 9,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"id\",\n            \"price\": 54.83,\n            \"game_include\": 8\n        },\n        {\n            \"id\": 10,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"soluta\",\n            \"price\": 88.91,\n            \"game_include\": 10\n        },\n        {\n            \"id\": 11,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"ipsam\",\n            \"price\": 13.9,\n            \"game_include\": 8\n        },\n        {\n            \"id\": 12,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"voluptatem\",\n            \"price\": 75.83,\n            \"game_include\": 9\n        },\n        {\n            \"id\": 13,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"ab\",\n            \"price\": 70.99,\n            \"game_include\": 6\n        },\n        {\n            \"id\": 14,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"deleniti\",\n            \"price\": 49.64,\n            \"game_include\": 3\n        },\n        {\n            \"id\": 15,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"dicta\",\n            \"price\": 94.34,\n            \"game_include\": 4\n        },\n        {\n            \"id\": 16,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"quam\",\n            \"price\": 68.31,\n            \"game_include\": 2\n        },\n        {\n            \"id\": 17,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"amet\",\n            \"price\": 26.48,\n            \"game_include\": 2\n        },\n        {\n            \"id\": 18,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"eos\",\n            \"price\": 79.33,\n            \"game_include\": 3\n        },\n        {\n            \"id\": 19,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"dolores\",\n            \"price\": 50.9,\n            \"game_include\": 10\n        },\n        {\n            \"id\": 20,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"voluptate\",\n            \"price\": 12.95,\n            \"game_include\": 9\n        },\n        {\n            \"id\": 21,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"voluptas\",\n            \"price\": 16.5,\n            \"game_include\": 9\n        },\n        {\n            \"id\": 22,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"laborum\",\n            \"price\": 95.76,\n            \"game_include\": 8\n        },\n        {\n            \"id\": 23,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"magni\",\n            \"price\": 49.62,\n            \"game_include\": 8\n        },\n        {\n            \"id\": 24,\n            \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n            \"name\": \"quos\",\n            \"price\": 10.02,\n            \"game_include\": 10\n        },\n        {\n            \"id\": 25,\n            \"created_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"name\": \"dolor\",\n            \"price\": 19.65,\n            \"game_include\": 9\n        },\n        {\n            \"id\": 26,\n            \"created_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"name\": \"eligendi\",\n            \"price\": 30.42,\n            \"game_include\": 6\n        },\n        {\n            \"id\": 27,\n            \"created_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"name\": \"perferendis\",\n            \"price\": 23.58,\n            \"game_include\": 2\n        },\n        {\n            \"id\": 28,\n            \"created_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"name\": \"nisi\",\n            \"price\": 43.99,\n            \"game_include\": 1\n        },\n        {\n            \"id\": 29,\n            \"created_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:50.000000Z\",\n            \"name\": \"nihil\",\n            \"price\": 25.41,\n            \"game_include\": 7\n        },\n        {\n            \"id\": 30,\n            \"created_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"name\": \"qui\",\n            \"price\": 65.4,\n            \"game_include\": 3\n        },\n        {\n            \"id\": 31,\n            \"created_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"name\": \"et\",\n            \"price\": 99.99,\n            \"game_include\": 8\n        },\n        {\n            \"id\": 32,\n            \"created_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"name\": \"non\",\n            \"price\": 40.09,\n            \"game_include\": 6\n        },\n        {\n            \"id\": 33,\n            \"created_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"name\": \"eligendi\",\n            \"price\": 44.15,\n            \"game_include\": 8\n        },\n        {\n            \"id\": 34,\n            \"created_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:51.000000Z\",\n            \"name\": \"exercitationem\",\n            \"price\": 12.11,\n            \"game_include\": 8\n        },\n        {\n            \"id\": 35,\n            \"created_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"name\": \"excepturi\",\n            \"price\": 50.63,\n            \"game_include\": 7\n        },\n        {\n            \"id\": 36,\n            \"created_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"name\": \"fugit\",\n            \"price\": 36.91,\n            \"game_include\": 8\n        },\n        {\n            \"id\": 37,\n            \"created_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"name\": \"delectus\",\n            \"price\": 91.92,\n            \"game_include\": 5\n        },\n        {\n            \"id\": 38,\n            \"created_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"name\": \"illum\",\n            \"price\": 29.22,\n            \"game_include\": 6\n        },\n        {\n            \"id\": 39,\n            \"created_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:52.000000Z\",\n            \"name\": \"placeat\",\n            \"price\": 93.58,\n            \"game_include\": 7\n        },\n        {\n            \"id\": 40,\n            \"created_at\": \"2024-08-20T11:47:53.000000Z\",\n            \"updated_at\": \"2024-08-20T11:47:53.000000Z\",\n            \"name\": \"nulla\",\n            \"price\": 47.08,\n            \"game_include\": 10\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "add plane",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/plane/addplan",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"plane",
+								"addplan"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "contact_us",
+			"item": [
+				{
+					"name": "contact_us",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"subject\": \"Subject of the message\",\r\n    \"message\": \"This is the message content.\",\r\n    \"name\": \"hassan gomaa\",\r\n    \"email\": \"hassan.gomaa.dev@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/contact-us",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"contact-us"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "supscription",
+			"item": [
+				{
+					"name": "get user supscription",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/supscription",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"supscription"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get user supscription",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/supscription",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"supscription"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:30:06 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:30:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.10"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "57"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 21,\n            \"plan_id\": {\n                \"id\": 1,\n                \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n                \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n                \"name\": \"ut\",\n                \"price\": 38.29,\n                \"game_include\": 10\n            },\n            \"user_id\": {\n                \"id\": 1,\n                \"name\": \"ADMIN GAME WISE\",\n                \"avatar\": \"https://res.cloudinary.com/demo/image/facebook/w_100,h_100,c_fill,d_avatar2.png/non_existing_id.jpg\",\n                \"email\": \"admin@app.com\",\n                \"phone\": \"+971123456789\",\n                \"country_code\": \"+20\",\n                \"lang\": \"ar\",\n                \"email_verified_at\": \"2024-08-20T11:47:34.000000Z\",\n                \"user_type\": \"USER\",\n                \"email_verification_token\": null,\n                \"status\": 0,\n                \"remainig_game\": 10,\n                \"active\": 1,\n                \"api_token\": null,\n                \"deleted_at\": null,\n                \"created_at\": \"2024-08-20T11:47:34.000000Z\",\n                \"updated_at\": \"2024-08-20T12:30:03.000000Z\"\n            },\n            \"payment_method\": \"stripe\",\n            \"created_at\": \"2024-08-20T11:48:48.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:48.000000Z\"\n        },\n        {\n            \"id\": 22,\n            \"plan_id\": {\n                \"id\": 1,\n                \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n                \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n                \"name\": \"ut\",\n                \"price\": 38.29,\n                \"game_include\": 10\n            },\n            \"user_id\": {\n                \"id\": 1,\n                \"name\": \"ADMIN GAME WISE\",\n                \"avatar\": \"https://res.cloudinary.com/demo/image/facebook/w_100,h_100,c_fill,d_avatar2.png/non_existing_id.jpg\",\n                \"email\": \"admin@app.com\",\n                \"phone\": \"+971123456789\",\n                \"country_code\": \"+20\",\n                \"lang\": \"ar\",\n                \"email_verified_at\": \"2024-08-20T11:47:34.000000Z\",\n                \"user_type\": \"USER\",\n                \"email_verification_token\": null,\n                \"status\": 0,\n                \"remainig_game\": 10,\n                \"active\": 1,\n                \"api_token\": null,\n                \"deleted_at\": null,\n                \"created_at\": \"2024-08-20T11:47:34.000000Z\",\n                \"updated_at\": \"2024-08-20T12:30:03.000000Z\"\n            },\n            \"payment_method\": \"stripe\",\n            \"created_at\": \"2024-08-20T12:30:03.000000Z\",\n            \"updated_at\": \"2024-08-20T12:30:03.000000Z\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "payment supscription",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"plan_id\" : 2 , \r\n    \"paymentMethod\" :  \"stripe\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/supscription",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"supscription"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "payment supscritpe",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"plan_id\" : 1 , \r\n    \"paymentMethod\" :  \"stripe\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/supscription",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"supscription"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:30:03 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:30:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.10"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": {\n        \"user_id\": 1,\n        \"plan_id\": \"1\",\n        \"amount\": 38.29,\n        \"payment_method\": \"stripe\",\n        \"updated_at\": \"2024-08-20T12:30:03.000000Z\",\n        \"created_at\": \"2024-08-20T12:30:03.000000Z\",\n        \"id\": 22\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "user game",
+			"item": [
+				{
+					"name": "get user game",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user-game",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user-game"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get user supscription",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/supscription",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"supscription"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:30:06 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:30:06 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.10"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "57"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 21,\n            \"plan_id\": {\n                \"id\": 1,\n                \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n                \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n                \"name\": \"ut\",\n                \"price\": 38.29,\n                \"game_include\": 10\n            },\n            \"user_id\": {\n                \"id\": 1,\n                \"name\": \"ADMIN GAME WISE\",\n                \"avatar\": \"https://res.cloudinary.com/demo/image/facebook/w_100,h_100,c_fill,d_avatar2.png/non_existing_id.jpg\",\n                \"email\": \"admin@app.com\",\n                \"phone\": \"+971123456789\",\n                \"country_code\": \"+20\",\n                \"lang\": \"ar\",\n                \"email_verified_at\": \"2024-08-20T11:47:34.000000Z\",\n                \"user_type\": \"USER\",\n                \"email_verification_token\": null,\n                \"status\": 0,\n                \"remainig_game\": 10,\n                \"active\": 1,\n                \"api_token\": null,\n                \"deleted_at\": null,\n                \"created_at\": \"2024-08-20T11:47:34.000000Z\",\n                \"updated_at\": \"2024-08-20T12:30:03.000000Z\"\n            },\n            \"payment_method\": \"stripe\",\n            \"created_at\": \"2024-08-20T11:48:48.000000Z\",\n            \"updated_at\": \"2024-08-20T11:48:48.000000Z\"\n        },\n        {\n            \"id\": 22,\n            \"plan_id\": {\n                \"id\": 1,\n                \"created_at\": \"2024-08-20T11:47:49.000000Z\",\n                \"updated_at\": \"2024-08-20T11:47:49.000000Z\",\n                \"name\": \"ut\",\n                \"price\": 38.29,\n                \"game_include\": 10\n            },\n            \"user_id\": {\n                \"id\": 1,\n                \"name\": \"ADMIN GAME WISE\",\n                \"avatar\": \"https://res.cloudinary.com/demo/image/facebook/w_100,h_100,c_fill,d_avatar2.png/non_existing_id.jpg\",\n                \"email\": \"admin@app.com\",\n                \"phone\": \"+971123456789\",\n                \"country_code\": \"+20\",\n                \"lang\": \"ar\",\n                \"email_verified_at\": \"2024-08-20T11:47:34.000000Z\",\n                \"user_type\": \"USER\",\n                \"email_verification_token\": null,\n                \"status\": 0,\n                \"remainig_game\": 10,\n                \"active\": 1,\n                \"api_token\": null,\n                \"deleted_at\": null,\n                \"created_at\": \"2024-08-20T11:47:34.000000Z\",\n                \"updated_at\": \"2024-08-20T12:30:03.000000Z\"\n            },\n            \"payment_method\": \"stripe\",\n            \"created_at\": \"2024-08-20T12:30:03.000000Z\",\n            \"updated_at\": \"2024-08-20T12:30:03.000000Z\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "games/buyGame",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "// {\r\n//     \"plan_id\" : 1 , \r\n//     \"paymentMethod\" :  \"stripe\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/game/buyGame",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"game",
+								"buyGame"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "buyGame",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/game/buyGame",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"game",
+										"buyGame"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 21:01:18 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 21:01:18 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.10"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"in\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 14.02,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 2,\n            \"name\": \"illo\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 85.16,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 3,\n            \"name\": \"qui\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 92.94,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 4,\n            \"name\": \"in\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 31.22,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 5,\n            \"name\": \"magnam\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 94.44,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 6,\n            \"name\": \"eos\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 51.38,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 7,\n            \"name\": \"similique\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 95.5,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 8,\n            \"name\": \"architecto\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 77.13,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 9,\n            \"name\": \"sit\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 93.92,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 10,\n            \"name\": \"recusandae\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 82.12,\n            \"created_at\": \"2024-08-20T20:28:23.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 11,\n            \"name\": \"dolores\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 9.46,\n            \"created_at\": \"2024-08-20T20:28:37.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 12,\n            \"name\": \"nihil\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 96.42,\n            \"created_at\": \"2024-08-20T20:28:37.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 13,\n            \"name\": \"et\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 82.15,\n            \"created_at\": \"2024-08-20T20:28:38.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 14,\n            \"name\": \"voluptas\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 32.34,\n            \"created_at\": \"2024-08-20T20:28:38.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 15,\n            \"name\": \"voluptas\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 82.32,\n            \"created_at\": \"2024-08-20T20:28:38.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 16,\n            \"name\": \"voluptatem\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 14.24,\n            \"created_at\": \"2024-08-20T20:28:38.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 17,\n            \"name\": \"quidem\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 34.6,\n            \"created_at\": \"2024-08-20T20:28:38.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 18,\n            \"name\": \"aut\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 88.78,\n            \"created_at\": \"2024-08-20T20:28:39.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 19,\n            \"name\": \"dolorum\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 45.88,\n            \"created_at\": \"2024-08-20T20:28:39.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 20,\n            \"name\": \"nesciunt\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 51.16,\n            \"created_at\": \"2024-08-20T20:28:39.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 21,\n            \"name\": \"nisi\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 74.3,\n            \"created_at\": \"2024-08-20T20:28:39.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 22,\n            \"name\": \"quibusdam\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 44.75,\n            \"created_at\": \"2024-08-20T20:28:39.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 23,\n            \"name\": \"veniam\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 52.48,\n            \"created_at\": \"2024-08-20T20:28:40.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 24,\n            \"name\": \"qui\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 11.9,\n            \"created_at\": \"2024-08-20T20:28:40.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 25,\n            \"name\": \"libero\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 96.21,\n            \"created_at\": \"2024-08-20T20:28:40.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 26,\n            \"name\": \"voluptatem\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 42.67,\n            \"created_at\": \"2024-08-20T20:28:40.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 27,\n            \"name\": \"beatae\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 25.27,\n            \"created_at\": \"2024-08-20T20:28:40.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 28,\n            \"name\": \"praesentium\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 43.79,\n            \"created_at\": \"2024-08-20T20:28:41.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 29,\n            \"name\": \"sunt\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 57.51,\n            \"created_at\": \"2024-08-20T20:28:41.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 30,\n            \"name\": \"pariatur\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 58.16,\n            \"created_at\": \"2024-08-20T20:28:41.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 31,\n            \"name\": \"sed\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 15.69,\n            \"created_at\": \"2024-08-20T20:28:41.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 32,\n            \"name\": \"culpa\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 74.24,\n            \"created_at\": \"2024-08-20T20:28:42.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 33,\n            \"name\": \"voluptatem\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 7.79,\n            \"created_at\": \"2024-08-20T20:28:42.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 34,\n            \"name\": \"quas\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 8.64,\n            \"created_at\": \"2024-08-20T20:28:42.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 35,\n            \"name\": \"veniam\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 89.47,\n            \"created_at\": \"2024-08-20T20:28:42.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 36,\n            \"name\": \"perspiciatis\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 98.1,\n            \"created_at\": \"2024-08-20T20:28:42.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 37,\n            \"name\": \"aperiam\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 45.87,\n            \"created_at\": \"2024-08-20T20:28:43.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 38,\n            \"name\": \"ullam\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 75.56,\n            \"created_at\": \"2024-08-20T20:28:43.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 39,\n            \"name\": \"et\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 18.74,\n            \"created_at\": \"2024-08-20T20:28:43.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 40,\n            \"name\": \"quod\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 61.72,\n            \"created_at\": \"2024-08-20T20:28:43.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 41,\n            \"name\": \"neque\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 38.48,\n            \"created_at\": \"2024-08-20T20:28:43.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 42,\n            \"name\": \"quod\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 9.92,\n            \"created_at\": \"2024-08-20T20:28:43.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 43,\n            \"name\": \"harum\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 13.83,\n            \"created_at\": \"2024-08-20T20:28:44.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 44,\n            \"name\": \"rerum\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 2.66,\n            \"created_at\": \"2024-08-20T20:28:44.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 45,\n            \"name\": \"beatae\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 20.45,\n            \"created_at\": \"2024-08-20T20:28:44.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 46,\n            \"name\": \"facilis\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 10.45,\n            \"created_at\": \"2024-08-20T20:28:44.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 47,\n            \"name\": \"enim\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 54.94,\n            \"created_at\": \"2024-08-20T20:28:44.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 48,\n            \"name\": \"expedita\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 82.16,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 49,\n            \"name\": \"nemo\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 92.53,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 50,\n            \"name\": \"beatae\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 91.76,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": []\n        },\n        {\n            \"id\": 51,\n            \"name\": \"aut\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 12.3,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 31,\n                        \"name\": \"Ray Powlowski\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/009933?text=ut\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 52,\n            \"name\": \"ipsa\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 72.9,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 32,\n                        \"name\": \"Dr. Agustin Gutmann DVM\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00cccc?text=ipsam\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 53,\n            \"name\": \"magni\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 95.54,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 33,\n                        \"name\": \"Mrs. Marie Rohan\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00ff22?text=reprehenderit\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 54,\n            \"name\": \"alias\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 61.32,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 34,\n                        \"name\": \"Reanna Krajcik\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/0022aa?text=voluptatibus\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 55,\n            \"name\": \"laboriosam\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 60.23,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 35,\n                        \"name\": \"Lauryn Satterfield\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00ddee?text=voluptas\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 56,\n            \"name\": \"repellendus\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 3.01,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 36,\n                        \"name\": \"Prof. Gretchen Turner Jr.\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/000022?text=aut\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 57,\n            \"name\": \"aliquam\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 20.27,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 37,\n                        \"name\": \"Ms. Dessie Nienow\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00ee44?text=et\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 58,\n            \"name\": \"reiciendis\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 31.06,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 38,\n                        \"name\": \"Prof. Magdalena Rolfson MD\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00bbbb?text=aliquam\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 59,\n            \"name\": \"assumenda\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 41.74,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 39,\n                        \"name\": \"Torrey Bruen Sr.\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/0088bb?text=officia\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 60,\n            \"name\": \"est\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 62,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 40,\n                        \"name\": \"Marilou Macejkovic IV\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/001144?text=enim\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 61,\n            \"name\": \"quod\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 85.76,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 41,\n                        \"name\": \"Wilmer Harris\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/004400?text=distinctio\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 62,\n            \"name\": \"pariatur\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 19.79,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 42,\n                        \"name\": \"Luella White\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00aa66?text=et\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 63,\n            \"name\": \"nostrum\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 29.97,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 43,\n                        \"name\": \"Miss Flavie Osinski\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00ee22?text=velit\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 64,\n            \"name\": \"perspiciatis\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 30.1,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 44,\n                        \"name\": \"Rey Hessel\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/0099ff?text=a\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 65,\n            \"name\": \"neque\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 41.66,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 45,\n                        \"name\": \"Prof. Enoch Johnston Sr.\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/0022ee?text=odio\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 66,\n            \"name\": \"est\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 58.63,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 46,\n                        \"name\": \"Davion Morissette\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00bb44?text=fugit\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 67,\n            \"name\": \"dignissimos\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 92.55,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 47,\n                        \"name\": \"Alison Lang\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00cc22?text=ut\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 68,\n            \"name\": \"est\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 18.12,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 48,\n                        \"name\": \"Mr. Kip Huels\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/0022ee?text=dolore\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 69,\n            \"name\": \"perspiciatis\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 63.52,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 49,\n                        \"name\": \"Natasha Erdman\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/00cc66?text=placeat\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        },\n        {\n            \"id\": 70,\n            \"name\": \"possimus\",\n            \"description\": null,\n            \"is_free\": null,\n            \"price\": 39.48,\n            \"created_at\": \"2024-08-20T20:28:45.000000Z\",\n            \"game_category\": [\n                {\n                    \"category\": {\n                        \"id\": 50,\n                        \"name\": \"Mrs. Delia Breitenberg\",\n                        \"image_url\": \"https://via.placeholder.com/640x480.png/0066cc?text=dicta\",\n                        \"questions\": []\n                    }\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "games/buyGame",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/user-game/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"user-game",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "64"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "payment supscritpe",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"plan_id\" : 1 , \r\n    \"paymentMethod\" :  \"stripe\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/supscription",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"supscription"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:30:03 GMT"
+								},
+								{
+									"key": "Date",
+									"value": "Tue, 20 Aug 2024 12:30:03 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.1.10"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "58"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": 200,\n    \"message\": \"success\",\n    \"data\": {\n        \"user_id\": 1,\n        \"plan_id\": \"1\",\n        \"amount\": 38.29,\n        \"payment_method\": \"stripe\",\n        \"updated_at\": \"2024-08-20T12:30:03.000000Z\",\n        \"created_at\": \"2024-08-20T12:30:03.000000Z\",\n        \"id\": 22\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Faqs",
+			"item": [
+				{
+					"name": "Faqs Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "lang",
+								"value": "ar",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/faqs",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"faqs"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwt_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://127.0.0.1:8000/api",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "base_url",
+			"value": "https://game-wise.smartleadtech.com/api",
+			"type": "string",
+			"disabled": true
+		},
+		{
+			"key": "base_url",
+			"value": "https://game-wise.test/api",
+			"type": "string"
+		},
+		{
+			"key": "bearerToken",
+			"value": ""
+		}
+	]
+}

@@ -1,5 +1,5 @@
 <template>
-  <div style="font-family: 'Kufam', 'sans-serif';" class=" min-h-screen bg-cover bg-center text-white font-arabic p-4" dir="rtl"
+  <div style="font-family: 'Kufam', 'sans-serif'; display: flex ; flex-direction: column; justify-content: space-between;" class="  min-h-screen bg-cover bg-center text-white font-arabic p-4" dir="rtl"
   :style="`background-image: url(${bg});`">
     <!-- Top Navigation Bar -->
  <nav class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 rounded-3xl bg-white text-black p-4 shadow-md gap-3 sm:gap-0">
@@ -134,11 +134,20 @@ class="cursor-pointer"
       <h2 class="text-2xl font-bold text-[#24054D] mb-6">
         {{ currentQuestion?.title || 'لا يوجد عنوان' }}
       </h2>
-      <img
-        :src="currentQuestion?.question_image || placeholderImg"
-        alt="صورة السؤال"
-        class="mx-auto max-h-[150px] mb-6"
-      />
+<div class="media-container mx-auto mb-6">
+  <video
+    v-if="currentQuestion?.question_video"
+    :src="getMediaUrl(currentQuestion)"
+    controls
+    class="max-h-[250px] w-auto mx-auto rounded-md"
+  ></video>
+  <img
+    v-else
+    :src="getMediaUrl(currentQuestion)"
+    alt="صورة السؤال"
+    class="mx-auto max-h-[150px] rounded-md"
+  />
+</div>
       <p class="text-sm text-gray-600 mb-4">
         ({{ currentQuestion?.points }} نقطة)
       </p>
@@ -226,6 +235,28 @@ const selectedColumn = ref(null);
 const score1 = ref(0);
 const score2 = ref(0);
 /* -------------------- 3. الدوال -------------------- */
+const getMediaUrl = (question) => {
+  // إذا السؤال غير موجود ارجع الصورة الافتراضية
+  if (!question) return placeholderImg;
+  // لو فيه فيديو
+  if (question.question_video) {
+    // رابط فيديو كامل أو نسبي
+    if (question.question_video.startsWith('http')) {
+      return question.question_video;
+    }
+    // لو نسبي، زود الرابط الأساسي
+    return `https://game-wise.smartleadtech.com/${question.question_video}`;
+  }
+  // لو فيه صورة
+  if (question.question_image) {
+    if (question.question_image.startsWith('http')) {
+      return question.question_image;
+    }
+    return `https://game-wise.smartleadtech.com/${question.question_image}`;
+  }
+  // لو لا صورة ولا فيديو رجع الصورة الافتراضية
+  return placeholderImg;
+};
 const goToWinGame = () => {
   router.push({
     path: '/WinGame',
