@@ -90,6 +90,16 @@ const routes = [
     name: "connectintro",
     component: () => import("../views/Games/Game2/connectintro.vue"),
   },
+  {
+    path: "/chooseplayer",
+    name: "chooseplayer",
+    component: () => import("../views/Games/Game2/chooseplayer.vue"),
+  },
+    {
+    path: "/Homeconnect",
+    name: "Homeconnect",
+    component: () => import("../views/Games/Game2/Homeconnect.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

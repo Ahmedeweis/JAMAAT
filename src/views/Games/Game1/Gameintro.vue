@@ -37,7 +37,7 @@
         </div>
       </div>
 <!-- <button class=""> -->
-<router-link :to="{ path: '/Homescreen', query: { id: gameId } }" @click="startGame" class=" flex justify-center items-center cursor-pointer  w-full bg-red-500 text-white rounded-lg py-2 font-semibold hover:bg-red-600 transition mt-4">
+<router-link :to="{ path: '/Homescreen', query: { id: gameId } }" @click="startGame" class=" flex justify-center items-center cursor-pointer  w-full bg-red-500 text-white rounded-lg py-2 font-semibold  transition mt-4">
   ابدأ اللعبة
 </router-link>
 <!-- </button> -->

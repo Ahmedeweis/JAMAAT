@@ -11,3 +11,8 @@ export const getCategories = (params = {}) => {
 export const getCategoryById = (id) => {
   return api.get(`/category/${id}`)
 }
+export const getCategoriesByIds = (ids) => {
+  return api.get('/categories', {
+    params: { ids: ids.join(',') }
+  })
+}

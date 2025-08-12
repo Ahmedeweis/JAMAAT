@@ -1,6 +1,10 @@
 <!-- components/StartGameModal.vue -->
 <template>
   <div class="min-h-screen w-full bg-cover bg-center bg-no-repeat" :style="`background-image: url(${bg});`">
+        <router-link to="/ChooseGame"
+      class="  fixed top-5 left-0 m-4 flex justify-between items-center  text-start bg-[#010035] shadow-lg rounded-lg z-50">
+      <img src="../../../assets/imgs/close_btn.svg" alt="Logo" class="w-10 z-10 " />
+    </router-link>
     <div
       class=" board fixed top-0 right-0 m-4 flex justify-between items-center  w-[200px] text-start bg-[#010035] shadow-lg rounded-lg z-50">
       <img src="../../../assets/imgs/coin.svg" alt="Logo" class="w-8 z-10 coin-icon" />
@@ -10,7 +14,7 @@
     <div class=" inset-0  bg-opacity-60 flex justify-center items-center z-50">
       <div class="mt-30 flex flex-col items-center">
         <img src="../../../assets/imgs/Group 12.svg">
-        <h2 class="text-[#D9D9D9] text-3xl my-7">حدد الفئة</h2>
+        <h2 class="text-[#D9D9D9] text-3xl my-7 font-bold">حدد الفئة</h2>
         <div class="space-y-6 my-3" style="margin: 20px 10px;">
           <!-- لوب على كل مجموعة من 10 -->
           <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -55,13 +59,19 @@
             </div>
           </div>
         </div>
-            <router-link
-      :to="{ path: '/Homescreen', query: { id: gameId } }"
-      @click="startGame"
-      class="flex justify-center items-center  w-full cursor-pointer p-4 bg-red-500 text-white rounded-lg py-2 font-semibold hover:bg-red-600 transition"
-    >
-      التالي
-    </router-link>
+<router-link
+  :to="{
+    path: '/chooseplayer',
+    query: {
+      id: gameId,
+      categories: selectedCategories.join(',')
+    }
+  }"
+  @click="startGame"
+  class="flex justify-center items-center w-full cursor-pointer p-4 mb-5 bg-gradient-to-l from-red-500 to-yellow-400 text-white rounded-lg py-2 font-semibold hover:bg-red-600 transition"
+>
+  التالي
+</router-link>
       </div>
     </div>
   </div>
