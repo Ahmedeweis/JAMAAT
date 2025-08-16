@@ -57,7 +57,7 @@
 import { ref, onMounted } from "vue";
 import bg from '../../assets/imgs/splash.png'
 import side from '../../components/side.vue'
-import { getPlans } from "../services/plans.js";
+import { getPlans } from "../../services/plans";
 const plans = ref([]);
 const firstPlan = ref(null);
 onMounted(async () => {
