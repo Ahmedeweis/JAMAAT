@@ -23,6 +23,9 @@
         </div>
       </div>
     </div>
+    <div>
+      present.svg
+    </div>
   </div>
     <div class="p-4">
         <h2 class="text-2xl font-bold mb-6 text-center text-purple-700">📂 التصنيفات المتاحة</h2>

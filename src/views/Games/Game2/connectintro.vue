@@ -14,7 +14,7 @@
     <div class=" inset-0  bg-opacity-60 flex justify-center items-center z-50">
       <div class="mt-30 flex flex-col items-center">
         <img src="../../../assets/imgs/Group 12.svg">
-        <h2 class="text-[#D9D9D9] text-3xl my-7 font-bold">حدد الفئة</h2>
+        <h2 class="text-[#D9D9D9] text-3xl mt-7 font-bold">حدد الفئة</h2>
         <div class="space-y-6 my-3" style="margin: 20px 10px;">
           <!-- لوب على كل مجموعة من 10 -->
           <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -59,31 +59,26 @@
             </div>
           </div>
         </div>
-<router-link
-  :to="{
-    path: '/chooseplayer',
-    query: {
-      id: gameId,
-      categories: selectedCategories.join(',')
-    }
-  }"
+<button
   @click="startGame"
-  class="flex justify-center items-center w-full cursor-pointer p-4 mb-5 bg-gradient-to-l from-red-500 to-yellow-400 text-white rounded-lg py-2 font-semibold hover:bg-red-600 transition"
+  class="flex justify-center items-center w-full cursor-pointer p-4 mx-4 mb-5 bg-gradient-to-l from-red-500 to-yellow-400 text-white rounded-lg py-2 font-semibold hover:bg-red-600 transition"
 >
   التالي
-</router-link>
+</button>
       </div>
     </div>
   </div>
 </template>
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { getCategories } from '../../../services/categoryService'
 import bg from '../../../assets/imgs/splash.png'
 import { useToast } from 'vue-toastification'
 const toast = useToast()
+const router = useRouter()
 const itemsToShow = ref(10);
-const gameName = ref('')
+// const gameName = ref('')
 const activeHintId = ref(null);
 const categories = ref([])
 const selectedCategories = ref([])
@@ -99,15 +94,24 @@ const toggleCategory = (id) => {
   }
 }
 const toggleHint = (id) => {
-  activeHintId.value = activeHintId.value === id ? null : id
-}
-const chunkedCategories = computed(() => {
-  const chunks = []
-  for (let i = 0; i < categories.value.length; i += 10) {
-    chunks.push(categories.value.slice(i, i + 10))
+  if (activeHintId.value === id) {
+    activeHintId.value = null
+  } else {
+    activeHintId.value = id
+    setTimeout(() => {
+      if (activeHintId.value === id) {
+        activeHintId.value = null
+      }
+    }, 5000)
   }
-  return chunks
-})
+}
+// const chunkedCategories = computed(() => {
+//   const chunks = []
+//   for (let i = 0; i < categories.value.length; i += 10) {
+//     chunks.push(categories.value.slice(i, i + 10))
+//   }
+//   return chunks
+// })
 onMounted(async () => {
   try {
     const res = await getCategories();
@@ -126,6 +130,18 @@ onMounted(async () => {
   categories.value = res.data.data
 })
 const visibleCategories = computed(() => categories.value.slice(0, itemsToShow.value));
+const startGame = () => {
+  if (selectedCategories.value.length === 0) {
+    toast.error('اختر فئة واحدة على الأقل للمتابعة')
+    return
+  }
+  router.push({
+    path: '/chooseplayer',
+    query: {
+      categories: selectedCategories.value.join(',')
+    }
+  })
+}
 </script>
 <style scoped>
 /* خلفية اللوحة */

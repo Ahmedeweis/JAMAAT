@@ -28,35 +28,35 @@
               <!-- لوب على كل مجموعة من 10 -->
               <div v-for="(group, groupIndex) in chunkedCategories" :key="groupIndex" class="bg-white rounded-2xl">
                 <div class="grid grid-cols-2 gap-1 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-                  <div v-for="category in group" :key="category.id" @click="toggleCategory(category.id)" :class="[
-                    'rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group cursor-pointer',
-                    selectedCategories.includes(category.id)
-                      ? 'border-2 border-purple-600 bg-purple-50'
-                      : 'bg-[#FAFBF5] '
-                  ]">
-                    <!-- صورة -->
-                    <img src="../../assets/imgs/upload.png" alt="صورة التصنيف"
-                      class="w-full h-28 sm:h-36 object-contain mb-3 rounded-xl" />
-                    <!-- عنوان + زر التلميح -->
- <div class="flex items-center justify-between mb-1 p-1 sm:p-2">
-                <button @click="toggleHint(category.id)"
-                  class="text-white cursor-pointer hover:text-purple-800 text-sm sm:text-xl bg-purple-400 rounded-full px-[13px] py-[2px] font-bold focus:outline-none"
-                  title="عرض التلميح">
-                  i
-                </button>
-                <h5
-                  class="text-[14px] sm:text-sm font-bold bg-gray-800/60 text-white px-2 sm:px-3 py-1 rounded-lg line-clamp-2 text-end ml-[5px] truncate"
-                  dir="rtl">
-                  {{ category.name }}
-                </h5>
-              </div>
-                  </div>
+<div v-for="category in group" :key="category.id" @click="toggleCategory(category.id)"
+     :class="[
+  'rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group cursor-pointer flex flex-col items-center p-3 transform',
+  selectedCategories.includes(category.id)
+    ? 'border-4 border-purple-600  bg-gradient-to-r from-yellow-400 to-red-500 shadow-[0_0_15px_rgba(102,61,156,0.8)]'
+    : 'bg-gradient-to-b opacity-50 from-yellow-400 to-red-500'
+]" class= "opacity-100" >
+  <!-- الصورة -->
+  <img :src="category.image_url" alt="صورة التصنيف"
+       class="w-full h-28 sm:h-36 object-contain mb-3 rounded-xl mt-3" />
+  <!-- العنوان + زر التلميح -->
+  <div class="flex items-center justify-between w-full mb-1 px-1 sm:px-2">
+    <button @click.stop="toggleHint(category.id)"
+            class="text-amber-700 cursor-pointer text-sm sm:text-base bg-white rounded-full px-3 py-1 font-bold focus:outline-none"
+            title="عرض التلميح">
+      i
+    </button>
+    <h5 class="text-[16px] sm:text-[18px] font-bold text-white truncate line-clamp-2 text-end ml-2"
+        dir="rtl">
+      {{ category.name }}
+    </h5>
+  </div>
+</div>
                 </div>
               </div>
             </div>
              <!-- هذا هو بار التلميح الثابت أسفل الشاشة -->
               <div v-if="activeHintId !== null"
-                class="fixed bottom-0 left-0 w-full text-white text-sm p-4 rounded-t-lg shadow-lg z-50 bg-gradient-to-l from-purple-700 to-purple-400"
+                class="fixed bottom-0 left-0 w-full text-white text-sm p-4 rounded-t-lg shadow-lg z-50 bg-gradient-to-l from-red-500 to-yellow-400 "
                 dir="rtl">
                 <div class="max-w-7xl mx-auto flex justify-between items-center">
                   <div>
@@ -65,7 +65,7 @@
                     }}
                   </div>
                   <button @click="activeHintId = null"
-                    class="text-purple-white cursor-pointer font-bold px-3 py-1 rounded hover:bg-purple-300 transition">
+                    class="text-purple-white cursor-pointer font-bold px-3 py-1 rounded transition">
                     إغلاق
                   </button>
                 </div>

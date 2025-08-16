@@ -1,6 +1,10 @@
 <template>
-<div class="min-h-screen w-full bg-cover bg-center relative h-screen flex flex-col items-center pt-16 "
+<div class="min-h-screen w-full bg-cover bg-center relative h-screen flex flex-col items-center justify-center "
      :style="`background-image: url(${bg});`">
+             <router-link to="/main"
+      class="  fixed top-5 left-0 m-4 flex justify-between items-center  text-start bg-[#010035] shadow-lg rounded-lg z-50">
+      <img src="../../assets/imgs/close_btn.svg" alt="Logo" class="w-10 z-10 " />
+    </router-link>
   <h1 class="text-white text-4xl mb-8 z-10">ألعاب</h1>
   <img src="../../assets/imgs/JAMAAT.svg" alt="Logo" class="w-64 mb-6 z-10">
   <p class="text-white text-lg mb-8 z-10">أختر اللعبة</p>

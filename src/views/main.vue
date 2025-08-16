@@ -27,13 +27,13 @@
                 <img src="../assets/imgs/coin.svg" class="w-5 h-5">
               </div>
               <div
-                class="flex items-center bg-[#ECE1FB] border-2 border-solid border-[#000000] rounded-full px-1 py-1 relative pr-7 w-[130px] h-[45px] justify-center">
+                class="flex items-center bg-[#ECE1FB] border-4 border-solid border-[#000000] rounded-full px-1 py-1 relative pr-7 w-[130px] h-[45px] justify-center">
                 <span class="text-[#AC3F2F] font-semibold flex justify-end items-start">
                   <span class="mr-[5px]">ريال</span> {{ balance }}
                 </span>
                 <button @click="increaseBalance"
                   class="bg-black text-[#E3614E] font-bold text-base absolute right-[-10px] rounded-3xl border-2 border-solid border-black">
-                  <router-link to="/" class="text-2xl px-2 mb-[2px] inline-block">+</router-link>
+                  <router-link to="/Payment" class="text-2xl px-2 mb-[2px] inline-block">+</router-link>
                 </button>
               </div>
             </div>
@@ -82,44 +82,41 @@
         <div v-if="activeTab === 'categories'" v-for="(group, groupIndex) in chunkedCategories" :key="groupIndex"
           class="bg-white p-3 rounded-2xl">
           <div class="grid grid-cols-2 gap-2 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-            <div v-for="category in group" :key="category.id" class="grid grid-cols-1 gap-2 sm:gap-4
- bg-[#FAFBF5] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group">
-              <img :src="category.image_url" alt="صورة التصنيف" class="w-full h-36 object-contain mb-4 rounded-xl" />
-              <div class="flex items-center justify-between mb-2 p-2">
-                <h5
-                  class="text-[14px] font-bold bg-gray-800/60 text-white px-3 py-1 rounded-lg line-clamp-2 text-end ml-[5px] truncate"
-                  dir="rtl">
-                  {{ category.name }}
-                </h5>
-                <button @click="toggleHint(category.id)"
-                  class="text-white cursor-pointer hover:text-purple-800 text-xl bg-purple-400 rounded-full px-[10px] font-bold focus:outline-none"
-                  title="عرض التلميح">
-                  i
-                </button>
-              </div>
-              <div v-if="activeHintId !== null"
-                class="fixed bottom-0 left-0 w-full bg-purple-100 text-purple-800 text-sm p-4 rounded-t-lg  z-50"
-                dir="rtl">
-                <div v-if="activeHintId !== null"
-                  class="fixed bottom-0 left-0 w-full text-white text-sm p-4 rounded-t-lg  z-50 bg-gradient-to-l from-purple-700 to-purple-400"
-                  dir="rtl">
-                  <div class="max-w-7xl mx-auto flex justify-between items-center">
-                    <div>
-                      💡
-                      {{
-                        categories.find(cat =>
-                          cat.id === activeHintId
-                      )?.hint || 'لا يوجد تلميح'
-                      }}
-                    </div>
-                    <button @click="activeHintId = null"
-                      class="text-purple-white cursor-pointer font-bold px-3 py-1 rounded hover:bg-purple-300 transition">
-                      إغلاق
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+<div v-for="category in group" :key="category.id"
+     class="grid grid-cols-1 gap-2 sm:gap-4
+            bg-gradient-to-b from-yellow-400 to-red-500
+            rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group">
+  <img :src="category.image_url" alt="صورة التصنيف"
+       class="w-full h-36 object-contain mb-3 rounded-xl mt-3" />
+  <div class="flex items-center justify-between mb-4 px-2 ">
+        <button @click="toggleHint(category.id)"
+            class="text-amber-700 cursor-pointer text-sm bg-white rounded-full px-3 py-1 font-bold hover:bg-yellow-200 focus:outline-none"
+            title="عرض التلميح">
+      i
+    </button>
+    <h5 class="text-[16px] font-bold text-white truncate text-end ml-2 line-clamp-2"
+        dir="rtl">
+      {{ category.name }}
+    </h5>
+  </div>
+  <div v-if="activeHintId !== null"
+       class="fixed bottom-0 left-0 w-full text-white text-sm p-4 rounded-t-lg z-50
+              bg-gradient-to-l from-red-500 to-yellow-400 "
+       dir="rtl">
+    <div class="max-w-7xl mx-auto flex justify-between items-center">
+      <div>
+        💡
+        {{
+          categories.find(cat => cat.id === activeHintId)?.hint || 'لا يوجد تلميح'
+        }}
+      </div>
+      <button @click="activeHintId = null"
+              class="text-white cursor-pointer font-bold px-3 py-1 rounded  transition">
+        إغلاق
+      </button>
+    </div>
+  </div>
+</div>
           </div>
         </div>
         <div v-else v-for="game in games" :key="game.id" class="mb-6 bg-white p-3 rounded-2xl">
@@ -133,43 +130,42 @@
               </router-link>
               <h2 class="text-2xl font-bold mb-4 text-purple-700 text-end"> {{ game.game.name }}</h2>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 " dir="rtl">
-              <div v-for="categoryWrapper in game.game.game_category" :key="categoryWrapper.category.id"
-                class="rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group p-4 bg-white">
-                <img :src="categoryWrapper.category.image_url" alt="صورة التصنيف"
-                  class="w-full h-36 object-contain mb-4 rounded-xl" />
-                <div class="flex items-center justify-between mb-2 p-2">
-                  <h5
-                    class="text-[14px] font-bold bg-gray-800/60 text-white px-3 py-1 rounded-lg line-clamp-2 text-end ml-[5px] truncate"
-                    dir="rtl">
-                    {{ categoryWrapper.category.name }}
-                  </h5>
-                  <button @click="toggleHint(categoryWrapper.category.id)"
-                    class="text-white cursor-pointer hover:text-purple-800 text-xl bg-purple-400 rounded-full px-[10px] font-bold focus:outline-none"
-                    title="عرض التلميح">
-                    i
-                  </button>
-                </div>
-                <div v-if="activeHintId !== null"
-                  class="fixed bottom-0 left-0 w-full text-white text-sm p-4 rounded-t-lg shadow-lg z-50 bg-gradient-to-l from-purple-700 to-purple-400"
-                  dir="rtl">
-                  <div class="max-w-7xl mx-auto flex justify-between items-center">
-                    <div>
-                      💡
-                      {{
-                        categories.find(cat =>
-                          cat.id === activeHintId
-                      )?.hint || 'لا يوجد تلميح'
-                      }}
-                    </div>
-                    <button @click="activeHintId = null"
-                      class="text-purple-white cursor-pointer font-bold px-3 py-1 rounded hover:bg-purple-300 transition">
-                      إغلاق
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" dir="rtl">
+  <div v-for="categoryWrapper in game.game.game_category" :key="categoryWrapper.category.id"
+       class="rounded-xl shadow-md hover:shadow-xl transition-all duration-300 relative group p-4
+              bg-gradient-to-b from-yellow-400 to-red-500">
+    <img :src="categoryWrapper.category.image_url" alt="صورة التصنيف"
+         class="w-full h-36 object-contain mb-3 rounded-xl mt-3" />
+    <div class="flex items-center justify-between mb-1 px-2">
+      <h5 class="text-[16px] font-bold text-white truncate line-clamp-2 text-end ml-2"
+          dir="rtl">
+        {{ categoryWrapper.category.name }}
+      </h5>
+      <button @click="toggleHint(categoryWrapper.category.id)"
+              class="text-amber-700 cursor-pointer text-sm bg-white rounded-full px-3 py-1 font-bold hover:bg-yellow-200 focus:outline-none"
+              title="عرض التلميح">
+        i
+      </button>
+    </div>
+    <div v-if="activeHintId !== null"
+         class="fixed bottom-0 left-0 w-full text-white text-sm p-4 rounded-t-lg shadow-lg z-50
+                bg-gradient-to-l from-red-500 to-yellow-400 "
+         dir="rtl">
+      <div class="max-w-7xl mx-auto flex justify-between items-center ">
+        <div>
+          💡
+          {{
+            categories.find(cat => cat.id === activeHintId)?.hint || 'لا يوجد تلميح'
+          }}
+        </div>
+        <button @click="activeHintId = null"
+                class="text-white cursor-pointer font-bold px-3 py-1 rounded transition">
+          إغلاق
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </div>

@@ -3,22 +3,22 @@
   <div class="min-h-screen w-full bg-cover bg-center bg-no-repeat" :style="`background-image: url(${bg});`">
   <div
     @click="confirmExit"
-    class="fixed top-5 left-0 m-4 flex justify-between items-center text-start bg-[#010035] shadow-lg rounded-lg z-50 cursor-pointer"
+    class="fixed top-5 left-0 m-4 flex justify-between items-center text-start bg-[#010035] shadow-lg rounded-lg z-5 cursor-pointer"
   >
-    <img src="../../../assets/imgs/close_btn.svg" alt="Logo" class="w-10 z-10" />
+    <img src="../../../assets/imgs/close_btn.svg" alt="Logo" class="w-10 z-5" />
   </div>
             <div
             @click="resetBoard"
-      class=" cursor-pointer fixed top-5 left-15 m-4 flex justify-between items-center  text-start bg-[#010035] shadow-lg rounded-lg z-50">
-      <img src="../../../assets/imgs/redo_btn.svg" alt="Logo" class="w-10 z-10 " />
+      class=" cursor-pointer fixed top-5 left-15 m-4 flex justify-between items-center  text-start bg-[#010035] shadow-lg rounded-lg z-5">
+      <img src="../../../assets/imgs/redo_btn.svg" alt="Logo" class="w-10 z-5 " />
     </div>
     <div
-      class=" board fixed top-0 right-0 m-4 flex justify-between items-center  w-[200px] text-start bg-[#010035] shadow-lg rounded-lg z-50">
-      <img src="../../../assets/imgs/coin.svg" alt="Logo" class="w-8 z-10 coin-icon" />
+      class=" board fixed top-0 right-0 m-4 flex justify-between items-center  w-[200px] text-start bg-[#010035] shadow-lg rounded-lg z-5">
+      <img src="../../../assets/imgs/coin.svg" alt="Logo" class="w-8 z-5 coin-icon" />
       <span class="text-2xl font-bold text-white coin-amount">120</span>
       <img src="../../../assets/imgs/Icon-Buttons.svg" alt="Clock Icon" class="w-8 h-8 add-button" />
     </div>
-    <div class=" inset-0  bg-opacity-60 flex justify-center items-center z-50">
+    <div class=" inset-0  bg-opacity-60 flex justify-center items-center z-5">
       <div class="mt-30 flex flex-col items-center">
 <div class="flex items-center mb-4 boardII cursor-pointer"
      :class="[{ active: currentPlayer === 'red' }, 'red']">
@@ -46,29 +46,163 @@
       </div>
     </div>
   </div>
+    <!-- Other template code remains unchanged -->
+<!-- المودال -->
+<div v-if="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-1000 px-2 sm:px-4 py-6 overflow-y-auto">
+  <div class="bg-white rounded-[20px] shadow-lg relative w-full sm:w-[90%] max-w-[500px] h-[600px] p-4 sm:p-6 flex flex-col gap-4 justify-between items-center">
+    <!-- زر الإغلاق -->
+    <img
+      src="../../../assets/imgs/close_btn.svg"
+      alt="Close"
+      @click="closeModal"
+      class="absolute top-[-15px] right-[-15px] cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md"
+    />
+    <!-- لو مفيش أسئلة متبقية -->
+    <div v-if="remainingQuestions.length === 0" class="flex flex-col items-center justify-center h-full gap-6">
+      <h2 class="text-red-600 font-bold text-2xl">لم يعد هناك أسئلة</h2>
+      <button
+        @click="router.push('/connectintro')"
+        class="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-bold px-6 py-3 rounded-full shadow-lg transition"
+      >
+        الرجوع للصفحة الرئيسية
+      </button>
+    </div>
+    <!-- الأسئلة العادية -->
+    <div v-else-if="currentQuestion" class="modal-container w-full flex flex-col items-center gap-4">
+      <h1
+        class="rounded-3xl self-start text-white text-end p-3 text-2xl bg-[#01004C] w-full"
+      >
+        {{ currentQuestion.category_name || 'بدون كاتيجوري' }}
+      </h1>
+      <h2 class="text-[#024E28] text-xl font-bold text-center w-full mb-6">
+        {{ currentQuestion.title || 'لا يوجد عنوان' }}
+      </h2>
+      <!-- فيديو -->
+      <video
+        v-if="currentQuestion?.question_video"
+        :src="getMediaUrl(currentQuestion)"
+        controls
+        class="max-h-[300px] w-auto mx-auto rounded-md"
+        @error="handleVideoError"
+      ></video>
+      <!-- صورة -->
+      <img
+        v-else
+        :src="getMediaUrl(currentQuestion)"
+        alt="صورة السؤال"
+        class="max-h-[250px] w-auto mx-auto rounded-md"
+      />
+    </div>
+    <!-- زر إظهار الإجابة -->
+<button
+  v-if="!showAnswer && currentQuestion && currentQuestion.id !== -1"
+  @click="revealAnswer"
+  class="bg-[#24B758] cursor-pointer hover:bg-green-700 text-center w-[200px] text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition mt-2"
+>
+  أظهر الإجابة
+</button>
+    <!-- الإجابة -->
+    <div v-else-if="showAnswer && currentQuestion" class="mt-4 animate-fade-in w-full flex flex-col items-center gap-4">
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-lg text-center text-lg font-bold max-w-[90%]">
+        {{ currentQuestion?.correct_answer || 'لا توجد إجابة' }}
+      </div>
+      <!-- أزرار التقييم -->
+      <div class="flex gap-4 mt-4">
+        <button
+          @click="handleAnswer(true)"
+          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full cursor-pointer"
+        >
+          إجابة صحيحة ؟
+        </button>
+        <button
+          @click="handleAnswer(false)"
+          class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full cursor-pointer"
+        >
+          إجابة خاطئة
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+    <!-- -------------------------------------------------- -->
+<div v-if="winer" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[1000] px-2 sm:px-4 py-6">
+  <div class="relative w-full sm:w-[90%] max-w-[500px]">
+    <div class="bg-white rounded-[20px] shadow-lg relative h-[250px] p-4 sm:p-6 flex flex-col gap-4 justify-between items-center ">
+      <!-- التوهج -->
+      <img
+        src="../../../assets/imgs/star_ing.svg"
+        alt="Glow"
+        class="absolute top-[-150px] left-1/2 -translate-x-1/2 w-64 h-64 animate-pulse opacity-80 z-20"
+      />
+      <!-- النجوم -->
+      <img
+        src="../../../assets/imgs/stars.svg"
+        alt="Stars"
+        class="absolute top-[-120px] left-1/2 -translate-x-1/2 w-72 h-72 animate-spin-slow  z-30"
+      />
+      <!-- زر الإغلاق -->
+      <img
+        src="../../../assets/imgs/closeo.svg"
+        alt="Close"
+        @click="closeModale"
+        class="absolute -top-4 -right-4 cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md z-40"
+      />
+      <!-- العنوان -->
+      <h1 class="text-green-700 font-bold text-4xl mt-14 z-40">تهانينا للفائز</h1>
+      <!-- بيانات الفائز -->
+<div
+  class="flex items-center justify-between mt-4 z-40 text-4xl p-2 rounded-xl"
+  :class="currentPlayer === 'red' ? 'bg-amber-400' : ' bg-green-700'"
+>
+  <img
+    v-if="currentPlayer === 'red'"
+     src="../../../assets/imgs/yellow.svg"
+    alt="Winner"
+  />
+  <img
+    v-else
+    src="../../../assets/imgs/green.svg"
+    alt="Winner"
+  />
+  <div class="text-white font-bold mx-4">
+    {{ wing }}
+  </div>
+</div>
+    </div>
+  </div>
+</div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
-import Swal from 'sweetalert2'
-import { getCategories } from '../../../services/categoryService'
-import bg from '../../../assets/imgs/splash.png'
-import { useToast } from 'vue-toastification'
-import { useRoute } from 'vue-router'
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue';
+import Swal from 'sweetalert2';
+import { getCategories } from '../../../services/categoryService';
+import bg from '../../../assets/imgs/splash.png';
+import { useToast } from 'vue-toastification';
+import { useRoute, useRouter } from 'vue-router';
+import placeholderImg from '../../../assets/imgs/upload.png';
 const router = useRouter();
-const rows = 6
-const cols = 7
-const toast = useToast()
-const route = useRoute()
-const categories = ref([])
-const allQuestions = ref([])
-const loading = ref(true)
-const player1 = ref(localStorage.getItem('player1Name') || '')
-const player2 = ref(localStorage.getItem('player2Name') || '')
+const rows = 6;
+const cols = 7;
+const winer = ref(false);
+const wing = ref('');
+const player1Score = ref(0);
+const player2Score = ref(0);
+const toast = useToast();
+const route = useRoute();
+const pendingCol = ref(null);
+const categories = ref([]);
+const allQuestions = ref([]);
+const remainingQuestions = ref([]);
+const loading = ref(true);
+const showModal = ref(false);
+const currentQuestion = ref(null);
+const showAnswer = ref(false);
+const player1 = ref(localStorage.getItem('player1Name') || '');
+const player2 = ref(localStorage.getItem('player2Name') || '');
 // استخراج أرقام الكاتيجوريز من الرابط وتحويلها لأرقام
 const routeCategories = Array.isArray(route.query.categories)
   ? route.query.categories.map(Number)
-  : route.query.categories?.split(',').map(Number) || []
+  : route.query.categories?.split(',').map(Number) || [];
 onMounted(async () => {
   if (routeCategories.length === 0) {
     toast.error('لم يتم تحديد أي كاتيجوري في الرابط')
@@ -77,12 +211,10 @@ onMounted(async () => {
   }
   try {
     const res = await getCategories()
-    // دعم شكلين محتملين للـ API
     const apiData = res?.data?.result?.data || res?.data?.data
     if (!apiData) {
       throw new Error('الـ API لم يرجع بيانات صحيحة')
     }
-    // تعديل رابط الصورة إذا لزم الأمر
     const allCategories = apiData.map(cat => ({
       ...cat,
       image_url: cat.image?.startsWith('http')
@@ -90,12 +222,27 @@ onMounted(async () => {
         : `http://game-wise.smartleadtech.com/${cat.image?.replace(/^\/+/, '')}`
     }))
     console.log('📌 الكاتيجوريز قبل الفلترة:', allCategories)
-    // فلترة بناءً على IDs من الرابط
     const filteredCategories = allCategories.filter(cat =>
       routeCategories.includes(cat.id)
     )
     categories.value = filteredCategories
-    allQuestions.value = filteredCategories.flatMap(cat => cat.questions || [])
+    allQuestions.value = filteredCategories.flatMap(cat =>
+      (cat.questions || []).map(q => ({
+        ...q,
+        category_name: cat.name
+      }))
+    )
+    // إضافة السؤال الافتراضي في نهاية القايمة
+    const defaultQuestion = {
+      id: -1, // ID مميز عشان تميزه
+      question_text: 'هل تريد إعادة اللعبة للبداية ؟',
+      correct_answer: 'العودة للصفحة الرئيسية',
+      category_name: 'افتراضي',
+      question_image: null,
+      question_video: null
+    }
+    allQuestions.value.push(defaultQuestion) // إضافة السؤال الافتراضي
+    remainingQuestions.value = [...allQuestions.value]
     console.log('📌 الكاتيجوريز بعد الفلترة:', categories.value)
     console.log('📌 الأسئلة:', allQuestions.value)
   } catch (err) {
@@ -105,21 +252,33 @@ onMounted(async () => {
     loading.value = false
   }
 })
+const selectRandomQuestion = () => {
+  if (remainingQuestions.value.length === 0) return null
+  // لو في سؤال واحد بس وهو الافتراضي
+  if (remainingQuestions.value.length === 1 && remainingQuestions.value[0].id === -1) {
+    const question = remainingQuestions.value[0]
+    remainingQuestions.value.splice(0, 1)
+    return question
+  }
+  // استبعاد السؤال الافتراضي من الاختيار العشوائي لو فيه أسئلة تانية
+  const nonDefaultQuestions = remainingQuestions.value.filter(q => q.id !== -1)
+  if (nonDefaultQuestions.length === 0) return null // لو مفيش أسئلة غير الافتراضي ومش هو الوقت بتاعه
+  const randomIndex = Math.floor(Math.random() * nonDefaultQuestions.length)
+  const question = nonDefaultQuestions[randomIndex]
+  const indexInRemaining = remainingQuestions.value.findIndex(q => q.id === question.id)
+  remainingQuestions.value.splice(indexInRemaining, 1)
+  return question
+}
 const board = ref(
   Array.from({ length: rows }, () => Array(cols).fill(null))
 )
 const currentPlayer = ref('red')
 const dropDisc = (colIndex) => {
-  // نلاقي أول خانة فاضية من تحت لفوق
-  for (let row = rows - 1; row >= 0; row--) {
-    if (!board.value[row][colIndex]) {
-      board.value[row][colIndex] = currentPlayer.value
-      // نبدل اللاعب
-      currentPlayer.value = currentPlayer.value === 'red' ? 'yellow' : 'red'
-      break
-    }
-  }
-}
+  pendingCol.value = colIndex; // نخزن العمود
+  currentQuestion.value = selectRandomQuestion();
+  showAnswer.value = false;
+  showModal.value = true;
+};
 const resetBoard = () => {
   Swal.fire({
     title: 'هل أنت متأكد؟',
@@ -132,6 +291,9 @@ const resetBoard = () => {
   }).then((result) => {
     if (result.isConfirmed) {
       board.value = Array.from({ length: rows }, () => Array(cols).fill(null))
+      remainingQuestions.value = [...allQuestions.value]
+      player1Score.value = 0;
+      player2Score.value = 0;
       currentPlayer.value = 'red'
       Swal.fire({
         title: 'تم إعادة التعيين!',
@@ -156,6 +318,126 @@ const confirmExit = () => {
       router.push('/ChooseGame');
     }
   });
+};
+const closeModal = () => {
+  showModal.value = false;
+  currentQuestion.value = null;
+  showAnswer.value = false;
+};
+const revealAnswer = () => {
+  showAnswer.value = true;
+  if (playerAnswer.value === currentQuestion.value?.correct_answer) {
+    for (let row = rows - 1; row >= 0; row--) {
+      if (!board.value[row][pendingCol.value]) {
+        board.value[row][pendingCol.value] = currentPlayer.value;
+        break;
+      }
+    }
+  }
+};
+const getMediaUrl = (question) => {
+  if (!question) return placeholderImg;
+  if (question.question_video) {
+    if (question.question_video.startsWith('http')) {
+      return question.question_video;
+    }
+    return `https://game-wise.smartleadtech.com/${question.question_video.replace(/^\/+/, '')}`;
+  }
+  if (question.question_image) {
+    if (question.question_image.startsWith('http')) {
+      return question.question_image;
+    }
+    return `https://game-wise.smartleadtech.com/${question.question_image.replace(/^\/+/, '')}`;
+  }
+  return placeholderImg;
+};
+const handleVideoError = (event) => {
+  console.error('Video failed to load:', event);
+  toast.error('فشل تحميل الفيديو، تحقق من الرابط أو الملف');
+};
+// دالة للتحقق من الفوز
+const checkWinner = (player) => {
+  // أفقي
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c <= cols - 4; c++) {
+      if (
+        board.value[r][c] === player &&
+        board.value[r][c + 1] === player &&
+        board.value[r][c + 2] === player &&
+        board.value[r][c + 3] === player
+      ) return true;
+    }
+  }
+  // رأسي
+  for (let c = 0; c < cols; c++) {
+    for (let r = 0; r <= rows - 4; r++) {
+      if (
+        board.value[r][c] === player &&
+        board.value[r + 1][c] === player &&
+        board.value[r + 2][c] === player &&
+        board.value[r + 3][c] === player
+      ) return true;
+    }
+  }
+  // قطري ↘
+  for (let r = 0; r <= rows - 4; r++) {
+    for (let c = 0; c <= cols - 4; c++) {
+      if (
+        board.value[r][c] === player &&
+        board.value[r + 1][c + 1] === player &&
+        board.value[r + 2][c + 2] === player &&
+        board.value[r + 3][c + 3] === player
+      ) return true;
+    }
+  }
+  // قطري ↗
+  for (let r = 3; r < rows; r++) {
+    for (let c = 0; c <= cols - 4; c++) {
+      if (
+        board.value[r][c] === player &&
+        board.value[r - 1][c + 1] === player &&
+        board.value[r - 2][c + 2] === player &&
+        board.value[r - 3][c + 3] === player
+      ) return true;
+    }
+  }
+  return false;
+};
+// دالة الإجابة
+const handleAnswer = (isCorrect) => {
+  if (isCorrect) {
+    // إضافة الدائرة
+    for (let row = rows - 1; row >= 0; row--) {
+      if (!board.value[row][pendingCol.value]) {
+        board.value[row][pendingCol.value] = currentPlayer.value;
+        break;
+      }
+    }
+    // زيادة النقاط
+    if (currentPlayer.value === 'red') {
+      player1Score.value += 10;
+    } else {
+      player2Score.value += 10;
+    }
+    // التحقق من الفوز
+    if (checkWinner(currentPlayer.value)) {
+      const winnerName = currentPlayer.value === 'red' ? player1.value : player2.value;
+      wing.value = winnerName
+      winer.value = true;
+      closeModal();
+      return;
+    }
+  }
+  // تبديل الدور
+  currentPlayer.value = currentPlayer.value === "red" ? "yellow" : "red";
+  // غلق المودال
+  showModal.value = false;
+  currentQuestion.value = null;
+  showAnswer.value = false;
+};
+const closeModale = () => {
+  winer.value = false;
+  wing.value = '';
 };
 </script>
 <style scoped>
@@ -292,18 +574,18 @@ const confirmExit = () => {
   display: flex;
 }
 .cell {
-  width: 70px;
-  height: 70px;
+  width: clamp(40px, 10vw, 70px);  /* أصغر 40px، أكبر 70px، تتغير حسب الشاشة */
+  height: clamp(40px, 10vw, 70px);
   border-radius: 50%;
   background: #01004C;
-  margin: 6px;
+  margin: 4px;  /* قللت المسافة لتناسب الشاشات الصغيرة */
   cursor: pointer;
 }
 .cell.red {
-  background: #FFCE67;
+  background:  #66FD84;
 }
 .cell.yellow {
-  background: #66FD84;
+  background:#FFCE67;
 }
 .boardII {
   transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;

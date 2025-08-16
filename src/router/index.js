@@ -95,10 +95,15 @@ const routes = [
     name: "chooseplayer",
     component: () => import("../views/Games/Game2/chooseplayer.vue"),
   },
-    {
+  {
     path: "/Homeconnect",
     name: "Homeconnect",
     component: () => import("../views/Games/Game2/Homeconnect.vue"),
+  },
+  {
+    path: "/Payment",
+    name: "Payment",
+    component: () => import("../views/Addtions/Payment.vue"),
   },
 ];
 const router = createRouter({
