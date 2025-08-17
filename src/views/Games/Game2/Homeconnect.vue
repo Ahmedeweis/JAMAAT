@@ -12,12 +12,7 @@
       class=" cursor-pointer fixed top-5 left-15 m-4 flex justify-between items-center  text-start bg-[#010035] shadow-lg rounded-lg z-5">
       <img src="../../../assets/imgs/redo_btn.svg" alt="Logo" class="w-10 z-5 " />
     </div>
-    <div
-      class=" board fixed top-0 right-0 m-4 flex justify-between items-center  w-[200px] text-start bg-[#010035] shadow-lg rounded-lg z-5">
-      <img src="../../../assets/imgs/coin.svg" alt="Logo" class="w-8 z-5 coin-icon" />
-      <span class="text-2xl font-bold text-white coin-amount">120</span>
-      <img src="../../../assets/imgs/Icon-Buttons.svg" alt="Clock Icon" class="w-8 h-8 add-button" />
-    </div>
+    <buy></buy>
     <div class=" inset-0  bg-opacity-60 flex justify-center items-center z-5">
       <div class="mt-30 flex flex-col items-center">
 <div class="flex items-center mb-4 boardII cursor-pointer"
@@ -152,16 +147,16 @@
       <!-- بيانات الفائز -->
 <div
   class="flex items-center justify-between mt-4 z-40 text-4xl p-2 rounded-xl"
-  :class="currentPlayer === 'red' ? 'bg-amber-400' : ' bg-green-700'"
+  :class="currentPlayer === 'red' ? ' bg-green-700':   'bg-amber-400'"
 >
   <img
     v-if="currentPlayer === 'red'"
-     src="../../../assets/imgs/yellow.svg"
+      src="../../../assets/imgs/green.svg"
     alt="Winner"
   />
   <img
     v-else
-    src="../../../assets/imgs/green.svg"
+    src="../../../assets/imgs/yellow.svg"
     alt="Winner"
   />
   <div class="text-white font-bold mx-4">
@@ -176,6 +171,7 @@
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import { getCategories } from '../../../services/categoryService';
+import buy from '../../../components/buy.vue'
 import bg from '../../../assets/imgs/splash.png';
 import { useToast } from 'vue-toastification';
 import { useRoute, useRouter } from 'vue-router';

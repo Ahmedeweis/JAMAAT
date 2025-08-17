@@ -18,17 +18,11 @@
           <input v-model="player2" class="p-2 w-[90%] text-[#24054C] font-bold text-end rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" placeholder="أدخل اسم اللاعب الثاني" />
         </div>
         <!-- زر البدء -->
-        <router-link
-         :to="{
-    path: '/Homeconnect',
-    query: {
-      categories
-    }
-  }"
-          @click="startGame"
-          class="flex justify-center items-center cursor-pointer w-full bg-red-500 text-white rounded-lg py-2 font-semibold transition mt-4">
-          ابدأ اللعبة
-        </router-link>
+<button
+  @click="startGame"
+  class="flex justify-center items-center cursor-pointer w-full bg-red-500 text-white rounded-lg py-2 font-semibold transition mt-4">
+  ابدأ اللعبة
+</button>
       </div>
     </div>
   </div>
@@ -37,6 +31,8 @@
 import { ref, onMounted } from 'vue'
 import bg from '../../../assets/imgs/splash.png'
 import { useRouter , useRoute} from 'vue-router'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 const router = useRouter()
 const route = useRoute()
 const categories = ref([])
@@ -45,11 +41,23 @@ const player2 = ref('')
 onMounted(() => {
   if (route.query.categories) {
     categories.value = route.query.categories.split(',').map(Number)
-    console.log('📌 الفئات المستلمة:', categories.value)
+    console.log(' الفئات المستلمة:', categories.value)
   }
 })
 const startGame = () => {
+  if (!player1.value.trim() || !player2.value.trim()) {
+    toast.error(" من فضلك اكتب اسماء اللاعبين  ")
+    return
+  }
+  // حفظ الأسماء
   localStorage.setItem('player1Name', player1.value)
   localStorage.setItem('player2Name', player2.value)
+  // الانتقال للعبة مع الكاتيجوريز
+  router.push({
+    path: '/Homeconnect',
+    query: {
+      categories: categories.value.join(',')
+    }
+  })
 }
 </script>
