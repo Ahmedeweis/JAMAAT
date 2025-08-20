@@ -52,31 +52,41 @@
 <div
   v-if="gameData && gameData.game_category"
   v-for="(categoryItem, index) in gameData.game_category"
-    :key="index"
-    class= "bg-white rounded-lg p-2"
-  >
-    <h3
-      class="text-lg font-semibold mb-2 text-center c24054D">
-      {{ categoryItem.category.name }}
-    </h3>
-    <div class="space-y-2">
-<button
-class="cursor-pointer"
-  v-for="(question, qIndex) in categoryItem.category.questions"
-  :key="qIndex"
-  @click="selectQuestion(question, index + 1)"
-  :disabled="answeredQuestions.includes(question.id)"
-  :class="[
-    'w-full py-2 rounded-lg shadow-sm transition border',
-    answeredQuestions.includes(question.id)
-      ? 'bg-[#24054D] text-white border-[#3F0092]'
-      : 'bg-[#FCFAFF] text-[#B984FF] border-[#ECE1FB]'
-  ]"
+  :key="index"
+  class="bg-white rounded-lg p-2"
 >
-  {{ question.points }}
-</button>
-    </div>
+  <h3 class="text-lg font-semibold mb-2 text-center text-[#24054D]">
+    {{ categoryItem.category.name }}
+  </h3>
+  <div class="space-y-2">
+    <!-- لو في أسئلة -->
+    <template v-if="categoryItem.category.questions && categoryItem.category.questions.length">
+      <button
+        class="cursor-pointer"
+        v-for="(question, qIndex) in categoryItem.category.questions"
+        :key="qIndex"
+        @click="selectQuestion(question, index + 1)"
+        :disabled="answeredQuestions.includes(question.id)"
+        :class="[
+          'w-full py-2 rounded-lg shadow-sm transition border',
+          answeredQuestions.includes(question.id)
+            ? 'bg-[#24054D] text-white border-[#3F0092]'
+            : 'bg-[#FCFAFF] text-[#B984FF] border-[#ECE1FB]'
+        ]"
+      >
+        {{ question.points }}
+      </button>
+    </template>
+    <!-- لو مفيش أسئلة -->
+    <template v-else>
+      <div
+        class="w-full py-2 rounded-lg shadow-sm border text-center text-sm italic text-gray-400 bg-[#F9F9F9]"
+      >
+        لا توجد أسئلة في هذا التصنيف
+      </div>
+    </template>
   </div>
+</div>
 </div>
     <!-- Logo and Score Counters -->
     <div class="flex flex-col items-center ">
@@ -236,25 +246,19 @@ const score1 = ref(0);
 const score2 = ref(0);
 /* -------------------- 3. الدوال -------------------- */
 const getMediaUrl = (question) => {
-  // إذا السؤال غير موجود ارجع الصورة الافتراضية
   if (!question) return placeholderImg;
-  // لو فيه فيديو
   if (question.question_video) {
-    // رابط فيديو كامل أو نسبي
     if (question.question_video.startsWith('http')) {
       return question.question_video;
     }
-    // لو نسبي، زود الرابط الأساسي
     return `https://game-wise.smartleadtech.com/${question.question_video}`;
   }
-  // لو فيه صورة
   if (question.question_image) {
     if (question.question_image.startsWith('http')) {
       return question.question_image;
     }
     return `https://game-wise.smartleadtech.com/${question.question_image}`;
   }
-  // لو لا صورة ولا فيديو رجع الصورة الافتراضية
   return placeholderImg;
 };
 const goToWinGame = () => {
@@ -263,7 +267,6 @@ const goToWinGame = () => {
     query: { score1: score1.value, score2: score2.value }
   });
 };
-// بدء المؤقت
 const startTimer = () => {
   clearInterval(countdownInterval);
   timer.value = 30;
@@ -278,21 +281,17 @@ const startTimer = () => {
     }
   }, 1000);
 };
-// إيقاف/تشغيل المؤقت
 const togglePause = () => {
   isPaused.value = !isPaused.value;
 };
-// تنسيق الوقت
 const formatTime = (seconds) => {
   const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
   const secs = String(seconds % 60).padStart(2, '0');
   return `${mins}:${secs}`;
 };
-// تبديل دور الفريق
 const toggleTeam = () => {
   currentTeam.value = currentTeam.value === 1 ? 2 : 1;
 };
-// اختيار سؤال
 const selectQuestion = (question, column) => {
   selectedQuestion.value = question.points;
   selectedColumn.value = column;
@@ -302,7 +301,6 @@ const selectQuestion = (question, column) => {
   blockPoints.value = false;
   startTimer();
 };
-// إظهار الإجابة
 const revealAnswer = () => {
   showAnswer.value = true;
   setTimeout(() => {
@@ -310,7 +308,6 @@ const revealAnswer = () => {
     showAnswer.value = false;
   }, 3000);
 };
-// إغلاق المودال وحساب النقاط
 const closeModal = () => {
   showModal.value = false;
   answeredQuestions.value.push(currentQuestion.value.id);
@@ -332,7 +329,6 @@ const goTo = (path, message) => {
     router.push(path);
   }
 };
-// التحكم اليدوي بالنقاط
 const increaseScore1 = () => score1.value += 10;
 const decreaseScore1 = () => score1.value = Math.max(0, score1.value - 10);
 const increaseScore2 = () => score2.value += 10;

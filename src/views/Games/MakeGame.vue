@@ -24,7 +24,7 @@
             </div>
             <!-- إرشادات -->
             <p class="text-sm text-gray-500 text-end font-bold">: أختر التصنيفات التي ترغب في تضمينها في اللعبة </p>
-            <div class="space-y-6 my-3" style="margin: 20px 10px;">
+            <div class="space-y-6 my-3" style="margin: 20px 10px; padding: 20px 0;">
               <!-- لوب على كل مجموعة من 10 -->
               <div v-for="(group, groupIndex) in chunkedCategories" :key="groupIndex" class="bg-white rounded-2xl">
                 <div class="grid grid-cols-2 gap-1 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">

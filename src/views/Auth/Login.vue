@@ -73,6 +73,7 @@ const handleLogin = async () => {
       localStorage.setItem('imageUrl', data.user.avatar || '')
       localStorage.setItem('userType', data.user.user_type || '')
       localStorage.setItem('phone', data.user.phone || '')
+      localStorage.setItem('balance', data.user.balance || '0.00')
       toast.success(' تم تسجيل الدخول بنجاح')
       router.push('/ChooseGame')
     } else {

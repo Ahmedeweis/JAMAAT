@@ -185,7 +185,7 @@ const activeTab = ref('categories')
 const setActiveTab = (tabName) => {
   activeTab.value = tabName
 }
-const balance = ref(10000);
+const balance = localStorage.getItem('balance') || 1.00;
 const couponCode = ref('');
 const categories = ref([]);
 const activeHintId = ref(null);
