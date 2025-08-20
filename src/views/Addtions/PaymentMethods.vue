@@ -133,7 +133,8 @@
     جاري المعالجة...
   </template>
   <template v-else>
-    💸 تأكيد الدفع
+       <img src="../../assets/imgs/coin.png" class="w-8">
+     تأكيد الدفع
   </template>
 </button>
   </template>
@@ -185,11 +186,17 @@ const confirmPayment = async () => {
     });
     console.log("API response:", res.data);
     const data = res.data;
-    if (data.IsSuccess && data.Data?.PaymentURL) {
-      window.location.href = data.Data.PaymentURL;
-    } else {
-      alert(data.Message || "فشل إنشاء الدفع!");
-    }
+if (data.IsSuccess && data.Data?.PaymentURL) {
+router.push({
+  path: "/PaymentPage",
+  query: {
+    paymentUrl: data.Data.PaymentURL,
+    embedded: selectedMethod.value.IsEmbeddedSupported // true/false
+  }
+});
+} else {
+  alert(data.Message || "فشل إنشاء الدفع!");
+}
   } catch (err) {
     console.error("Error during payment:", err);
     alert("حدث خطأ أثناء العملية");

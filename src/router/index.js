@@ -110,6 +110,11 @@ const routes = [
     name: "PaymentMethods",
     component: () => import("../views/Addtions/PaymentMethods.vue"),
   },
+    {
+    path: "/PaymentPage",
+    name: "PaymentPage",
+    component: () => import("../views/Addtions/PaymentPage.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),
