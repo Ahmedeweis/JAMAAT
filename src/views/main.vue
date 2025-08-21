@@ -206,7 +206,7 @@ const parentCategories = computed(() => {
 })
 onMounted(async () => {
   try {
-    const res = await getCategories({}, "en")
+    const res = await getCategories({}, "ar")
     categories.value = res.data.data
   } catch (err) {
     console.error("فشل في جلب التصنيفات", err)
