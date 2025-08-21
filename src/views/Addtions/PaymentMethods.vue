@@ -1,15 +1,15 @@
 <template>
-    <div class="min-h-screen bg-cover bg-center flex p-3" :style="`background-image: url(${bg});`">
+    <div class="min-h-screen bg-cover bg-center flex p-3 flex-row" :style="`background-image: url(${bg});`">
         <div
             class="flex-1 pl-2 pb-2 pr-0 pt-5 rounded-3xl bg-gradient-to-br from-indigo-50 via-white to-indigo-100 p-6 flex flex-col pb-6">
             <!-- العنوان -->
             <div class="text-center mb-10 ">
                 <h1
                     class="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-pink-500 pb-3">
-                    اختر طريقة الدفع
+                  {{ $t("paymeth") }}
                 </h1>
             </div>
-            <div class="flex gap-8 flex-wrap lg:flex-nowrap w-full">
+            <div class="flex gap-8 flex-wrap lg:flex-nowrap w-full flex-row-reverse">
                 <!-- طرق الدفع -->
                 <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 flex-1 mr-5">
                     <template v-if="loading">
@@ -25,19 +25,19 @@
                                 ">
                             <!-- محتوى الكارت -->
                             <img :src="pm.ImageUrl" alt="payment method" class="w-16 h-16 object-contain mb-4" />
-                            <h3 class="font-bold text-lg text-gray-800">
-                                {{ pm.PaymentMethodAr }}
-                            </h3>
-                            <p class="text-sm text-gray-500">
-                                {{ pm.PaymentMethodEn }}
-                            </p>
+<h3 class="font-bold text-lg text-gray-800">
+  {{ locale === 'ar' ? pm.PaymentMethodAr : pm.PaymentMethodEn }}
+</h3>
+<p class="text-sm text-gray-500">
+  {{ locale === 'ar' ? pm.PaymentMethodEn : pm.PaymentMethodAr }}
+</p>
                             <p class="mt-2 text-indigo-600 font-semibold">
-                                رسوم: {{ pm.ServiceCharge }} SAR
+                              {{ $t("serviceCharge") }}: {{ pm.ServiceCharge }} {{ $t("SAR") }}
                             </p>
                             <!-- زرار -->
                             <button
                                 class="mt-4  cursor-pointer w-full bg-gradient-to-r from-indigo-600 to-pink-500 text-white font-bold py-2 px-4 rounded-lg transition-all shadow-md hover:opacity-90">
-                                اختر
+                                  {{ $t("choose") }}
                             </button>
                         </div>
                     </template>
@@ -61,43 +61,45 @@
   <template v-else>
     <div class="flex-1">
       <!-- العنوان -->
-      <h3 class="text-2xl font-extrabold text-indigo-700 mb-6 flex items-center gap-2 justify-end">
-        الفاتورة
+      <h3 class="text-2xl font-extrabold text-indigo-700 mb-6 flex items-center gap-2 justify-end  flex-row-reverse">
+          {{ $t("invoice") }}
           <img src="../../assets/imgs/done.png" class="w-8">
       </h3>
       <!-- السعر الأساسي -->
 <!-- السعر الأساسي -->
-<div class="flex justify-between items-center text-gray-700 bg-white/70 p-3 rounded-xl shadow-sm mb-4">
-  <span class="font-semibold">{{ price }} SAR</span>
+<div class="flex justify-between items-center text-gray-700 bg-white/70 p-3 rounded-xl shadow-sm mb-4 flex-row-reverse">
+  <span class="font-semibold">{{ price }} {{$t("SAR")}}</span>
   <div class="flex items-center gap-2">
               <img src="../../assets/imgs/reduce-cost.png" class="w-8">
-    <span>السعر الأساسي</span>
+    <span> {{ $t("basePrice") }}</span>
   </div>
 </div>
 <!-- وسيلة الدفع -->
 <div v-if="selectedMethod"
-  class="flex justify-between items-center text-gray-700 bg-white/70 p-3 rounded-xl shadow-sm mb-4">
-  <span class="font-semibold">{{ selectedMethod.PaymentMethodAr }}</span>
+  class="flex justify-between items-center text-gray-700 bg-white/70 p-3 rounded-xl shadow-sm mb-4 flex-row-reverse">
+<span class="font-semibold">
+  {{ locale === 'ar' ? selectedMethod.PaymentMethodAr : selectedMethod.PaymentMethodEn }}
+</span>
   <div class="flex items-center gap-2">
    <img src="../../assets/imgs/credit-card.png" class="w-8">
-    <span>وسيلة الدفع</span>
+    <span> {{ $t("paymentMethod") }}</span>
   </div>
 </div>
 <!-- رسوم الخدمة -->
 <div v-if="selectedMethod"
-  class="flex justify-between items-center text-gray-700 bg-white/70 p-3 rounded-xl shadow-sm mb-4">
+  class="flex justify-between items-center text-gray-700 bg-white/70 p-3 rounded-xl shadow-sm mb-4 flex-row-reverse">
   <span class="font-semibold">{{ selectedMethod.ServiceCharge }} SAR</span>
   <div class="flex items-center gap-2">
    <img src="../../assets/imgs/thunder.png" class="w-8">
-    <span>رسوم الخدمة</span>
+    <span> {{ $t("serviceCharge") }}</span>
   </div>
 </div>
       <!-- الإجمالي -->
-      <div class="border-t pt-4 flex justify-between items-center font-extrabold text-lg text-indigo-800">
-        <span>{{ total }} SAR</span>
+      <div class="border-t pt-4 flex justify-between items-center font-extrabold text-lg text-indigo-800 flex-row-reverse">
+        <span>{{ total }} {{$t("SAR")}}</span>
         <div class="flex items-center gap-2">
              <img src="../../assets/imgs/price-tag.png" class="w-8">
-          <span>الإجمالي</span>
+          <span>{{ $t("total") }}</span>
         </div>
       </div>
     </div>
@@ -130,11 +132,11 @@
         d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
       ></path>
     </svg>
-    جاري المعالجة...
+  {{ $t("processing") }}
   </template>
   <template v-else>
        <img src="../../assets/imgs/coin.png" class="w-8">
-     تأكيد الدفع
+     {{ $t("confirmPayment") }}
   </template>
 </button>
   </template>
@@ -145,13 +147,28 @@
 </template>
 <script setup>
 import { ref, computed, onMounted } from "vue";
+const locale = localStorage.getItem("locale") || "en"; // افتراضي "en"
 import api from "../../services/axios";
 import { useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { getAvailablePaymentMethods } from "../../services/paymentService";
 import bg from "../../assets/imgs/splash.png";
 const router = useRouter();
+const route = useRoute();
 const price = router.options.history.state.price;
-const ide = ref(router.options.history.state?.planId || null);
+const ide = ref(
+  router.options.history.state?.planId ||
+  router.options.history.state?.gameId ||
+  null
+);
+const type = ref(router.options.history.state?.type || null)
+if (type.value === "game") {
+  console.log("النوع Game 🎮")
+} else if (type.value === "plane") {
+  console.log("النوع Plane ✈️")
+} else {
+  console.log("غير معروف")
+}
 const paymentMethods = ref([]);
 const selectedMethod = ref(null);
 const transactionId = ref(null);
@@ -180,7 +197,7 @@ const confirmPayment = async () => {
   try {
     const res = await api.post("/execute", {
       id: ide.value,
-      type: "plan",
+      type: type.value,
       PaymentMethodId: selectedMethod.value.PaymentMethodId,
       InvoiceAmount: total.value
     });
@@ -191,7 +208,7 @@ router.push({
   path: "/PaymentPage",
   query: {
     paymentUrl: data.Data.PaymentURL,
-    embedded: selectedMethod.value.IsEmbeddedSupported // true/false
+    embedded: selectedMethod.value.IsEmbeddedSupported
   }
 });
 } else {

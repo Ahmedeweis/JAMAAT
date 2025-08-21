@@ -75,6 +75,11 @@ const routes = [
     name: "ChooseGame",
     component: () => import("../views/Games/ChooseGame.vue"),
   },
+    {
+    path: "/GameLib",
+    name: "GameLib",
+    component: () => import("../views/Games/GameLib.vue"),
+  },
   {
     path: "/Homescreen",
     name: "Homescreen",

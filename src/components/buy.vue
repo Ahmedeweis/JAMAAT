@@ -1,12 +1,19 @@
 <template>
-    <router-link to="/Payment"
-        class=" board fixed top-0 right-0 m-4 flex justify-between items-center  w-[200px] text-start bg-[#010035] shadow-lg rounded-lg z-50">
-        <img src="../assets/imgs/coin.svg" alt="Logo" class="w-8 z-10 coin-icon" />
-        <span class="text-2xl font-bold text-white coin-amount">120</span>
-        <img src="../assets/imgs/Icon-Buttons.svg" alt="Clock Icon" class="w-8 h-8 add-button" />
-    </router-link>
+  <router-link to="/Payment"
+      class=" board fixed top-0 right-0 m-4 flex justify-between items-center  w-[200px] text-start bg-[#010035] shadow-lg rounded-lg z-50">
+      <img src="../assets/imgs/coin.svg" alt="Logo" class="w-8 z-10 coin-icon" />
+      <!-- عرض الرصيد من localStorage -->
+      <span class="text-2xl font-bold text-white coin-amount">{{ balance }}</span>
+      <img src="../assets/imgs/Icon-Buttons.svg" alt="Clock Icon" class="w-8 h-8 add-button" />
+  </router-link>
 </template>
 <script setup>
+import { ref, onMounted } from 'vue'
+const balance = ref(0)
+onMounted(() => {
+  const storedBalance = localStorage.getItem('balance')
+  balance.value = storedBalance ? Number(storedBalance) : 0
+})
 </script>
 <style scoped>
 /* خلفية اللوحة */

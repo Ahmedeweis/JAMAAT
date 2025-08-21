@@ -1,27 +1,33 @@
 <template>
-<div class="min-h-screen w-full bg-cover bg-center relative h-screen flex flex-col items-center justify-center "
-     :style="`background-image: url(${bg});`">
-             <router-link to="/main"
-      class="  fixed top-5 left-0 m-4 flex justify-between items-center  text-start bg-[#010035] shadow-lg rounded-lg z-50">
-      <img src="../../assets/imgs/close_btn.svg" alt="Logo" class="w-10 z-10 " />
+  <div class="min-h-screen w-full bg-cover bg-center relative h-screen flex flex-col items-center justify-center"
+       :style="`background-image: url(${bg});`">
+    <!-- زر الإغلاق -->
+    <router-link to="/main"
+      class="fixed top-5 left-0 m-4 flex justify-between items-center text-start bg-[#010035] shadow-lg rounded-lg z-50">
+      <img src="../../assets/imgs/close_btn.svg" alt="Logo" class="w-10 z-10" />
     </router-link>
-  <h1 class="text-white text-4xl mb-8 z-10">ألعاب</h1>
-  <img src="../../assets/imgs/JAMAAT.svg" alt="Logo" class="w-64 mb-6 z-10">
-  <p class="text-white text-lg mb-8 z-10">أختر اللعبة</p>
-   <div class="space-y-4 z-10 w-full px-4 flex flex-col justify-center  items-center" style="font-family: 'Rubik', sans-serif;">
-  <router-link to="/main" class="btn-gradient-border px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-orange-500 text-2xl rounded-xl shadow-lg hover:bg-orange-600 transition">
-    <img src="../../assets/imgs/play.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
-    <span> لعبة 1 </span>
-  </router-link>
-  <router-link to="/connectintro" class="btn-gradient-border cursor-pointer px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-orange-500 text-2xl rounded-lg shadow-lg hover:bg-orange-600 transition">
-    <img src="../../assets/imgs/play.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
-    <span>جمع أربعة</span>
-  </router-link>
-  <router-link to="" class="btn-gradient-borderII cursor-not-allowed px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-yellow-700 text-2xl rounded-lg shadow-lg transition">
-    <img src="../../assets/imgs/Lock.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
-    <span> لعبة  3</span>
-  </router-link>
-</div>
+    <!-- العنوان -->
+    <h1 class="text-white text-4xl mb-8 z-10">{{ $t("games") }}</h1>
+    <img src="../../assets/imgs/JAMAAT.svg" alt="Logo" class="w-64 mb-6 z-10">
+    <p class="text-white text-lg mb-8 z-10">{{ $t("chooseGame") }}</p>
+    <!-- الألعاب -->
+    <div class="space-y-4 z-10 w-full px-4 flex flex-col justify-center items-center" style="font-family: 'Rubik', sans-serif;">
+      <router-link to="/main"
+        class="btn-gradient-border px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-orange-500 text-2xl rounded-xl shadow-lg hover:bg-orange-600 transition">
+        <img src="../../assets/imgs/play.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
+        <span>{{ $t("game1") }}</span>
+      </router-link>
+      <router-link to="/connectintro"
+        class="btn-gradient-border cursor-pointer px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-orange-500 text-2xl rounded-lg shadow-lg hover:bg-orange-600 transition">
+        <img src="../../assets/imgs/play.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
+        <span>{{ $t("connectFour") }}</span>
+      </router-link>
+      <router-link to=""
+        class="btn-gradient-borderII cursor-not-allowed px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-yellow-700 text-2xl rounded-lg shadow-lg transition">
+        <img src="../../assets/imgs/Lock.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
+        <span>{{ $t("game3") }}</span>
+      </router-link>
+    </div>
   </div>
 </template>
 <script setup>

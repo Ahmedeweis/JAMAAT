@@ -1,10 +1,13 @@
 import api from "./axios";
-export const getCategories = (params = {}) => {
+export const getCategories = (params = {}, lang) => {
   return api.get('/categories', {
     params: {
-      per_page: 100,
+      // per_page: 100,
       ...params,
     },
+    headers: {
+      'lang': lang
+    }
   });
 };
 // Get one category by ID

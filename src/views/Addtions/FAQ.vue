@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen bg-cover bg-center flex" :style="`background-image: url(${bg});`">
+  <div class="min-h-screen bg-cover bg-center flex flex-row-reverse" :style="`background-image: url(${bg});`">
     <div class="flex-1 pl-2 pb-2 pr-0 pt-0 rounded-3xl">
       <div class="min-h-screen mt-4 mr-[5px] rounded-3xl bg-white flex flex-col items-center justify-start p-4">
-        <h1 class="text-3xl md:text-4xl font-bold mb-8" style="font-family: 'Kufam', sans-serif;">الأسئلة الشائعة</h1>
+        <h1 class="text-3xl md:text-4xl font-bold mb-8" style="font-family: 'Kufam', sans-serif;">{{ $t("faq") }}</h1>
         <div class="w-full max-w-md space-y-4 ">
           <section class="mt-4">
             <div class="space-y-4 ">
@@ -41,7 +41,8 @@ import { GetFAQ } from '../../services/supportService'
 const faqs = ref([])
 onMounted(async () => {
   try {
-    const res = await GetFAQ()
+    const lang = localStorage.getItem("lang") || "ar"   // 👈 هنا تجيبها
+    const res = await GetFAQ(lang)                      // 👈 وتباصيها
     faqs.value = res.data.data.map(item => ({
       ...item,
       open: false

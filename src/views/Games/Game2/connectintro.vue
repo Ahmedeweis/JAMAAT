@@ -10,38 +10,48 @@
       <div class="mt-30 flex flex-col items-center">
         <img src="../../../assets/imgs/Group 12.svg">
         <h2 class="text-[#D9D9D9] text-3xl mt-7 font-bold">حدد الفئة</h2>
-        <div class="space-y-6 my-3" style="margin: 20px 10px;">
-          <!-- لوب على كل مجموعة من 10 -->
-          <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div v-for="category in visibleCategories" :key="category.id" @click="toggleCategory(category.id)" :class="[
-              'rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group cursor-pointer flex flex-col items-center p-3',
-              selectedCategories.includes(category.id)
-                ? 'border-2 border-purple-600 bg-purple-50'
-                : canSelectMore
-                  ? 'border border-transparent bg-transparent'
-                  : 'opacity-50 cursor-not-allowed',
-            ]" class="bg-gradient-to-b from-yellow-400 to-red-500">
-              <img :src="category.image_url" alt="صورة التصنيف"
-                class="w-full h-28 object-contain mb-3 rounded-xl mt-3.5" />
-              <div class="flex items-center justify-between w-full mb-1 px-1">
-                <button @click.stop="toggleHint(category.id)"
-                  class="text-amber-700 cursor-pointer text-sm bg-white rounded-full px-3 py-1 font-bold focus:outline-none"
-                  title="عرض التلميح">
-                  i
-                </button>
-                <h5 class="text-[18px] font-bold text-white truncate text-end ml-2" dir="rtl">
-                  {{ category.name }}
-                </h5>
-              </div>
-            </div>
-                      <div class="load-more-container mt-8 flex h-fit  justify-center self-center">
-            <button v-if="itemsToShow < categories.length" @click="itemsToShow += 10"
-              class="px-6 py-3  text-white rounded-lg shadow-lg cursor-pointer bg-gradient-to-l from-red-500 to-yellow-400 transition font-semibold">
-              تحميل المزيد
-            </button>
-          </div>
-          </div>
+<div class="space-y-6 my-3" style="margin: 20px 10px;">
+  <!-- عرض الفئات حسب التصنيف الرئيسي -->
+  <div v-for="parentName in parentCategories" :key="parentName">
+    <h2 class="text-xl sm:text-2xl font-bold text-white mb-4" dir="rtl">{{ parentName }}</h2>
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" dir="rtl">
+      <div
+        v-for="category in visibleCategories.filter(c => (c.parent?.name || 'بدون تصنيف رئيسي') === parentName)"
+        :key="category.id"
+        @click="toggleCategory(category.id)"
+        :class="[
+          'rounded-xl shadow-md hover:shadow-lg transition-all duration-300 relative group cursor-pointer flex flex-col items-center p-3',
+          selectedCategories.includes(category.id)
+            ? 'border-2 border-purple-600 bg-purple-50'
+            : canSelectMore
+              ? 'border border-transparent bg-transparent'
+              : 'opacity-50 cursor-not-allowed',
+        ]"
+        class="bg-gradient-to-b from-yellow-400 to-red-500"
+      >
+        <img :src="category.image_url" alt="صورة التصنيف"
+          class="w-full h-28 object-contain mb-3 rounded-xl mt-3.5" />
+        <div class="flex items-center justify-between w-full mb-1 px-1">
+          <button @click.stop="toggleHint(category.id)"
+            class="text-amber-700 cursor-pointer text-sm bg-white rounded-full px-3 py-1 font-bold focus:outline-none"
+            title="عرض التلميح">
+            i
+          </button>
+          <h5 class="text-[18px] font-bold text-white truncate text-end ml-2" dir="rtl">
+            {{ category.name }}
+          </h5>
         </div>
+      </div>
+    </div>
+  </div>
+  <!-- زر تحميل المزيد -->
+  <div class="load-more-container mt-8 flex h-fit  justify-center self-center">
+    <button v-if="itemsToShow < categories.length" @click="itemsToShow += 10"
+      class="px-6 py-3  text-white rounded-lg shadow-lg cursor-pointer bg-gradient-to-l from-red-500 to-yellow-400 transition font-semibold">
+      تحميل المزيد
+    </button>
+  </div>
+</div>
         <!-- هذا هو بار التلميح الثابت أسفل الشاشة -->
         <div v-if="activeHintId !== null"
           class="fixed bottom-0 left-0 w-full text-white text-sm p-4 rounded-t-lg shadow-lg z-50 bg-gradient-to-l from-red-500 to-yellow-400 "
@@ -138,4 +148,8 @@ const startGame = () => {
     }
   })
 }
+const parentCategories = computed(() => {
+  const parents = visibleCategories.value.map(c => c.parent?.name || 'بدون تصنيف رئيسي')
+  return [...new Set(parents)]
+})
 </script>

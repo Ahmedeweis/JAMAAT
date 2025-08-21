@@ -5,7 +5,7 @@
     <h2
       class="text-3xl md:text-4xl font-extrabold mb-6 text-center bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-pink-500"
     >
-      اكمل الدفع
+      {{ $t("completePayment") }}
     </h2>
     <div class="w-full max-w-5xl">
       <div v-if="paymentUrl" class="flex flex-col items-center">
@@ -21,21 +21,21 @@
           class="text-center mt-4 bg-white/90 p-6 rounded-xl shadow-md border border-gray-200 w-full"
         >
           <p class="mb-3 text-red-600 font-semibold">
-            بوابة الدفع لا تدعم الدفع داخل التطبيق مباشرة
+             {{ $t("gatewayNotSupported") }}
           </p>
           <p class="mb-4 text-gray-700">
-            اضغط على الزر أدناه للانتقال لصفحة الدفع:
+            {{ $t("clickToRedirect") }}
           </p>
           <button
             @click="startPayment"
             class="px-6 py-3 bg-gradient-to-r from-indigo-600 to-pink-500 text-white font-bold rounded-xl shadow-md hover:opacity-90 transition-all"
           >
-            بدء الدفع
+            {{ $t("clickToRedirect") }}
           </button>
         </div>
       </div>
       <div v-else class="text-center p-6 bg-white/70 rounded-xl shadow-md">
-        <p class="text-gray-700 text-lg">جارٍ تجهيز صفحة الدفع...</p>
+        <p class="text-gray-700 text-lg" > {{ $t("clickToRedirect") }}</p>
       </div>
     </div>
   </div>

@@ -1,37 +1,49 @@
 <template>
-    <div class="min-h-screen bg-cover bg-center flex" :style="`background-image: url(${bg});`">
+    <div class="min-h-screen bg-cover bg-center flex flex-row-reverse" :style="`background-image: url(${bg});`" :dir="dir">
         <div class="flex-1 pl-2 pb-2 pr-0 pt-0 rounded-3xl">
             <div class="min-h-screen mt-4 mr-[5px] rounded-3xl bg-white flex flex-col items-center justify-center p-4">
-                <h1 class="text-3xl md:text-4xl font-bold mb-8" style="font-family: 'Kufam', sans-serif;" >تواصل معنا</h1>
+                <h1 class="text-3xl md:text-4xl font-bold mb-8" style="font-family: 'Kufam', sans-serif;"> {{
+                    $t("contactUs") }}</h1>
                 <div class="w-full max-w-md space-y-4 ">
-                    <div class="flex flex-col text-right">
-                        <label class="text-[#663D9C] mb-1">الإسم</label>
-                        <input v-model="name" type="text"
-                            class="p-2  placeholder-[#D5C1EE] text-[#24054C]  rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none text-right "
-                            placeholder="سجل الإسم">
+                    <div class="flex flex-col ">
+                        <label class="text-[#663D9C] mb-1 text-justify">{{ $t("name") }}</label>
+<input
+  v-model="name"
+  type="text"
+  :class="[
+    'p-2 rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none',
+    $i18n.locale === 'en' ? 'text-left placeholder-left' : 'text-right placeholder-right'
+  ]"
+  :placeholder="$t('enterName')"
+/>
                     </div>
                     <div class="flex flex-col text-right">
-                        <label class="text-purple-800 mb-1">البريد الإلكتروني</label>
+                        <label class="text-purple-800 mb-1 text-justify"> {{ $t("email") }}</label>
                         <input type="email" v-model="email"
-                            class="p-2 placeholder-[#D5C1EE] text-[#24054C] font-bold text-left rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
-                            placeholder="example@gmail.com" />
+                            class="p-2 placeholder-[#D5C1EE] text-[#24054C] font-bold  rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
+                            :placeholder="$t('enterEmail')"  />
                     </div>
+<div class="flex flex-col" :class="$i18n.locale === 'ar' ? 'text-right' : 'text-left'">
+  <label class="text-purple-800 mb-1">{{ $t("phone") }}</label>
+  <input
+    type="tel"
+    v-model="phone"
+    :class="[
+      'p-2 rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none',
+      $i18n.locale === 'ar' ? 'text-right placeholder-right' : 'text-left placeholder-left'
+    ]"
+    :placeholder="$t('enterPhone')"
+  >
+</div>
                     <div class="flex flex-col text-right">
-                        <label class="text-purple-800 mb-1">رقم الجوال</label>
-                        <input type="tel" v-model="phone"
-                            class="p-2 placeholder-[#D5C1EE] text-[#24054C]  text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
-                            placeholder="رقم الجوال">
-                    </div>
-                    <div class="flex flex-col text-right">
-                        <label class="text-[#663D9C] mb-1">رسالتك</label>
+                        <label class="text-[#663D9C] mb-1 text-justify">{{ $t("message") }}</label>
                         <textarea v-model="message"
                             class="p-2 placeholder-[#D5C1EE] text-[#24054C] rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none text-right resize-none"
-                            placeholder="اكتب رسالتك هنا" rows="6"></textarea>
+                            :placeholder="$t('enterMessage')"  rows="6"></textarea>
                     </div>
-                    <button @click="handleSubmit"
-                     class="w-full cursor-pointer bg-[#E3614D] text-white py-3 rounded-4xl font-bold
+                    <button @click="handleSubmit" class="w-full cursor-pointer bg-[#E3614D] text-white py-3 rounded-4xl font-bold
                      shadow-[5px_5px_15px_#C33520] transition duration-300">
-                        إرسال
+                        {{ $t("send") }}
                     </button>
                 </div>
             </div>
@@ -56,27 +68,27 @@ const message = ref('')
 const toast = useToast()
 const router = useRouter()
 const handleSubmit = async () => {
-  const payload = {
-    name: name.value.trim(),
-    email: email.value.trim(),
-    // phone: phone.value.trim(),
-    message: message.value.trim(),
-  }
-  if (!payload.name || !payload.email || !payload.message) {
-    toast.warning('يرجى تعبئة الحقول المطلوبة')
-    return
-  }
-  try {
-    await ContactUs(payload)
-    toast.success('تم إرسال الرسالة بنجاح  سنتواصل معك في أسرع وقت ')
-    name.value = ''
-    email.value = ''
-    // phone.value = ''
-    message.value = ''
-  } catch (err) {
-    console.error('خطأ في الإرسال:', err)
-    const errorMsg = err?.response?.data?.message || 'حدث خطأ أثناء الإرسال '
-    toast.error(errorMsg)
-  }
+    const payload = {
+        name: name.value.trim(),
+        email: email.value.trim(),
+        // phone: phone.value.trim(),
+        message: message.value.trim(),
+    }
+    if (!payload.name || !payload.email || !payload.message) {
+        toast.warning(t('required'))
+        return
+    }
+    try {
+        await ContactUs(payload)
+         toast.success(t('success'))
+        name.value = ''
+        email.value = ''
+        // phone.value = ''
+        message.value = ''
+    } catch (err) {
+        console.error('خطأ في الإرسال:', err)
+        const errorMsg = err?.response?.data?.message || 'حدث خطأ أثناء الإرسال '
+        toast.error(errorMsg)
+    }
 }
 </script>

@@ -1,7 +1,15 @@
 import api from "./axios";
-export const getQuestions = () => {
-  return api.get('/question')
-}
-export const createQuestion = (payload) => {
-  return api.post('/question', payload)
-}
+export const GetFAQ = (lang) => {
+  return api.get("/question", {
+    headers: {
+      "lang": lang
+    }
+  });
+};
+export const createQuestion = (payload, lang) => {
+  return api.post("/question", payload, {
+    headers: {
+      "lang": lang
+    }
+  });
+};
