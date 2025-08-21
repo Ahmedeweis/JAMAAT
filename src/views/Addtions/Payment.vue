@@ -12,10 +12,10 @@
           {{$t("createGame")}}
         </h1>
         <!-- Game Selection -->
-        <div
-          class="w-full space-y-4 flex flex-col justify-center"
-          :class="locale === 'ar' ? 'items-end text-right' : 'items-start text-left'"
-        >
+<div
+  class="w-full space-y-4 flex flex-col justify-center"
+  :class="locale.value === 'ar' ? 'items-end text-right' : 'items-start text-left'"
+>
           <h2 class="text-black text-2xl mb-2 pr-3" style="font-family: 'Kufam', sans-serif;">
             {{$t("numberOfGames")}}
           </h2>

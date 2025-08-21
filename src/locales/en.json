@@ -1,4 +1,8 @@
 {
+  "gameLibrary": "Game Library",
+  "noGames": "No games available.",
+  "selectedGameDetails": "Selected Game Details",
+  "priceLabel": "Price",
   "completePayment": "Complete Payment",
   "gatewayNotSupported": "Payment gateway does not support in-app payments",
   "clickToRedirect": "Click the button below to go to the payment page:",

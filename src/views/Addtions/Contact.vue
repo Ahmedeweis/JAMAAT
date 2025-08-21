@@ -39,7 +39,8 @@
                         <label class="text-[#663D9C] mb-1 text-justify">{{ $t("message") }}</label>
                         <textarea v-model="message"
                             class="p-2 placeholder-[#D5C1EE] text-[#24054C] rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none text-right resize-none"
-                            :placeholder="$t('enterMessage')"  rows="6"></textarea>
+                            :placeholder="$t('enterMessage')"
+                             rows="6"></textarea>
                     </div>
                     <button @click="handleSubmit" class="w-full cursor-pointer bg-[#E3614D] text-white py-3 rounded-4xl font-bold
                      shadow-[5px_5px_15px_#C33520] transition duration-300">

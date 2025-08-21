@@ -1,7 +1,12 @@
 import api from "./axios";
 // Get all games
-export const getGames = () => {
-  return api.get('/games')
+export const getGames = (lang) => {
+  console.log("Current locale:", lang);
+  return api.get("/games", {
+    headers: {
+      lang:lang
+    }
+  });
 };
 export const getGameById = (id) => {
   return api.get(`/game/${id}`)

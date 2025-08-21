@@ -1,4 +1,8 @@
 {
+  "gameLibrary": "مكتبة الألعاب",
+  "noGames": "لا توجد ألعاب متاحة.",
+  "selectedGameDetails": "تفاصيل اللعبة المختارة",
+  "priceLabel": "السعر",
   "completePayment": "اكمل الدفع",
   "gatewayNotSupported": "بوابة الدفع لا تدعم الدفع داخل التطبيق مباشرة",
   "clickToRedirect": "اضغط على الزر أدناه للانتقال لصفحة الدفع:",

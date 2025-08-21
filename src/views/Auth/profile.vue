@@ -114,20 +114,96 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
-const { locale } = useI18n()
 import { useRouter } from 'vue-router'
 import { useToast } from 'vue-toastification'
-import { updateProfile, uploadAvatar } from '../../services/authService'
+import side from '../../components/side.vue'
 import bg from '../../assets/imgs/splash.png'
 import profileImg from '../../assets/imgs/profile.png'
-import side from '../../components/side.vue'
-import { deleteAccount } from '../../services/authService'
+import { updateProfile, uploadAvatar, deleteAccount } from '../../services/authService'
+const { locale } = useI18n()
+const router = useRouter()
+const toast = useToast()
+// reactive state
+const fname = ref('')
+const lname = ref('')
+const email = ref('')
+const phone = ref('')
+const password = ref('')
+const imageUrl = ref(profileImg)
 const showDeleteModal = ref(false)
+const country_code = '+20'
+// ✅ عند تحميل الصفحة
+onMounted(() => {
+  // ضبط اللغة من localStorage أول مرة
+  const savedLang = localStorage.getItem('locale') || 'ar'
+  locale.value = savedLang
+  document.documentElement.dir = savedLang === 'ar' ? 'rtl' : 'ltr'
+  // جلب بيانات البروفايل من localStorage
+  const name = localStorage.getItem('name') || ''
+  const nameParts = name.split(' ')
+  fname.value = nameParts[0] || ''
+  lname.value = nameParts[1] || ''
+  email.value = localStorage.getItem('email') || ''
+  phone.value = localStorage.getItem('phone') || ''
+  imageUrl.value = localStorage.getItem('imageUrl') || profileImg
+})
+// ✅ تغيير اللغة
 const changeLang = (lang) => {
-  locale.value = lang
-  localStorage.setItem('lang', lang)
+  locale.value = lang               // تحديث Vue I18n reactive
+  localStorage.setItem('locale', lang) // حفظ اللغة في localStorage
   document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'
+  toast.info(lang === 'ar' ? 'تم تغيير اللغة إلى العربية' : 'Language changed to English')
 }
+// ✅ رفع صورة جديدة
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0]
+  if (!file) return
+  try {
+    const previewImage = URL.createObjectURL(file)
+    imageUrl.value = previewImage
+    const res = await uploadAvatar(file)
+    const avatar = res.data?.avatar
+    if (avatar) {
+      imageUrl.value = avatar
+      localStorage.setItem('imageUrl', avatar)
+    } else {
+      throw new Error('❌ لم يتم استلام رابط الصورة من السيرفر')
+    }
+    toast.success('تم رفع الصورة بنجاح')
+  } catch (err) {
+    toast.error(err.response?.data?.message || err.message || 'فشل رفع الصورة')
+  }
+}
+// ✅ حفظ التعديلات على البيانات
+const handleUpdateProfile = async () => {
+  try {
+    const payload = {
+      name: `${fname.value} ${lname.value}`,
+      email: email.value,
+      phone: phone.value,
+      country_code,
+      lang: locale.value  // أهم شيء: نرسل اللغة الحالية
+    }
+    if (password.value.trim()) payload.password = password.value.trim()
+    const res = await updateProfile(payload)
+    toast.success(res.data.message || 'تم تحديث بياناتك بنجاح')
+    // تحديث localStorage
+    localStorage.setItem('name', payload.name)
+    localStorage.setItem('email', payload.email)
+    localStorage.setItem('phone', payload.phone)
+  } catch (err) {
+    toast.error(err.response?.data?.message || 'فشل التحديث')
+  }
+}
+// ✅ تسجيل الخروج
+const handleLogout = () => {
+  const savedLang = localStorage.getItem('locale') || 'ar'
+  localStorage.clear()
+  localStorage.setItem('locale', savedLang) // نحتفظ باللغة
+  toast.info('تم تسجيل الخروج')
+  router.push('/login')
+}
+// ✅ حذف الحساب
 const confirmDelete = async () => {
   try {
     const res = await deleteAccount()
@@ -139,84 +215,5 @@ const confirmDelete = async () => {
   } finally {
     showDeleteModal.value = false
   }
-}
-const router = useRouter()
-const toast = useToast()
-// البيانات
-const fname = ref('')
-const lname = ref('')
-const email = ref('')
-const phone = ref('')
-const password = ref('')
-const imageUrl = ref('')
-const defaultAvatar = profileImg
-const country_code = '+20'
-// ✅ عند تحميل الصفحة، نجيب البيانات من localStorage
-onMounted(() => {
-  const name = localStorage.getItem('name') || ''
-  const nameParts = name.split(' ')
-  fname.value = nameParts[0] || ''
-  lname.value = nameParts[1] || ''
-  email.value = localStorage.getItem('email') || ''
-  phone.value = localStorage.getItem('phone') || ''
-  imageUrl.value = localStorage.getItem('imageUrl') || defaultAvatar
-})
-// ✅ رفع صورة جديدة
-const handleFileUpload = async (event) => {
-  const file = event.target.files[0]
-  if (!file) return
-  try {
-    const previewImage = URL.createObjectURL(file)
-    imageUrl.value = previewImage
-    const res = await uploadAvatar(file)
-    console.log("✅ Avatar upload response:", res.data)
-    if (avatar) {
-      // Update UI & localStorage
-      imageUrl.value = avatar
-      localStorage.setItem('imageUrl', avatar)
-      const profileRes = await getProfile()
-      console.log("📥 Fetched profile:", profileRes.data)
-    }
-    else {
-      throw new Error('❌ لم يتم استلام رابط الصورة من السيرفر')
-    }
-  } catch (err) {
-    toast.success(err.response?.data?.message || ' تم رفع الصورة بنجاح  ')
-  }
-}
-// ✅ حفظ التعديلات على البيانات
-const handleUpdateProfile = async () => {
-  try {
-    const payload = {
-      name: `${fname.value} ${lname.value}`,
-      email: email.value,
-      phone: phone.value,
-      country_code,
-      lang: 'en'
-    }
-    if (password.value.trim()) {
-      payload.password = password.value.trim()
-    }
-    const res = await updateProfile(payload)
-    let msg = res.data.message
-    if (msg === 'Profile updated successfully') {
-      msg = ' تم تحديث بياناتك بنجاح'
-    }
-    toast.success(msg)
-    // تحديث البيانات في localStorage
-    localStorage.setItem('name', payload.name)
-    localStorage.setItem('email', payload.email)
-    localStorage.setItem('phone', payload.phone)
-  } catch (err) {
-    toast.error(err.response?.data?.message || ' فشل التحديث')
-  }
-}
-// ✅ تسجيل الخروج
-const handleLogout = () => {
-  const savedLang = localStorage.getItem('lang') || 'ar'
-  localStorage.clear()
-  localStorage.setItem('lang', savedLang)
-  toast.info('تم تسجيل الخروج')
-  router.push('/login')
 }
 </script>
