@@ -1,6 +1,55 @@
 <!-- components/StartGameModal.vue -->
 <template>
   <div class="min-h-screen w-full bg-cover bg-center flex" :style="`background-image: url(${bg});`">
+      <div class="fixed inset-0 bg-opacity-60 flex justify-center items-center z-50">
+      <div class="bg-white rounded-2xl p-4 shadow-lg w-full max-w-md relative border border-indigo-200">
+        <!-- زر الإغلاق -->
+        <router-link to="/main" @click="exitGame"
+          class="absolute cursor-pointer top-4 right-4 text-gray-500 hover:text-gray-700">
+          <img src="../../../assets/imgs/close.svg" alt="Close" class="w-6 h-6">
+        </router-link>
+        <h2 class="text-2xl font-bold text-indigo-800 text-center mb-6">{{ $t("startGameTitle") }}</h2>
+        <!-- الفريق الأول -->
+        <div class="flex flex-col text-center items-center">
+          <label class="text-purple-800 mb-4 font-bold">{{ $t("team1Name") }}</label>
+          <input v-model="team1"
+            class="p-2 w-[90%] text-[#24054C] font-bold text-end rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
+            :placeholder="$t('enterTeam1Name')"
+              :style="{ textAlign: currentLang === 'ar' ? 'right' : 'left' }" />
+        </div>
+        <!-- عدد لاعبي الفريق الأول -->
+        <div class="mb-4 mt-4 flex flex-col text-center items-center">
+          <span class="text-purple-800 mb-2 font-bold">{{ $t("playersCount") }}</span>
+          <div class="flex items-center bg-[#ECE1FB] rounded-lg p-2">
+            <button @click="decreasePlayers1" class="bg-gray-300 cursor-pointer w-8 h-8 rounded-lg hover:bg-gray-400">-</button>
+            <input v-model="players1" style="margin-left: 20px;" class="w-12 text-center mx-2 bg-transparent" type="number" readonly />
+            <button @click="increasePlayers1" class="bg-[#01004C] font-bold cursor-pointer w-8 h-8 rounded-lg text-white">+</button>
+          </div>
+        </div>
+        <!-- الفريق الثاني -->
+        <div class="flex flex-col text-center items-center">
+          <label class="text-purple-800 mb-4 font-bold">{{ $t("team2Name") }}</label>
+          <input v-model="team2"
+            class="p-2 w-[90%] text-[#24054C] font-bold text-end rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
+            :placeholder="$t('enterTeam2Name')"
+              :style="{ textAlign: currentLang === 'ar' ? 'right' : 'left' }" />
+        </div>
+        <!-- عدد لاعبي الفريق الثاني -->
+        <div class="mb-4 mt-4 flex flex-col text-center items-center">
+          <span class="text-purple-800 mb-2 font-bold">{{ $t("playersCount") }}</span>
+          <div class="flex items-center bg-[#ECE1FB] rounded-lg p-2">
+            <button @click="decreasePlayers2" class="bg-gray-300 cursor-pointer w-8 h-8 rounded-lg hover:bg-gray-400">-</button>
+            <input v-model="players2" style="margin-left: 20px;" class="w-12 text-center mx-2 bg-transparent" type="number" readonly />
+            <button @click="increasePlayers2" class="bg-[#01004C] font-bold cursor-pointer w-8 h-8 rounded-lg text-white">+</button>
+          </div>
+        </div>
+        <!-- زر بدء اللعبة -->
+        <router-link :to="{ path: '/Homescreen', query: { id: gameId } }" @click="startGame"
+          class="flex justify-center items-center cursor-pointer w-full bg-red-500 text-white rounded-lg py-2 font-semibold transition mt-4">
+          {{ $t("startButton") }}
+        </router-link>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
