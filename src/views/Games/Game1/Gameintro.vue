@@ -56,8 +56,8 @@
 import { ref } from 'vue'
 import bg from '../../../assets/imgs/splash.png'
 import { useRoute ,useRouter } from 'vue-router'
-const { locale } = useI18n()
 import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
 const router = useRouter()
 const route = useRoute()
 const gameId = route.query.id
