@@ -9,6 +9,8 @@ import bg from '../../../assets/imgs/splash.png'
 import { useRoute ,useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 const { locale } = useI18n()
+const currentLang = locale.value
+console.log(currentLang)
 const router = useRouter()
 const route = useRoute()
 const gameId = route.query.id
