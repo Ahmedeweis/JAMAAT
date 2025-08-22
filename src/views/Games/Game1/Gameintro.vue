@@ -20,9 +20,9 @@
         <!-- عدد لاعبي الفريق الأول -->
         <div class="mb-4 mt-4 flex flex-col text-center items-center">
           <span class="text-purple-800 mb-2 font-bold">{{ $t("playersCount") }}</span>
-          <div class="flex items-center bg-[#ECE1FB] rounded-lg p-2">
+          <div class="flex items-center justify-center bg-[#ECE1FB] rounded-lg p-2">
             <button @click="decreasePlayers1" class="bg-gray-300 cursor-pointer w-8 h-8 rounded-lg hover:bg-gray-400">-</button>
-            <input v-model="players1" style="margin-left: 20px;" class="w-12 text-center mx-2 bg-transparent" type="number" readonly />
+            <input v-model="players1" style="margin-left: 15px;" class="w-12 text-center mx-2 bg-transparent" type="number" readonly />
             <button @click="increasePlayers1" class="bg-[#01004C] font-bold cursor-pointer w-8 h-8 rounded-lg text-white">+</button>
           </div>
         </div>
@@ -39,7 +39,7 @@
           <span class="text-purple-800 mb-2 font-bold">{{ $t("playersCount") }}</span>
           <div class="flex items-center bg-[#ECE1FB] rounded-lg p-2">
             <button @click="decreasePlayers2" class="bg-gray-300 cursor-pointer w-8 h-8 rounded-lg hover:bg-gray-400">-</button>
-            <input v-model="players2" style="margin-left: 20px;" class="w-12 text-center mx-2 bg-transparent" type="number" readonly />
+            <input v-model="players2" style="margin-left: 15px;" class="w-12 text-center mx-2 bg-transparent" type="number" readonly />
             <button @click="increasePlayers2" class="bg-[#01004C] font-bold cursor-pointer w-8 h-8 rounded-lg text-white">+</button>
           </div>
         </div>

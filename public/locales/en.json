@@ -81,7 +81,6 @@
   "myAccount": "Account",
   "signup": "Sign Up",
   "emailOrPhone": "Email or Phone",
-  "emailOrPhonePlaceholder": "Ali123@gmail.com",
   "passwordPlaceholder": "Enter your password",
   "loginSuccess": "Logged in successfully",
   "loginFailed": "Login failed. Please check your email and password.",

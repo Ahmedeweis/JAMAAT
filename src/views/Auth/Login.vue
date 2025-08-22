@@ -26,7 +26,7 @@
     'text-left': $i18n.locale === 'en',
     'text-right': $i18n.locale === 'ar'
   }"
-  :placeholder="$t('emailOrPhonePlaceholder')"
+  placeholder="Ali123@gmail.com"
 />
           </div>
           <div class="flex flex-col text-right mt-[15px]">
