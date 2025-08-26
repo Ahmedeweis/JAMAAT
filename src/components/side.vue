@@ -21,7 +21,8 @@
       <h2 class="text-lg text-gray-700">{{ $t('contact') }}</h2>
     </router-link>
     <router-link to="/FAQ" class="flex flex-col items-center w-full py-3 px-2">
-      <h2 class="text-xl text-white font-bold bg-[#010061] flex justify-center items-center rounded-full w-3 h-3 p-3">?</h2>
+      <h2 class="text-xl text-white font-bold bg-[#010061] flex justify-center items-center rounded-full w-3 h-3"
+      style="padding: 16px 14px 12px 14px;">?</h2>
     </router-link>
   </div>
 </template>

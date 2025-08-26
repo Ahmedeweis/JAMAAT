@@ -1,171 +1,144 @@
 <!-- components/StartGameModal.vue -->
 <template>
   <div class="min-h-screen w-full bg-cover bg-center bg-no-repeat" :style="`background-image: url(${bg});`">
-  <div
-    @click="confirmExit"
-    class="fixed top-5 left-0 m-4 flex justify-between items-center text-start bg-[#010035] shadow-lg rounded-lg z-5 cursor-pointer"
-  >
-    <img src="../../../assets/imgs/close_btn.svg" alt="Logo" class="w-10 z-5" />
-  </div>
-            <div
-            @click="resetBoard"
+    <div @click="confirmExit"
+      class="fixed top-5 left-0 m-4 flex justify-between items-center text-start bg-[#010035] shadow-lg rounded-lg z-5 cursor-pointer">
+      <img src="../../../assets/imgs/close_btn.svg" alt="Logo" class="w-10 z-5" />
+    </div>
+    <div @click="resetBoard"
       class=" cursor-pointer fixed top-5 left-15 m-4 flex justify-between items-center  text-start bg-[#010035] shadow-lg rounded-lg z-5">
       <img src="../../../assets/imgs/redo_btn.svg" alt="Logo" class="w-10 z-5 " />
     </div>
     <buy></buy>
     <div class=" inset-0  bg-opacity-60 flex justify-center items-center z-5">
       <div class="mt-30 flex flex-col items-center">
-<div class="flex items-center mb-4 boardII cursor-pointer"
-     :class="[{ active: currentPlayer === 'red' }, 'red']">
-    <img src="../../../assets/imgs/green.svg">
-    <h2 class="text-white text-bold text-3xl">{{ player1 }}</h2>
-</div>
-<div class="flex items-center mb-4 boardII cursor-pointer"
-     :class="[{ active: currentPlayer === 'yellow' }, 'yellow']">
-    <img src="../../../assets/imgs/yellow.svg">
-    <h2 class="text-white text-bold text-3xl">{{ player2 }}</h2>
-</div>
+        <div class="flex items-center mb-4 boardII cursor-pointer"
+          :class="[{ active: currentPlayer === 'red' }, 'red']">
+          <img src="../../../assets/imgs/green.svg">
+          <h2 class="text-white text-bold text-3xl">{{ player1 }}</h2>
+        </div>
+        <div class="flex items-center mb-4 boardII cursor-pointer"
+          :class="[{ active: currentPlayer === 'yellow' }, 'yellow']">
+          <img src="../../../assets/imgs/yellow.svg">
+          <h2 class="text-white text-bold text-3xl">{{ player2 }}</h2>
+        </div>
         <div class="space-y-6 my-3" style="margin: 20px 10px;">
-            <div class="land">
-    <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
-      <div
-        v-for="(cell, colIndex) in row"
-        :key="colIndex"
-        class="cell"
-        :class="cell"
-        @click="dropDisc(colIndex)"
-      ></div>
-    </div>
-  </div>
+          <div class="flex mb-1" style="margin-right: 4px;">
+            <div v-for="col in cols" :key="col" class="cell" :style="{
+              background: hoverCol === (col - 1) ? '#B0B0B0' : 'transparent',
+              opacity: hoverCol === (col - 1) ? 1 : 0,
+              pointerEvents: 'none'
+            }"></div>
+          </div>
+          <div class="land">
+            <div v-for="(row, rowIndex) in board" :key="rowIndex" class="row">
+              <div v-for="(cell, colIndex) in row" :key="colIndex" class="cell" :class="cell"
+                @click="dropDisc(colIndex)"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-    <!-- Other template code remains unchanged -->
-<!-- المودال -->
-<div v-if="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-1000 px-2 sm:px-4 py-6 overflow-y-auto">
-  <div class="bg-white rounded-[20px] shadow-lg relative w-full sm:w-[90%] max-w-[500px] h-[600px] p-4 sm:p-6 flex flex-col gap-4 justify-between items-center">
-    <!-- زر الإغلاق -->
-    <img
-      src="../../../assets/imgs/close_btn.svg"
-      alt="Close"
-      @click="closeModal"
-      class="absolute top-[-15px] right-[-15px] cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md"
-    />
-    <!-- لو مفيش أسئلة متبقية -->
-    <div v-if="remainingQuestions.length === 0" class="flex flex-col items-center justify-center h-full gap-6">
-      <h2 class="text-red-600 font-bold text-2xl">لم يعد هناك أسئلة</h2>
-      <button
-        @click="router.push('/connectintro')"
-        class="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-bold px-6 py-3 rounded-full shadow-lg transition"
-      >
-        الرجوع للصفحة الرئيسية
-      </button>
-    </div>
-    <!-- الأسئلة العادية -->
-    <div v-else-if="currentQuestion" class="modal-container w-full flex flex-col items-center gap-4">
-      <h1
-        class="rounded-3xl self-start text-white text-end p-3 text-2xl bg-[#01004C] w-full"
-      >
-        {{ currentQuestion.category_name || 'بدون كاتيجوري' }}
-      </h1>
-      <h2 class="text-[#024E28] text-xl font-bold text-center w-full mb-6">
-        {{ currentQuestion.title || 'لا يوجد عنوان' }}
-      </h2>
-      <!-- فيديو -->
-      <video
-        v-if="currentQuestion?.question_video"
-        :src="getMediaUrl(currentQuestion)"
-        controls
-        class="max-h-[300px] w-auto mx-auto rounded-md"
-        @error="handleVideoError"
-      ></video>
-      <!-- صورة -->
-      <img
-        v-else
-        :src="getMediaUrl(currentQuestion)"
-        alt="صورة السؤال"
-        class="max-h-[250px] w-auto mx-auto rounded-md"
-      />
-    </div>
-    <!-- زر إظهار الإجابة -->
-<button
-  v-if="!showAnswer && currentQuestion && currentQuestion.id !== -1"
-  @click="revealAnswer"
-  class="bg-[#24B758] cursor-pointer hover:bg-green-700 text-center w-[200px] text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition mt-2"
->
-  أظهر الإجابة
-</button>
-    <!-- الإجابة -->
-    <div v-else-if="showAnswer && currentQuestion" class="mt-4 animate-fade-in w-full flex flex-col items-center gap-4">
-      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-lg text-center text-lg font-bold max-w-[90%]">
-        {{ currentQuestion?.correct_answer || 'لا توجد إجابة' }}
-      </div>
-      <!-- أزرار التقييم -->
-      <div class="flex gap-4 mt-4">
-        <button
-          @click="handleAnswer(true)"
-          class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full cursor-pointer"
-        >
-          إجابة صحيحة ؟
-        </button>
-        <button
-          @click="handleAnswer(false)"
-          class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full cursor-pointer"
-        >
-          إجابة خاطئة
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-    <!-- -------------------------------------------------- -->
-<div v-if="winer" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[1000] px-2 sm:px-4 py-6">
-  <div class="relative w-full sm:w-[90%] max-w-[500px]">
-    <div class="bg-white rounded-[20px] shadow-lg relative h-[250px] p-4 sm:p-6 flex flex-col gap-4 justify-between items-center ">
-      <!-- التوهج -->
-      <img
-        src="../../../assets/imgs/star_ing.svg"
-        alt="Glow"
-        class="absolute top-[-150px] left-1/2 -translate-x-1/2 w-64 h-64 animate-pulse opacity-80 z-20"
-      />
-      <!-- النجوم -->
-      <img
-        src="../../../assets/imgs/stars.svg"
-        alt="Stars"
-        class="absolute top-[-120px] left-1/2 -translate-x-1/2 w-72 h-72 animate-spin-slow  z-30"
-      />
+  <!-- Other template code remains unchanged -->
+  <!-- المودال -->
+  <div v-if="showModal"
+    class="fixed inset-0 bg-black/50 flex items-center justify-center z-1000 px-2 sm:px-4 py-6 overflow-y-auto">
+    <div
+      class="bg-white rounded-[20px] shadow-lg relative w-full sm:w-[90%] max-w-[500px] h-[600px] p-4 sm:p-6 flex flex-col gap-4 justify-between items-center">
       <!-- زر الإغلاق -->
-      <img
-        src="../../../assets/imgs/closeo.svg"
-        alt="Close"
-        @click="closeModale"
-        class="absolute -top-4 -right-4 cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md z-40"
-      />
-      <!-- العنوان -->
-      <h1 class="text-green-700 font-bold text-4xl mt-14 z-40">تهانينا للفائز</h1>
-      <!-- بيانات الفائز -->
-<div
-  class="flex items-center justify-between mt-4 z-40 text-4xl p-2 rounded-xl"
-  :class="currentPlayer === 'red' ? ' bg-green-700':   'bg-amber-400'"
->
-  <img
-    v-if="currentPlayer === 'red'"
-      src="../../../assets/imgs/green.svg"
-    alt="Winner"
-  />
-  <img
-    v-else
-    src="../../../assets/imgs/yellow.svg"
-    alt="Winner"
-  />
-  <div class="text-white font-bold mx-4">
-    {{ wing }}
-  </div>
-</div>
+      <img src="../../../assets/imgs/close_btn.svg" alt="Close" @click="closeModal"
+        class="absolute top-[-15px] right-[-15px] cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md" />
+      <!-- لو مفيش أسئلة متبقية -->
+      <div v-if="remainingQuestions.length === 0" class="flex flex-col items-center justify-center h-full gap-6">
+        <h2 class="text-red-600 font-bold text-2xl">{{ $t("noQuestions") }}</h2>
+        <button @click="router.push('/connectintro')"
+          class="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-bold px-6 py-3 rounded-full shadow-lg transition">
+         {{ $t("backHome") }}
+        </button>
+      </div>
+      <!-- الأسئلة العادية -->
+      <div v-else-if="currentQuestion" class="modal-container w-full flex flex-col items-center gap-4">
+        <h1 class="rounded-3xl self-start text-white text-end p-3 text-2xl bg-[#01004C] w-full"
+           :dir="currentLang === 'ar' ? 'ltr' : 'rtl'">
+          {{ currentQuestion.category_name || $t("noCategory") }}
+        </h1>
+<button
+  v-if="currentQuestion && currentQuestion.id !== -1 && !showAnswer"
+  @click="skipQuestion"
+  class="flex items-center gap-2  self-start active:scale-95 cursor-pointer rounded-xl text-black text-lg font-bold px-1   transition-transform duration-200">
+  <img src="../../../assets/imgs/skip.png" class="w-12 h-12" alt="skip" />
+  <span v-if="currentPlayer === 'red'" class="bg-white/20 px-2 py-0.5 rounded-md t text-lg text-[#01004C]">
+    {{ player1Skips }}
+  </span>
+  <span v-else class="bg-white/20 px-2 py-0.5 rounded-md text-lg text-[#01004C]">
+    {{ player2Skips }}
+  </span>
+</button>
+        <h2 class="text-[#024E28] text-xl font-bold text-center w-full mb-6">
+          {{ currentQuestion.title || $t("noTitle")  }}
+        </h2>
+        <!-- فيديو -->
+        <video v-if="currentQuestion?.question_video" :src="getMediaUrl(currentQuestion)" controls
+          class="max-h-[300px] w-auto mx-auto rounded-md" @error="handleVideoError"></video>
+        <!-- صورة -->
+        <img v-else :src="getMediaUrl(currentQuestion)" alt="صورة السؤال"
+          class="max-h-[250px] w-auto mx-auto rounded-md" />
+      </div>
+      <!-- زر إظهار الإجابة -->
+      <button v-if="!showAnswer && currentQuestion && currentQuestion.id !== -1" @click="revealAnswer"
+        class="bg-[#24B758] cursor-pointer hover:bg-green-700 text-center w-[200px] text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition mt-2">
+        {{ $t("showAnswer") }}
+      </button>
+      <!-- الإجابة -->
+      <div v-else-if="showAnswer && currentQuestion"
+        class="mt-4 animate-fade-in w-full flex flex-col items-center gap-4">
+        <div
+          class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-lg text-center text-lg font-bold max-w-[90%]">
+          {{ currentQuestion?.correct_answer || $t("noAnswer") }}
+        </div>
+        <!-- أزرار التقييم -->
+        <div class="flex gap-4 mt-4">
+          <button @click="handleAnswer(true)"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full cursor-pointer">
+            {{ $t("correct") }}
+          </button>
+          <button @click="handleAnswer(false)"
+            class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full cursor-pointer">
+          {{ $t("wrong") }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+  <!-- -------------------------------------------------- -->
+  <div v-if="winer" class="fixed inset-0 bg-black/50 flex items-center justify-center z-[1000] px-2 sm:px-4 py-6">
+    <div class="relative w-full sm:w-[90%] max-w-[500px]">
+      <div
+        class="bg-white rounded-[20px] shadow-lg relative h-[250px] p-4 sm:p-6 flex flex-col gap-4 justify-between items-center ">
+        <!-- التوهج -->
+        <img src="../../../assets/imgs/star_ing.svg" alt="Glow"
+          class="absolute top-[-150px] left-1/2 -translate-x-1/2 w-64 h-64 animate-pulse opacity-80 z-20" />
+        <!-- النجوم -->
+        <img src="../../../assets/imgs/stars.svg" alt="Stars"
+          class="absolute top-[-120px] left-1/2 -translate-x-1/2 w-72 h-72 animate-spin-slow  z-30" />
+        <!-- زر الإغلاق -->
+        <img src="../../../assets/imgs/closeo.svg" alt="Close" @click="closeModale"
+          class="absolute -top-4 -right-4 cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md z-40" />
+        <!-- العنوان -->
+        <h1 class="text-green-700 font-bold text-4xl mt-14 z-40">  {{ $t("connectwin") }}  </h1>
+        <!-- بيانات الفائز -->
+        <div class="flex items-center justify-between mt-4 z-40 text-4xl p-2 rounded-xl"
+          :class="currentPlayer === 'red' ? ' bg-green-700' : 'bg-amber-400'">
+          <img v-if="currentPlayer === 'red'" src="../../../assets/imgs/green.svg" alt="Winner" />
+          <img v-else src="../../../assets/imgs/yellow.svg" alt="Winner" />
+          <div class="text-white font-bold mx-4">
+            {{ wing }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -176,7 +149,11 @@ import bg from '../../../assets/imgs/splash.png';
 import { useToast } from 'vue-toastification';
 import { useRoute, useRouter } from 'vue-router';
 import placeholderImg from '../../../assets/imgs/upload.png';
+import { useI18n } from 'vue-i18n'
 const router = useRouter();
+const { t, locale } = useI18n();
+const currentLang = locale.value
+const hoverCol = ref(null);
 const rows = 6;
 const cols = 7;
 const winer = ref(false);
@@ -195,7 +172,12 @@ const currentQuestion = ref(null);
 const showAnswer = ref(false);
 const player1 = ref(localStorage.getItem('player1Name') || '');
 const player2 = ref(localStorage.getItem('player2Name') || '');
-// استخراج أرقام الكاتيجوريز من الرابط وتحويلها لأرقام
+const player1Skips = ref(3)
+const player2Skips = ref(3)
+onMounted(() => {
+  player1Skips.value = parseInt(localStorage.getItem("player1Skips")) || 3
+  player2Skips.value = parseInt(localStorage.getItem("player2Skips")) || 3
+})
 const routeCategories = Array.isArray(route.query.categories)
   ? route.query.categories.map(Number)
   : route.query.categories?.split(',').map(Number) || [];
@@ -206,7 +188,8 @@ onMounted(async () => {
     return
   }
   try {
-    const res = await getCategories()
+      const currentLang = locale.value
+    const res = await getCategories({}, currentLang)
     const apiData = res?.data?.result?.data || res?.data?.data
     if (!apiData) {
       throw new Error('الـ API لم يرجع بيانات صحيحة')
@@ -277,12 +260,12 @@ const dropDisc = (colIndex) => {
 };
 const resetBoard = () => {
   Swal.fire({
-    title: 'هل أنت متأكد؟',
-    text: 'سيتم مسح البورد وإعادة اللعب من البداية!',
+    title: t('resetTitle'),
+    text: t('resetText'),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'نعم',
-    cancelButtonText: 'لا',
+    confirmButtonText: t('yes'),
+    cancelButtonText: t('no'),
     reverseButtons: true
   }).then((result) => {
     if (result.isConfirmed) {
@@ -291,9 +274,13 @@ const resetBoard = () => {
       player1Score.value = 0;
       player2Score.value = 0;
       currentPlayer.value = 'red'
+      player1Skips.value = 3
+      player2Skips.value = 3
+      localStorage.setItem("player1Skips", 3)
+      localStorage.setItem("player2Skips", 3)
       Swal.fire({
-        title: 'تم إعادة التعيين!',
-        text: 'اللعبة بدأت من جديد.',
+        title: t('resetDoneTitle'),
+        text: t('resetDoneText'),
         icon: 'success',
         timer: 1500,
         showConfirmButton: false
@@ -303,12 +290,12 @@ const resetBoard = () => {
 }
 const confirmExit = () => {
   Swal.fire({
-    title: 'هل أنت متأكد؟',
-    text: 'سيتم الخروج من اللعبة!',
+    title: t('exitTitle'),
+    text: t('exitText'),
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonText: 'نعم',
-    cancelButtonText: 'إلغاء'
+    confirmButtonText: t('yes'),
+    cancelButtonText: t('cancel')
   }).then((result) => {
     if (result.isConfirmed) {
       router.push('/ChooseGame');
@@ -401,24 +388,20 @@ const checkWinner = (player) => {
 };
 // دالة الإجابة
 const handleAnswer = (isCorrect) => {
+  // إضافة الدائرة في أي حال
+  for (let row = rows - 1; row >= 0; row--) {
+    if (!board.value[row][pendingCol.value]) {
+      board.value[row][pendingCol.value] = isCorrect ? currentPlayer.value : 'gray';
+      break;
+    }
+  }
   if (isCorrect) {
-    // إضافة الدائرة
-    for (let row = rows - 1; row >= 0; row--) {
-      if (!board.value[row][pendingCol.value]) {
-        board.value[row][pendingCol.value] = currentPlayer.value;
-        break;
-      }
-    }
     // زيادة النقاط
-    if (currentPlayer.value === 'red') {
-      player1Score.value += 10;
-    } else {
-      player2Score.value += 10;
-    }
+    if (currentPlayer.value === 'red') player1Score.value += 10;
+    else player2Score.value += 10;
     // التحقق من الفوز
     if (checkWinner(currentPlayer.value)) {
-      const winnerName = currentPlayer.value === 'red' ? player1.value : player2.value;
-      wing.value = winnerName
+      wing.value = currentPlayer.value === 'red' ? player1.value : player2.value;
       winer.value = true;
       closeModal();
       return;
@@ -435,6 +418,29 @@ const closeModale = () => {
   winer.value = false;
   wing.value = '';
 };
+const skipQuestion = () => {
+  if (currentPlayer.value === 'red' && player1Skips.value <= 0) {
+    toast.info('لا يوجد تخطي متبقي للاعب 1');
+    return;
+  }
+  if (currentPlayer.value === 'yellow' && player2Skips.value <= 0) {
+    toast.info('لا يوجد تخطي متبقي للاعب 2');
+    return;
+  }
+  if (currentPlayer.value === 'red') {
+    player1Skips.value--
+    localStorage.setItem("player1Skips", player1Skips.value)
+  } else {
+    player2Skips.value--
+    localStorage.setItem("player2Skips", player2Skips.value)
+  }
+  if (remainingQuestions.value.length === 0) {
+    toast.info('لا يوجد أسئلة متبقية للتخطي');
+    return;
+  }
+  currentQuestion.value = selectRandomQuestion();
+  showAnswer.value = false;
+}
 </script>
 <style scoped>
 /* خلفية اللوحة */
@@ -544,7 +550,7 @@ const closeModale = () => {
   align-items: center;
   justify-content: space-between;
   width: 200px;
-  margin-top:20px ;
+  margin-top: 20px;
   padding: 10px 11px 10px 11px;
   background: #010035;
   border-radius: 12px;
@@ -570,18 +576,23 @@ const closeModale = () => {
   display: flex;
 }
 .cell {
-  width: clamp(40px, 10vw, 70px);  /* أصغر 40px، أكبر 70px، تتغير حسب الشاشة */
+  width: clamp(40px, 10vw, 70px);
+  /* أصغر 40px، أكبر 70px، تتغير حسب الشاشة */
   height: clamp(40px, 10vw, 70px);
   border-radius: 50%;
   background: #01004C;
-  margin: 4px;  /* قللت المسافة لتناسب الشاشات الصغيرة */
+  margin: 4px;
+  /* قللت المسافة لتناسب الشاشات الصغيرة */
   cursor: pointer;
 }
 .cell.red {
-  background:  #66FD84;
+  background: #66FD84;
 }
 .cell.yellow {
-  background:#FFCE67;
+  background: #FFCE67;
+}
+.cell.gray {
+  background: #B0B0B0;
 }
 .boardII {
   transition: transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease, text-shadow 0.3s ease;

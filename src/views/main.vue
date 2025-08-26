@@ -3,41 +3,48 @@
     <div class="flex-1 rounded-2xl sm:rounded-3xl">
       <div class="flex flex-col md:flex-row gap-2 sm:gap-4 px-1 sm:px-4">
         <!-- البلوك الأول -->
-        <div class="flex-1 flex items-center justify-center bg-white mt-2 rounded-xl sm:rounded-2xl p-1 sm:p-4 shadow-lg">
-          <div class="flex flex-col md:flex-row items-center justify-between gap-2 sm:gap-4 w-full" :dir="currentLang === 'ar' ? 'ltr' : 'rtl'">
-            <button @click="confirmCoupon"
-              class="cursor-pointer bg-red-500 mt-2 sm:mt-[35px] text-white px-2 py-1 sm:px-6 sm:py-2 text-xs sm:text-base rounded-full font-semibold hover:bg-red-600 transition duration-200"
-              :disabled="!couponCode">
-              {{ $t("confirm") }}
-            </button>
-            <div class="flex flex-col text-end w-full ">
-              <div class="flex items-center justify-end space-x-2 mb-2">
-                <span class="text-base sm:text-lg text-black font-semibold">{{ $t("activateYourBalance") }}</span>
-                <img src="../assets/imgs/lighting.svg" class="w-4 h-4 sm:w-5 sm:h-5">
-              </div>
-              <input type="tel" v-model="phone"
-                class="p-1 sm:p-2 text-xs sm:text-base placeholder-[#D5C1EE] border-2 border-solid border-[#3F0092] text-[#24054C] text-right rounded-3xl bg-[#ECE1FB] focus:border-[#3F0092] focus:outline-none"
-                :placeholder="$t('couponCode')">
-            </div>
-            <!-- ✅ رصيد الألعاب -->
-            <div class="flex items-start justify-center gap-2 flex-col rounded-full p-2 text-white w-full "
-              :dir="currentLang === 'ar' ? 'rtl' : 'ltr'">
-              <div class="flex items-center space-x-2">
-                <img src="../assets/imgs/coin.svg" class="w-4 h-4 sm:w-5 sm:h-5">
-                <span class="text-base sm:text-lg text-black font-semibold">{{ $t("yourGameBalance") }}</span>
-              </div>
-              <div class="flex items-center bg-[#ECE1FB] border-4 border-solid border-[#000000] rounded-full px-1 py-1 relative pr-4 sm:pr-7 w-[110px] sm:w-[130px] h-[38px] sm:h-[45px] justify-center">
-                <span class="text-[#AC3F2F] font-semibold flex justify-end items-start text-xs sm:text-base">
-                  <span class="mx-[3px] sm:mx-[5px]"> {{ remainig_game }}</span> {{ $t("game") }}
-                </span>
-                <button @click="increaseBalance"
-                  class="bg-black text-[#E3614E] font-bold text-base absolute right-[-10px] rounded-3xl border-2 border-solid border-black">
-                  <router-link to="/Payment" class="text-xl sm:text-2xl px-2 mb-[2px] inline-block">+</router-link>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+<div class=" flex flex-1 rounded-2xl mt-3 p-3  bg-white flex-col sm:flex-row items-center sm:items-start gap-3 sm:gap-4 w-full" :dir="currentLang === 'ar' ? 'rtl' : 'ltr'"
+style="  display: flex;
+    justify-content: center;
+    align-items: center;">
+  <!-- Input + Button في صف واحد -->
+  <div class="flex w-full sm:max-w-[350px] items-end gap-2">
+    <div class="flex flex-col flex-1">
+      <div class="flex items-center justify-end sm:justify-start gap-2 mb-2">
+        <span class="text-base sm:text-lg font-semibold text-black truncate">{{ $t("activateYourBalance") }}</span>
+        <img src="../assets/imgs/lighting.svg" class="w-4 h-4 sm:w-5 sm:h-5">
+      </div>
+      <input type="tel" v-model="phone"
+        class="w-full p-2 text-sm sm:text-base placeholder-[#D5C1EE] border-2 border-solid border-[#3F0092] text-[#24054C] rounded-3xl bg-[#ECE1FB] focus:border-[#3F0092] focus:outline-none"
+        :class="{
+          'text-left': $i18n.locale === 'en',
+          'text-right': $i18n.locale === 'ar'
+        }"
+        :placeholder="$t('couponCode')">
+    </div>
+    <button @click="confirmCoupon"
+      class="h-10 sm:h-auto flex-shrink-0 bg-red-500 text-white px-3 py-1 sm:px-6 sm:py-2 text-sm sm:text-base rounded-full font-semibold hover:bg-red-600 transition duration-200"
+      :disabled="!couponCode">
+      {{ $t("confirm") }}
+    </button>
+  </div>
+  <!-- Game Balance -->
+  <div class="flex flex-col items-center justify-center gap-2 w-full sm:w-auto min-w-[120px]" :dir="currentLang === 'ar' ? 'rtl' : 'ltr'">
+    <div class="flex items-center gap-2 justify-center sm:justify-start">
+      <img src="../assets/imgs/coin.svg" class="w-4 h-4 sm:w-5 sm:h-5">
+      <span class="text-base sm:text-lg font-semibold text-black truncate">{{ $t("yourGameBalance") }}</span>
+    </div>
+<div class="relative flex items-center justify-center w-full sm:w-[140px] h-[45px] sm:h-[45px] px-2 sm:px-3 bg-[#ECE1FB] border-4 border-black rounded-full">
+  <span class="text-[#AC3F2F] font-semibold text-xs sm:text-base flex justify-center items-center truncate">
+    {{ remainig_game }} <span class="mx-1 sm:mx-2">{{ $t("game") }}</span>
+  </span>
+  <button @click="increaseBalance"
+    class="absolute -right-3 sm:-right-4 bg-black text-[#E3614E] font-bold text-base sm:text-lg rounded-3xl border-2 border-black">
+    <router-link to="/Payment" class="px-2 sm:px-3 inline-block">+</router-link>
+  </button>
+</div>
+  </div>
+</div>
         <!-- البلوك الثاني -->
         <div class="flex-1 bg-white text-gray-800 flex justify-center items-center flex-col mt-2 sm:mt-2 rounded-2xl p-2 sm:p-6 text-center">
           <h2 class="text-base sm:text-2xl font-bold text-red-500"> {{ $t("buyMoreSaveMore") }}</h2>

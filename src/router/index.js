@@ -120,6 +120,21 @@ const routes = [
     name: "PaymentPage",
     component: () => import("../views/Addtions/PaymentPage.vue"),
   },
+        {
+    path: "/Game3intro",
+    name: "Game3intro",
+    component: () => import("../views/Games/Game3/Game3intro.vue"),
+  },
+      {
+    path: "/testo",
+    name: "testo",
+    component: () => import("../views/test/testo.vue"),
+  },
+        {
+    path: "/apitest",
+    name: "apitest",
+    component: () => import("../views/test/apitest.vue"),
+  },
 ];
 const router = createRouter({
   history: createWebHistory(),

@@ -32,7 +32,7 @@
           :class="[teamTwoBg, 'rounded-xl px-6 py-4 text-center']"
           style="width: -webkit-fill-available"
         >
-          <p class="text-white font-semibold mb-2">نقاط الفريق الثاني</p>
+          <p class="text-white font-semibold mb-2">  {{ $t("team2Points") }}</p>
           <p class="text-lg font-bold bg-[#ECE1FB] p-3 rounded-2xl">
             {{ teamTwo }}
           </p>
@@ -41,7 +41,7 @@
           :class="[teamOneBg, 'rounded-xl px-6 py-4']"
           style="width: -webkit-fill-available"
         >
-          <p class="text-white font-semibold mb-2">نقاط الفريق الأول</p>
+          <p class="text-white font-semibold mb-2">  {{ $t("team1Points") }}</p>
           <p class="text-lg font-bold bg-[#ECE1FB] p-3 rounded-2xl">
             {{ teamOne }}
           </p>
@@ -55,6 +55,8 @@ import { ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import bg from "../../../assets/imgs/splash.png";
 const router = useRouter();
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 const route = useRoute();
 const teamOne = ref(Number(route.query.score1) || 0);
 const teamTwo = ref(Number(route.query.score2) || 0);
@@ -69,8 +71,9 @@ const winner = computed(() => {
 });
 // نص العنوان
 const titleText = computed(() => {
-  if (winner.value === 0) return "حظ سعيد للفريقين";
-  return `تهانينا للفريق ${winner.value === 1 ? "الأول" : "الثاني"}`;
+  if (winner.value === 0) return t("titleDraw");
+  const team = winner.value === 1 ? t("first") : t("second");
+  return t("titleWin", { team });
 });
 // ألوان الباكجراوند
 const teamOneBg = computed(() => {
@@ -79,8 +82,8 @@ const teamOneBg = computed(() => {
   return "bg-[#D5C1EE]";
 });
 const teamTwoBg = computed(() => {
-  if (winner.value === 2) return "bg-[#f4567f]"; // أخضر مضبوط
-  if (winner.value === 1) return "bg-red-500";   // أحمر مضبوط
+  if (winner.value === 2) return "bg-[#f4567f]";
+  if (winner.value === 1) return "bg-red-500";
   return "bg-[#D5C1EE]";
 });
 </script>

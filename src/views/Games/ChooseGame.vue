@@ -22,8 +22,8 @@
         <img src="../../assets/imgs/play.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
         <span>{{ $t("connectFour") }}</span>
       </router-link>
-      <router-link to=""
-        class="btn-gradient-borderII cursor-not-allowed px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-yellow-700 text-2xl rounded-lg shadow-lg transition">
+      <router-link to="/Game3intro"
+        class="btn-gradient-borderII px-6 py-3 text-white font-bold flex items-center justify-between h-16 bg-yellow-700 text-2xl rounded-lg shadow-lg transition">
         <img src="../../assets/imgs/Lock.svg" alt="Quiz Icon" class="w-6 h-6 mr-2 mb-[-4px]">
         <span>{{ $t("game3") }}</span>
       </router-link>

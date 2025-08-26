@@ -18,14 +18,26 @@
               :style="{ textAlign: currentLang === 'ar' ? 'right' : 'left' }" />
         </div>
         <!-- عدد لاعبي الفريق الأول -->
-        <div class="mb-4 mt-4 flex flex-col text-center items-center">
-          <span class="text-purple-800 mb-2 font-bold">{{ $t("playersCount") }}</span>
-          <div class="flex items-center justify-center bg-[#ECE1FB] rounded-lg p-2">
-            <button @click="decreasePlayers1" class="bg-gray-300 cursor-pointer w-8 h-8 rounded-lg hover:bg-gray-400">-</button>
-            <input v-model="players1" style="margin-left: 15px;" class="w-12 text-center mx-2 bg-transparent" type="number" readonly />
-            <button @click="increasePlayers1" class="bg-[#01004C] font-bold cursor-pointer w-8 h-8 rounded-lg text-white">+</button>
-          </div>
-        </div>
+         <div class="mb-4 mt-4 flex flex-col items-center w-1/2 max-w-xs mx-auto">
+  <span class="text-purple-800 mb-2 font-bold text-lg sm:text-xl">{{ $t("playersCount") }}</span>
+  <div class="flex items-center justify-between bg-[#ECE1FB] rounded-xl p-3 w-full">
+    <!-- زر ناقص -->
+    <button @click="decreasePlayers1"
+            class="bg-gray-300 cursor-pointer w-8 h-8 rounded-lg flex items-center justify-center text-2xl font-bold hover:bg-gray-400">
+      -
+    </button>
+    <!-- الرقم -->
+    <input  v-model="players1"
+           type="number"
+           readonly
+           class="w-16 sm:w-20 text-center text-xl sm:text-2xl font-semibold bg-transparent border-none focus:outline-none" />
+    <!-- زر زائد -->
+    <button @click="increasePlayers1"
+            class="bg-[#01004C] cursor-pointer w-8 h-8 rounded-lg flex items-center justify-center text-2xl font-bold text-white hover:bg-[#000080]">
+      +
+    </button>
+  </div>
+</div>
         <!-- الفريق الثاني -->
         <div class="flex flex-col text-center items-center">
           <label class="text-purple-800 mb-4 font-bold">{{ $t("team2Name") }}</label>
@@ -35,14 +47,26 @@
               :style="{ textAlign: currentLang === 'ar' ? 'right' : 'left' }" />
         </div>
         <!-- عدد لاعبي الفريق الثاني -->
-        <div class="mb-4 mt-4 flex flex-col text-center items-center">
-          <span class="text-purple-800 mb-2 font-bold">{{ $t("playersCount") }}</span>
-          <div class="flex items-center bg-[#ECE1FB] rounded-lg p-2">
-            <button @click="decreasePlayers2" class="bg-gray-300 cursor-pointer w-8 h-8 rounded-lg hover:bg-gray-400">-</button>
-            <input v-model="players2" style="margin-left: 15px;" class="w-12 text-center mx-2 bg-transparent" type="number" readonly />
-            <button @click="increasePlayers2" class="bg-[#01004C] font-bold cursor-pointer w-8 h-8 rounded-lg text-white">+</button>
-          </div>
-        </div>
+<div class="mb-4 mt-4 flex flex-col items-center w-1/2 max-w-xs mx-auto">
+  <span class="text-purple-800 mb-2 font-bold text-lg sm:text-xl">{{ $t("playersCount") }}</span>
+  <div class="flex items-center justify-between bg-[#ECE1FB] rounded-xl p-3 w-full">
+    <!-- زر ناقص -->
+    <button @click="decreasePlayers2"
+            class="bg-gray-300 cursor-pointer w-8 h-8 rounded-lg flex items-center justify-center text-2xl font-bold hover:bg-gray-400">
+      -
+    </button>
+    <!-- الرقم -->
+    <input v-model="players2"
+           type="number"
+           readonly
+           class="w-16 sm:w-20 text-center text-xl sm:text-2xl font-semibold bg-transparent border-none focus:outline-none" />
+    <!-- زر زائد -->
+    <button @click="increasePlayers2"
+            class="bg-[#01004C] cursor-pointer w-8 h-8 rounded-lg flex items-center justify-center text-2xl font-bold text-white hover:bg-[#000080]">
+      +
+    </button>
+  </div>
+</div>
         <!-- زر بدء اللعبة -->
         <router-link :to="{ path: '/Homescreen', query: { id: gameId } }" @click="startGame"
           class="flex justify-center items-center cursor-pointer w-full bg-red-500 text-white rounded-lg py-2 font-semibold transition mt-4">

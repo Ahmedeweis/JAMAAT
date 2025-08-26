@@ -7,7 +7,7 @@
   <button @click="toggleTeam"
     class="relative w-full sm:w-1/4 bg-[#ECE1FB] border-2 border-[#3F0092] px-4 py-2 sm:py-3 rounded-full flex items-center justify-center sm:justify-start cursor-pointer">
     <span class="text-[#24054D] font-bold text-sm sm:text-base">
-      دور الفريق {{ currentTeam === 1 ? 'الأول' : 'الثاني' }}
+      {{ $t("teamTurn") }} {{ currentTeam === 1 ? $t("first") : $t("second") }}
     </span>
     <img
       src="../../../assets/imgs/switch.svg"
@@ -17,7 +17,7 @@
   </button>
   <!-- العنوان -->
   <h1 class="text-lg sm:text-xl font-bold text-[#24054D] text-center flex-1 order-first sm:order-none">
-    لعبة الذكاء
+     {{ $t("gameTitle") }}
   </h1>
   <!-- أزرار التحكم -->
 <div class="flex flex-wrap justify-center sm:space-x-4 sm:space-x-reverse gap-2 sm:gap-0">
@@ -27,7 +27,7 @@
       class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
     >
       <img src="../../../assets/imgs/back.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
-      <span class="c24054D">الرجوع للوحة</span>
+      <span class="c24054D"> {{ $t("backToBoard") }}</span>
     </button>
     <!-- زر الخروج -->
     <button
@@ -35,7 +35,7 @@
       class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
     >
       <img src="../../../assets/imgs/door.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
-      <span class="c24054D ml-2">خروج</span>
+      <span class="c24054D ml-2">{{ $t("exit") }}</span>
     </button>
     <!-- زر إنهاء اللعبة -->
 <button
@@ -43,7 +43,7 @@
   class="hover:text-orange-400 flex items-center cursor-pointer text-sm sm:text-base"
 >
   <img src="../../../assets/imgs/End.svg" alt="Close" class="w-5 h-5 sm:w-6 sm:h-6 ml-2">
-  <span class="c24054D">إنهاء اللعبة</span>
+  <span class="c24054D"> {{ $t("endGame") }}</span>
 </button>
   </div>
 </nav>
@@ -82,7 +82,7 @@
       <div
         class="w-full py-2 rounded-lg shadow-sm border text-center text-sm italic text-gray-400 bg-[#F9F9F9]"
       >
-        لا توجد أسئلة في هذا التصنيف
+        {{ $t("noQuestions") }}
       </div>
     </template>
   </div>
@@ -93,7 +93,7 @@
 <div class="flex flex-col sm:flex-row justify-between w-full mb-4 items-center sm:items-end gap-4 sm:gap-0">
   <!-- نقاط الفريق الأول -->
   <div class="text-center w-full sm:w-auto">
-    <h3 class="text-base sm:text-lg font-semibold mb-2">نقاط الفريق الأول</h3>
+    <h3 class="text-base sm:text-lg font-semibold mb-2">  {{ $t("team1Points") }}</h3>
     <div class="flex items-center gap-2 rounded-lg p-2 justify-center">
       <div class="flex items-center justify-center bg-[#ECE1FB] rounded-lg p-2">
         <button @click="increaseScore1" class="bg-[#9747FF] font-bold cursor-pointer w-8 h-8 pt-1 rounded-lg text-white">+</button>
@@ -106,7 +106,7 @@
   <img src="../../../assets/imgs/JAMAAT.svg" alt="Logo" class="mb-2 sm:mb-4 w-20 sm:w-auto" />
   <!-- نقاط الفريق الثاني -->
   <div class="text-center w-full sm:w-auto">
-    <h3 class="text-base sm:text-lg font-semibold mb-2">نقاط الفريق الثاني</h3>
+    <h3 class="text-base sm:text-lg font-semibold mb-2">  {{ $t("team2Points") }}</h3>
     <div class="flex items-center gap-2 rounded-lg p-2 justify-center">
       <div class="flex items-center justify-center bg-[#ECE1FB] rounded-lg p-2">
         <button @click="increaseScore2" class="bg-[#9747FF] font-bold cursor-pointer w-8 h-8 pt-1 rounded-lg text-white">+</button>
@@ -120,10 +120,12 @@
   </div>
 <!-- Modal -->
 <div v-if="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-2 sm:px-4 py-6 overflow-y-auto">
-  <div class="bg-white rounded-[20px] shadow-lg relative w-full sm:w-[90%] max-w-[1100px] p-6 sm:p-8 flex flex-col lg:flex-row gap-6 border-[4px] border-[#D6B4FF]">
+  <div class="bg-white rounded-[20px] shadow-lg relative w-full sm:w-[90%] max-w-[1100px] p-6 sm:p-8 flex flex-col lg:flex-row gap-6 border-[4px] border-[#D6B4FF]"
+   :dir="currentLang === 'ar' ? 'rtl' : 'ltr'"
+  >
     <!-- زر الإغلاق -->
     <button
-      @click="closeModal"
+      @click="confirmAnswer()"
       class="absolute top-4 left-4 cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md"
     >
       ✕
@@ -142,7 +144,7 @@
         </div>
       </div>
       <h2 class="text-2xl font-bold text-[#24054D] mb-6">
-        {{ currentQuestion?.title || 'لا يوجد عنوان' }}
+      {{ currentQuestion?.title || $t("noTitle") }}
       </h2>
 <div class="media-container mx-auto mb-6">
   <video
@@ -154,30 +156,43 @@
   <img
     v-else
     :src="getMediaUrl(currentQuestion)"
-    alt="صورة السؤال"
+    alt="{{ $t('questionImage') }} "
     class="mx-auto max-h-[150px] rounded-md"
   />
 </div>
       <p class="text-sm text-gray-600 mb-4">
-        ({{ currentQuestion?.points }} نقطة)
+       ({{ currentQuestion?.points }} {{ $t("points") }})
       </p>
-      <button
-        v-if="!showAnswer"
-        @click="revealAnswer"
-        class="bg-[#24B758]  cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition"
-      >
-        أظهر الإجابة
+<div class="mt-6">
+  <!-- المرحلة 1: زر عرض الإجابة -->
+  <button v-if="!showAnswer"
+          @click="showAnswer = true"
+          class="bg-[#24B758] cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
+    {{ $t("showAnswer") }}
+  </button>
+  <!-- المرحلة 2: إظهار الإجابة -->
+  <div v-else class="animate-fade-in">
+    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded-lg text-center text-lg font-bold ">
+      {{ currentQuestion?.correct_answer || $t("noAnswer") }}
+    </div>
+    <!-- المرحلة 3: زر اختيار صحيحة أو خاطئة -->
+    <div class="flex justify-center gap-4 mt-5">
+            <button @click="confirmAnswer(false)"
+              class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full cursor-pointer">
+          {{ $t("wrong") }}
       </button>
-      <div v-else class="mt-6 animate-fade-in">
-        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg text-xl font-bold">
-          {{ currentQuestion?.correct_answer || 'لا توجد إجابة' }}
-        </div>
-      </div>
+      <button @click="confirmAnswer(true)"
+              class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-6 rounded-full cursor-pointer">
+          {{ $t("correct") }}
+      </button>
+    </div>
+  </div>
+</div>
     </div>
     <!-- الجانب الأيمن -->
     <div class="w-full lg:w-[200px] bg-[#F9F5FF] rounded-[20px] p-4 flex flex-col justify-start gap-4">
       <div class="bg-[#000000] text-white text-center rounded-lg py-2 font-bold">
-        الفريق {{ currentTeam === 1 ? 'الأول' : 'الثاني' }}
+     {{ $t("team") }} {{ currentTeam === 1 ? $t("first") : $t("second") }}
       </div>
 <!-- الزرارين -->
 <!-- مضاعفة النقاط -->
@@ -190,7 +205,7 @@
   ]"
 >
   <img src="../../../assets/imgs/double.svg" class="w-5 h-5" />
-  مضاعفة النقاط
+ {{ $t("doublePoints") }}
 </button>
 <!-- منع النقاط -->
 <button
@@ -202,7 +217,7 @@
   ]"
 >
   <img src="../../../assets/imgs/block.svg" class="w-5 h-5" />
-  منع النقاط
+ {{ $t("blockPoints") }}
 </button>
     </div>
   </div>
@@ -234,6 +249,7 @@ const showModal = ref(false);
 const currentQuestion = ref(null);
 const answeredQuestions = ref([]);
 const showAnswer = ref(false);
+const answerResult = ref(null); // "correct" أو "wrong"
 // المؤقت
 const timer = ref(30);
 const isPaused = ref(false);
@@ -303,10 +319,32 @@ const selectQuestion = (question, column) => {
 };
 const revealAnswer = () => {
   showAnswer.value = true;
+  answerResult.value = null; // لا تُحسب نقاط
+  clearInterval(countdownInterval);
+  // تعليم السؤال كمحلول
+  if (currentQuestion.value && !answeredQuestions.value.includes(currentQuestion.value.id)) {
+    answeredQuestions.value.push(currentQuestion.value.id);
+  }
   setTimeout(() => {
-    closeModal();
+    showModal.value = false;
     showAnswer.value = false;
-  }, 3000);
+    toggleTeam(); // تبديل الفريق
+  }, 2000);
+};
+const confirmAnswer = (isCorrect) => {
+  showModal.value = false;
+  showAnswer.value = false;
+  let pointsToAdd = 0;
+  if (isCorrect) {
+    pointsToAdd = currentQuestion.value.points || 0;
+    if (blockPoints.value) pointsToAdd = 0;
+    else if (doublePoints.value) pointsToAdd *= 2;
+  }
+  if (currentTeam.value === 1) score1.value += pointsToAdd;
+  else score2.value += pointsToAdd;
+  answeredQuestions.value.push(currentQuestion.value.id);
+  answerResult.value = isCorrect ? "correct" : "wrong";
+  toggleTeam();
 };
 const closeModal = () => {
   showModal.value = false;
