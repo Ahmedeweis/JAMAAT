@@ -232,11 +232,31 @@
   <div class="text-center w-full sm:w-auto">
     <h3 class="text-base sm:text-lg font-semibold mb-2">{{ $t("team2Points3") }}  {{ team1Name }} </h3>
     <div class="flex items-center gap-2 rounded-lg p-2 justify-center">
-      <div class="flex items-center justify-center bg-[#ECE1FB] rounded-lg p-2">
-        <button @click="increaseScore1" class="bg-[#9747FF] font-bold cursor-pointer w-8 h-8 pt-1 rounded-lg text-white" style="padding-bottom: 4px;">+</button>
-        <span style="color: #24054C;" class=" text-center w-12 bg-transparent">{{ score1 }}</span>
-        <button @click="decreaseScore1" class="bg-[#B984FF] cursor-pointer w-8 h-8 rounded-lg pt-1 hover:bg-gray-400" style="padding-bottom: 4px;">-</button>
-      </div>
+<div class="flex items-center justify-center bg-[#ECE1FB] rounded-lg p-2 gap-1">
+  <button
+    @click="score1 += 10"
+    class="bg-[#6B21A8] font-bold cursor-pointer w-10 h-8 rounded-lg text-white text-sm">
+    +10
+  </button>
+    <button
+    @click="score1++"
+    class="bg-[#9747FF] font-bold cursor-pointer w-10 h-8 rounded-lg text-white text-sm">
+    +1
+  </button>
+  <span style="color: #24054C;" class="text-center w-12 bg-transparent font-bold">
+    {{ score1 }}
+  </span>
+  <button
+    @click="score1 = Math.max(0, score1 - 1)"
+    class=" bg-red-600 cursor-pointer w-10 h-8 rounded-lg text-white text-sm ">
+    -1
+  </button>
+  <button
+    @click="score1 = Math.max(0, score1 - 10)"
+    class="bg-red-600 cursor-pointer w-10 h-8 rounded-lg text-white text-sm ">
+    -10
+  </button>
+</div>
     </div>
   </div>
   <!-- اللوجو -->
@@ -245,11 +265,31 @@
   <div class="text-center w-full sm:w-auto">
     <h3 class="text-base sm:text-lg font-semibold mb-2"> {{ $t("team2Points3") }}   {{ team2Name }} </h3>
     <div class="flex items-center gap-2 rounded-lg p-2 justify-center">
-      <div class="flex items-center justify-center bg-[#ECE1FB] rounded-lg p-2">
-        <button @click="increaseScore2" class="bg-[#9747FF] font-bold cursor-pointer w-8 h-8 pt-1 rounded-lg text-white" style="padding-bottom: 4px;">+</button>
-        <span style="color: #24054C;" class=" text-center w-12 bg-transparent">{{ score2 }}</span>
-        <button @click="decreaseScore2" class="bg-[#B984FF] cursor-pointer w-8 h-8 rounded-lg pt-1 hover:bg-gray-400" style="padding-bottom: 4px;">-</button>
-      </div>
+<div class="flex items-center justify-center bg-[#ECE1FB] rounded-lg p-2 gap-1">
+  <button
+    @click="score2 += 10"
+    class="bg-[#6B21A8] font-bold cursor-pointer w-10 h-8 rounded-lg text-white text-sm">
+    +10
+  </button>
+    <button
+    @click="score2++"
+    class="bg-[#9747FF] font-bold cursor-pointer w-10 h-8 rounded-lg text-white text-sm">
+    +1
+  </button>
+  <span style="color: #24054C;" class="text-center w-12 bg-transparent font-bold">
+    {{ score2 }}
+  </span>
+  <button
+    @click="score2 = Math.max(0, score2 - 1)"
+    class="bg-red-600 cursor-pointer w-10 h-8 rounded-lg text-white text-sm ">
+    -1
+  </button>
+  <button
+    @click="score2 = Math.max(0, score2 - 10)"
+    class="bg-red-600 cursor-pointer w-10 h-8 rounded-lg text-white text-sm ">
+    -10
+  </button>
+</div>
     </div>
   </div>
 </div>
