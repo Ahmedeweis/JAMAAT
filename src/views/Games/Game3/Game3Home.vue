@@ -51,9 +51,43 @@
 <div class="flex flex-col sm:flex-row items-center  sm:items-center rounded-xl mt-2 mb-3 bg-white text-black p-4 shadow-md gap-3 sm:gap-0">
         <div class="flex flex-wrap items-center gap-2 ">
               <h2 class="font-bold">الجولات : </h2>
-          <button class="px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold bg-indigo-600 text-white hover:bg-indigo-700">بدون كلام</button>
-          <button class="px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200">تحدّي الرسم</button>
-          <button class="px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold bg-gray-100 text-gray-700 hover:bg-gray-200" >كلمة السر</button>
+<button
+      @click="selectedRound = 1"
+      :class="[
+        'px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold',
+        selectedRound === 1
+          ? 'bg-indigo-600 text-white'
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+      ]"
+    >
+      بدون كلام
+    </button>
+    <!-- تحدي الرسم -->
+<button
+  @click="selectedRound = 2"
+  :class="[
+    'px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold transition',
+    selectedRound === 2
+      ? 'bg-indigo-600 text-white'
+      : round1Completed
+        ? 'bg-green-500 text-white animate-bounce'
+        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+  ]"
+>
+  تحدّي الرسم
+</button>
+    <!-- كلمة السر -->
+    <button
+      @click="selectedRound = 3"
+      :class="[
+        'px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold',
+        selectedRound === 3
+          ? 'bg-indigo-600 text-white'
+          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+      ]"
+    >
+      كلمة السر
+    </button>
           <div class="ms-auto flex items-center gap-2">
           </div>
         </div>
@@ -61,73 +95,135 @@
 </div>
 <div>
     <!-- Questions Grid -->
-<div class="flex flex-col sm:flex-row sm:flex-wrap justify-between gap-4 mb-6">
- <!-- بوكس الفريق الأول -->
-    <div class="bg-white rounded-lg p-4 shadow-md w-full sm:w-[30%]">
-      <h3 class="text-lg font-semibold mb-2 text-center text-[#24054D]">
-       فريق  {{team1Name}}
-      </h3>
-      <div class="space-y-2">
-        <template v-if="questions.length >= 4">
-<button
-  v-for="(question, qIndex) in questions.slice(0, 4)"
-  :key="qIndex"
-  @click="selectQuestion(question, 1)"
-  :disabled="answeredQuestions.includes(question.id) || currentTeam !== 1"
-  :class="[
-    'w-full py-2 rounded-lg shadow-sm transition border font-bold',
-    answeredQuestions.includes(question.id)
-      ? 'bg-[#24054D] text-white cursor-default'
-      : currentTeam !== 1
-        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-        : 'bg-[#FCFAFF] text-[#B984FF] border-[#ECE1FB] cursor-pointer'
-  ]"
->
-  أظهر السؤال
-</button>
-        </template>
-        <template v-else>
-          <div
-            class="w-full py-2 rounded-lg shadow-sm border text-center text-sm italic text-gray-400 bg-[#F9F9F9]"
-          >
-            لا توجد أسئلة
-          </div>
-        </template>
-      </div>
+<!-- الأعمدة للجولة الأولى -->
+<div v-if="selectedRound === 1" class="flex flex-col sm:flex-row sm:flex-wrap justify-between gap-4 mb-6">
+  <!-- عمود الفريق الأول -->
+  <div class="bg-white rounded-lg p-4 shadow-md w-full sm:w-[30%]">
+    <h3 class="text-lg font-semibold mb-2 text-center text-[#24054D]">
+      فريق {{ team1Name }}
+    </h3>
+    <div class="space-y-2">
+      <template v-if="questions.length >= 4">
+        <button
+          v-for="(question, qIndex) in questions.slice(0, 4)"
+          :key="qIndex"
+          @click="selectQuestion(question, 1)"
+          :disabled="answeredQuestions.includes(question.id) || currentTeam !== 1"
+          :class="[
+            'w-full py-2 rounded-lg shadow-sm transition border font-bold',
+            answeredQuestions.includes(question.id)
+              ? 'bg-[#24054D] text-white cursor-default'
+              : currentTeam !== 1
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-[#FCFAFF] text-[#B984FF] border-[#ECE1FB] cursor-pointer'
+          ]"
+        >
+          أظهر السؤال
+        </button>
+      </template>
+      <template v-else>
+        <div class="w-full py-2 rounded-lg shadow-sm border text-center text-sm italic text-gray-400 bg-[#F9F9F9]">
+          لا توجد أسئلة
+        </div>
+      </template>
     </div>
-    <!-- بوكس الفريق الثاني -->
-    <div class="bg-white rounded-lg p-4 shadow-md w-full sm:w-[30%]">
-      <h3 class="text-lg font-semibold mb-2 text-center text-[#24054D]">
-      فريق {{team2Name}}
-      </h3>
-      <div class="space-y-2">
-        <template v-if="questions.length >= 8">
-<button
-  v-for="(question, qIndex) in questions.slice(4, 8)"
-  :key="qIndex"
-  @click="selectQuestion(question, 2)"
-  :disabled="answeredQuestions.includes(question.id) || currentTeam !== 2"
-  :class="[
-    'w-full py-2 rounded-lg shadow-sm transition border font-bold',
-    answeredQuestions.includes(question.id)
-      ? 'bg-[#24054D] text-white cursor-default'
-      : currentTeam !== 2
-        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-        : 'bg-[#FCFAFF] text-[#B984FF] border-[#ECE1FB] cursor-pointer'
-  ]"
->
-  أظهر السؤال
-</button>
-        </template>
-        <template v-else>
-          <div
-            class="w-full py-2 rounded-lg shadow-sm border text-center text-sm italic text-gray-400 bg-[#F9F9F9]"
-          >
-            لا توجد أسئلة
-          </div>
-        </template>
-      </div>
+  </div>
+  <!-- عمود الفريق الثاني -->
+  <div class="bg-white rounded-lg p-4 shadow-md w-full sm:w-[30%]">
+    <h3 class="text-lg font-semibold mb-2 text-center text-[#24054D]">
+      فريق {{ team2Name }}
+    </h3>
+    <div class="space-y-2">
+      <template v-if="questions.length >= 8">
+        <button
+          v-for="(question, qIndex) in questions.slice(4, 8)"
+          :key="qIndex"
+          @click="selectQuestion(question, 2)"
+          :disabled="answeredQuestions.includes(question.id) || currentTeam !== 2"
+          :class="[
+            'w-full py-2 rounded-lg shadow-sm transition border font-bold',
+            answeredQuestions.includes(question.id)
+              ? 'bg-[#24054D] text-white cursor-default'
+              : currentTeam !== 2
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-[#FCFAFF] text-[#B984FF] border-[#ECE1FB] cursor-pointer'
+          ]"
+        >
+          أظهر السؤال
+        </button>
+      </template>
+      <template v-else>
+        <div class="w-full py-2 rounded-lg shadow-sm border text-center text-sm italic text-gray-400 bg-[#F9F9F9]">
+          لا توجد أسئلة
+        </div>
+      </template>
     </div>
+  </div>
+</div>
+<!-- الأعمدة للجولة الثانية (تحدي الرسم) -->
+<div v-if="selectedRound === 2" class="flex flex-col sm:flex-row sm:flex-wrap justify-between gap-4 mb-6">
+  <!-- عمود الفريق الأول تحدي الرسم -->
+  <div class="bg-white rounded-lg p-4 shadow-md w-full sm:w-[30%]">
+    <h3 class="text-lg font-semibold mb-2 text-center text-[#24054D]">
+      فريق {{ team1Name }} (رسم)
+    </h3>
+    <div class="space-y-2">
+      <template v-if="questionsRound2.length >= 4">
+        <button
+          v-for="(question, qIndex) in questionsRound2.slice(0, 4)"
+          :key="qIndex"
+          @click="selectQuestion(question, 1)"
+          :disabled="answeredQuestionsRound2.includes(question.id) || currentTeam !== 1"
+          :class="[
+            'w-full py-2 rounded-lg shadow-sm transition border font-bold',
+            answeredQuestionsRound2.includes(question.id)
+              ? 'bg-[#24054D] text-white cursor-default'
+              : currentTeam !== 1
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-[#FCFAFF] text-[#B984FF] border-[#ECE1FB] cursor-pointer'
+          ]"
+        >
+          أظهر السؤال
+        </button>
+      </template>
+      <template v-else>
+        <div class="w-full py-2 rounded-lg shadow-sm border text-center text-sm italic text-gray-400 bg-[#F9F9F9]">
+          لا توجد أسئلة
+        </div>
+      </template>
+    </div>
+  </div>
+  <!-- عمود الفريق الثاني تحدي الرسم -->
+  <div class="bg-white rounded-lg p-4 shadow-md w-full sm:w-[30%]">
+    <h3 class="text-lg font-semibold mb-2 text-center text-[#24054D]">
+      فريق {{ team2Name }} (رسم)
+    </h3>
+    <div class="space-y-2">
+      <template v-if="questionsRound2.length >= 8">
+        <button
+          v-for="(question, qIndex) in questionsRound2.slice(4, 8)"
+          :key="qIndex"
+          @click="selectQuestion(question, 2)"
+          :disabled="answeredQuestionsRound2.includes(question.id) || currentTeam !== 2"
+          :class="[
+            'w-full py-2 rounded-lg shadow-sm transition border font-bold',
+            answeredQuestionsRound2.includes(question.id)
+              ? 'bg-[#24054D] text-white cursor-default'
+              : currentTeam !== 2
+                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                : 'bg-[#FCFAFF] text-[#B984FF] border-[#ECE1FB] cursor-pointer'
+          ]"
+        >
+          أظهر السؤال
+        </button>
+      </template>
+      <template v-else>
+        <div class="w-full py-2 rounded-lg shadow-sm border text-center text-sm italic text-gray-400 bg-[#F9F9F9]">
+          لا توجد أسئلة
+        </div>
+      </template>
+    </div>
+  </div>
 </div>
     <!-- Logo and Score Counters -->
     <div class="flex flex-col items-center ">
@@ -161,9 +257,16 @@
 </div>
   </div>
 <!-- Modal -->
-<div v-if="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-2 sm:px-4 py-6 overflow-y-auto">
-  <div class="bg-white rounded-[20px] shadow-lg relative w-full min-h-[400px] sm:w-[90%] max-w-[1100px] p-6 sm:p-8 flex  flex-col-reverse lg:flex-row gap-6 border-[4px] border-[#D6B4FF]"
-   :dir="currentLang === 'ar' ? 'ltr' : 'rtl'"
+<div
+  v-if="showModal"
+  :class="[
+    'fixed inset-0 bg-black/50 flex justify-center z-50 px-2 sm:px-4 py-6 overflow-y-auto',
+    selectedRound === 2 ? 'items-start' : 'items-center'
+  ]"
+>
+  <div
+    class="bg-white rounded-[20px] shadow-lg relative w-full min-h-[400px] sm:w-[90%] max-w-[1100px] p-6 sm:p-8 flex flex-col-reverse lg:flex-row gap-6 border-[4px] border-[#D6B4FF]"
+    :dir="currentLang === 'ar' ? 'ltr' : 'rtl'"
   >
     <!-- زر الإغلاق -->
     <button
@@ -215,6 +318,7 @@
       class="mx-auto max-h-[150px] rounded-md"
     />
   </div>
+<DrowBoard v-if="selectedRound === 2 && showDrawingBoard" />
 <!-- زر جاهز / أظهر الإجابة / تقييم الإجابة -->
 <div class="flex justify-center flex-col items-center">
   <!-- زر جاهز -->
@@ -295,7 +399,7 @@
 </template>
 <script setup>
 /* -------------------- 1. الإستيراد -------------------- */
-import { ref, onMounted } from 'vue';
+import { ref, onMounted ,watch ,computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import data from './sports-category.json';
 import playIcon from '../../../assets/imgs/play.png';
@@ -303,7 +407,9 @@ import pauseIcon from '../../../assets/imgs/pause.svg';
 import bg from '../../../assets/imgs/splash.png';
 import placeholderImg from '../../../assets/imgs/upload.png';
 import { useToast } from "vue-toastification"
+import DrowBoard from '../../../components/DrowBoard.vue';
 const toast = useToast()
+const selectedRound = ref(1);
 /* -------------------- 2. التوجيه (Router + Params) -------------------- */
 const route = useRoute();
 const router = useRouter();
@@ -326,10 +432,14 @@ const increaseScore2 = () => score2.value += 10;
 const decreaseScore2 = () => score2.value = Math.max(0, score2.value - 10);
 /* -------------------- 4. الأسئلة -------------------- */
 const questions = ref([]);
+const questionsRound2 = ref([]);
+const questionsRound3 = ref([]);
 const answeredQuestions = ref([]);
+const answeredQuestionsRound2 = ref([]);
+const answeredQuestionsRound3 = ref([]);
 const loadQuestions = () => {
   if (data && data.data && data.data.length > 0) {
-    questions.value = data.data[0].questions.map(question => ({
+    const all = data.data[0].questions.map(question => ({
       id: question.id,
       title: question.title,
       question_text: question.question_text,
@@ -339,7 +449,12 @@ const loadQuestions = () => {
       correct_answer: question.correct_answer,
       points: question.points
     }));
-    console.log('Loaded questions:', questions.value); // تحقق من تحميل الأسئلة
+    questions.value = all.slice(0, 8);
+    questionsRound2.value = all.slice(8, 16);
+    questionsRound3.value = all.slice(16);
+    console.log('Loaded questions:', questions.value);
+    console.log('Loaded questionsRound2:', questionsRound2.value);
+    console.log('Loaded questionsRound3:', questionsRound3.value);
   } else {
     console.error('No questions loaded from JSON');
   }
@@ -355,6 +470,7 @@ const doublePoints = ref(false);
 const blockPoints = ref(false);
 const currentLang = ref('ar'); // افتراضيًا اللغة العربية
 const selectQuestion = (question, column) => {
+  if (selectedRound.value === 1) {
   if (!answeredQuestions.value.includes(question.id)) {
     answeredQuestions.value.push(question.id);
     selectedQuestion.value = question.points;
@@ -363,10 +479,19 @@ const selectQuestion = (question, column) => {
     showModal.value = true;
     doublePoints.value = false;
     blockPoints.value = false;
-    questionRevealed.value = false; // 👈 تصفير المرحلة
-    console.log('showModal set to:', showModal.value);
-  } else {
-    console.log('Question already answered:', question.id);
+    questionRevealed.value = false;
+  }
+ }else if (selectedRound.value === 2) {
+    if (!answeredQuestionsRound2.value.includes(question.id)) {
+      answeredQuestionsRound2.value.push(question.id);
+     selectedQuestion.value = question.points;
+    selectedColumn.value = column;
+    currentQuestion.value = question;
+    showModal.value = true;
+    doublePoints.value = false;
+    blockPoints.value = false;
+    questionRevealed.value = false;
+    }
   }
 };
 /*---------------------- أول م يدوس جاهز يبدا المؤفت ------------------------------- */
@@ -403,7 +528,6 @@ const validateAnswer = (isCorrect) => {
         score2.value += timer.value
       }
     }
-    answeredQuestions.value.push(currentQuestion.value.id)
     isTransferred.value = false
     awaitingValidation.value = false
     showAnswer.value = false
@@ -418,9 +542,6 @@ const validateAnswer = (isCorrect) => {
       currentTeam.value = currentTeam.value === 1 ? 2 : 1
      toast.info("تم نقل السؤال للفريق الآخر ✅", { timeout: 3000 })
     } else {
-      // ❌ الفريق التاني كمان جاوب غلط → السؤال يتقفل
-      answeredQuestions.value.push(currentQuestion.value.id)
-      // reset
       isTransferred.value = false
       awaitingValidation.value = false
       showAnswer.value = false
@@ -456,9 +577,6 @@ const revealAnswer = () => {
   showAnswer.value = true;
   answerResult.value = null;
   clearInterval(countdownInterval);
-  if (currentQuestion.value && !answeredQuestions.value.includes(currentQuestion.value.id)) {
-    answeredQuestions.value.push(currentQuestion.value.id);
-  }
 };
 const confirmAnswer = (isCorrect) => {
   showModal.value = false;
@@ -471,7 +589,6 @@ const confirmAnswer = (isCorrect) => {
   }
   if (currentTeam.value === 1) score1.value += pointsToAdd;
   else score2.value += pointsToAdd;
-  answeredQuestions.value.push(currentQuestion.value.id);
   answerResult.value = isCorrect ? "correct" : "wrong";
   toggleTeam();
 };
@@ -520,17 +637,47 @@ const goTo = (path, message) => {
     router.push(path);
   }
 };
-const goToWinGame = (path, message) => {
-  if (confirm(message)) {
-    router.push(path);
+const goToWinGame = () => {
+  if (confirm("هل أنت متأكد من إنهاء اللعبة؟")) {
+    router.push({
+      path: '/WinGame',
+      query: { score1: score1.value, score2: score2.value }
+    })
   }
-};
+}
 /* -------------------- 8. عند التحميل -------------------- */
 onMounted(() => {
   loadQuestions();
-  const team1Name = ref(localStorage.getItem("team1Name") || "الفريق الأول")
+const team1Name = ref(localStorage.getItem("team1Name") || "الفريق الأول")
 const team2Name = ref(localStorage.getItem("team2Name") || "الفريق الثاني")
 });
+/* ----------------------------------------------- */
+const showDrawingBoard = ref(false)
+// نراقب isReady
+watch(isReady, (newVal, oldVal) => {
+  if (newVal === true) {
+    // أول مرة بس يبدأ، نفعّل اللوحة
+    showDrawingBoard.value = true
+  }
+})
+// نراقب إغلاق المودال
+watch(showModal, (newVal) => {
+  if (newVal === false) {
+    // لما المودال يتقفل نخفي اللوحة
+    showDrawingBoard.value = false
+  }
+})
+const round1Completed = computed(() => {
+  return answeredQuestions.value.length >= questions.value.length
+})
+watch(round1Completed, (completed) => {
+  if (completed) {
+    toast.success("✅ أحسنت! اضغط على 'تحدي الرسم' للانتقال للجولة الثانية", {
+      timeout: 4000,
+      position: "top-center",
+    })
+  }
+})
 </script>
 <style scoped>
 /* .rouned {

@@ -1,54 +1,43 @@
 <template>
   <div
-    class="flex flex-col items-center justify-center min-h-screen
-           bg-gradient-to-br from-indigo-100 via-white to-indigo-200 p-6"
+    class="flex flex-col items-center justify-center min-h-[60vh]
+           bg-gradient-to-br from-indigo-100 via-white to-indigo-200 p-2 mb-3"
   >
-    <!-- الهيدر -->
-    <div class="text-center mb-8">
-      <h1 class="text-4xl font-extrabold text-indigo-700 flex items-center gap-2 justify-center">
-        🎨 لوحة الرسم
-      </h1>
-      <p class="text-gray-600 mt-2">ارسم بحرية، غيّر الألوان والحجم، واحفظ إبداعك!</p>
-    </div>
     <!-- أدوات التحكم -->
     <div
-      class="flex flex-wrap gap-6 items-center mb-8 bg-white shadow-lg
-             rounded-xl p-6 border border-indigo-100"
+      class="flex flex-wrap gap-3 items-center mb-4 bg-white shadow-lg
+             rounded-xl p-3 border border-indigo-100"
     >
       <!-- اختيار اللون -->
-      <div class="flex items-center gap-3">
-        <label class="font-medium text-gray-700">اللون</label>
- <div class="relative group">
-  <input
-    type="color"
-    v-model="color"
-    class="sr-only"
-    ref="colorPicker"
-  />
-  <!-- الزر الدائري -->
-  <div
-    class="w-11 h-11 rounded-full border border-gray-300 shadow-sm
-           transition-all duration-300 cursor-pointer
-           group-hover:shadow-md group-hover:scale-105"
-    :style="{ background: color }"
-    @click="$refs.colorPicker.click()"
-  ></div>
-</div>
+      <div class="flex items-center gap-2">
+        <div class="relative group">
+  <div class="flex items-center gap-2">
+    <label class="font-medium text-gray-700 text-sm">اللون</label>
+    <div class="flex gap-2 flex-wrap">
+      <div
+        v-for="c in colors"
+        :key="c"
+        class="w-7 h-7 rounded-full border shadow cursor-pointer transition-transform duration-200"
+        :style="{ backgroundColor: c, border: color === c ? '2px solid #4f46e5' : '1px solid #ccc' }"
+        @click="color = c"
+      ></div>
+    </div>
+  </div>
+        </div>
       </div>
       <!-- حجم القلم -->
-      <div class="flex items-center gap-4">
-        <label class="font-medium text-gray-700">الحجم</label>
+      <div class="flex items-center gap-2">
+        <label class="font-medium text-gray-700 text-sm">الحجم</label>
         <input
           type="range"
           min="5"
           max="25"
           v-model="size"
-          class="w-44 h-2 rounded-lg appearance-none bg-gray-200 accent-indigo-600
+          class="w-24 h-2 rounded-lg appearance-none bg-gray-200 accent-indigo-600
                  cursor-pointer transition-all duration-300"
         />
-        <div class="flex items-center gap-2">
-          <span class="font-semibold text-gray-800 tabular-nums">{{ size }}px</span>
-          <!-- preview circle -->
+        <div class="flex items-center gap-1">
+          <span class="font-semibold text-gray-800 tabular-nums text-xs">{{ size }}px</span>
           <div
             class="rounded-full bg-indigo-500 border border-gray-300"
             :style="{ width: size + 'px', height: size + 'px' }"
@@ -56,56 +45,53 @@
         </div>
       </div>
       <!-- أزرار التحكم -->
-        <div class="flex gap-3">
-  <!-- زر الممحاة -->
-  <button
-    @click="toggleEraser"
-    :class="[
-      'flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium cursor-pointer transition-all duration-200',
-      isErasing
-        ? 'bg-yellow-500 text-white shadow-md'
-        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-    ]"
-  >
-    🩹 <span>الممحاة</span>
-  </button>
+      <div class="flex gap-2">
+        <button
+          @click="toggleEraser"
+          :class="[
+            'flex items-center gap-1 px-3 py-1.5 rounded-lg font-medium cursor-pointer text-xs transition-all duration-200',
+            isErasing
+              ? 'bg-green-600 text-white shadow-md'
+              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+          ]"
+        >
+        <img src="../assets/imgs/eraser.png" class="w-7 h-7">
+           <!-- <span>ممحاة</span> -->
+        </button>
         <button
           @click="clearCanvas"
-          class="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium cursor-pointer
-                 bg-red-500 text-white shadow-sm
+          class="flex items-center gap-1 px-3 py-1.5 rounded-lg font-medium cursor-pointer
+                 bg-red-500 text-white shadow-sm text-xs
                  hover:bg-red-600 hover:shadow-md
                  active:scale-95 transition-all duration-200"
         >
-           <span>مسح الكل</span>
+          <span>مسح</span>
         </button>
         <button
           @click="saveCanvas"
-          class="flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium cursor-pointer
-                 bg-indigo-600 text-white shadow-sm
+          class="flex items-center gap-1 px-3 py-1.5 rounded-lg font-medium cursor-pointer
+                 bg-indigo-600 text-white shadow-sm text-xs
                  hover:bg-indigo-700 hover:shadow-md
                  active:scale-95 transition-all duration-200"
         >
-           <span>حفظ الصورة</span>
+          <span>حفظ</span>
         </button>
       </div>
     </div>
-    <!-- الكانفاس -->
-    <canvas
-      ref="canvas"
-      width="800"
-      height="500"
-      class="border-2 border-indigo-300 rounded-xl shadow-lg bg-white cursor-crosshair
-             transition-transform duration-500 hover:scale-[1.01]"
-      @mousedown="startDrawing"
-      @mousemove="draw"
-      @mouseup="stopDrawing"
-      @mouseleave="stopDrawing"
-    ></canvas>
+<canvas
+  ref="canvas"
+  class="w-full max-w-[800px] aspect-[16/9] border-2 border-indigo-300 rounded-xl shadow-lg bg-white cursor-crosshair
+         transition-transform duration-500 hover:scale-[1.01]"
+  @mousedown="startDrawing"
+  @mousemove="draw"
+  @mouseup="stopDrawing"
+  @mouseleave="stopDrawing"
+></canvas>
     <!-- Toast -->
     <transition name="fade">
       <div
         v-if="showToast"
-        class="fixed bottom-6 right-6 bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-lg"
+        class="fixed bottom-6 right-6 bg-indigo-600 text-white px-3 py-1 rounded-lg shadow-lg text-xs"
       >
         ✅ تم حفظ الصورة بنجاح
       </div>
@@ -113,19 +99,28 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue"
+import { ref, onMounted, onBeforeUnmount } from "vue"
 const color = ref("#ff5733")
+const colors = [
+  "#000000", // أسود
+//   "#ffffff", // أبيض
+  "#ef4444", // أحمر
+  "#3b82f6", // أزرق
+  "#22c55e", // أخضر
+  "#eab308", // أصفر
+//   "#f97316", // برتقالي
+  "#a855f7", // بنفسجي
+//   "#06b6d4", // سماوي
+//   "#ec4899", // وردي
+  "#6b7280", // رمادي
+  "#92400e", // بني
+]
 const isErasing = ref(false)
 const canvas = ref(null)
 const ctx = ref(null)
 const drawing = ref(false)
 const size = ref(5)
 const showToast = ref(false)
-onMounted(() => {
-  ctx.value = canvas.value.getContext("2d")
-  ctx.value.lineCap = "round"
-  ctx.value.lineJoin = "round"
-})
 const startDrawing = (e) => {
   drawing.value = true
   ctx.value.beginPath()
@@ -156,6 +151,33 @@ const saveCanvas = () => {
 const toggleEraser = () => {
   isErasing.value = !isErasing.value
 }
+// 📌 إعادة ضبط الكانفاس مع الحفاظ على الرسمة
+const resizeCanvas = () => {
+  const canvasEl = canvas.value
+  if (!canvasEl) return
+  // حفظ الرسم الحالي كصورة
+  const dataURL = canvasEl.toDataURL()
+  // تحديث أبعاد الكانفاس مع حجم الـ container
+  canvasEl.width = canvasEl.clientWidth
+  canvasEl.height = canvasEl.clientHeight
+  // إعادة تهيئة السياق
+  ctx.value = canvasEl.getContext("2d")
+  ctx.value.lineCap = "round"
+  ctx.value.lineJoin = "round"
+  // استرجاع الرسمة القديمة
+  const img = new Image()
+  img.src = dataURL
+  img.onload = () => {
+    ctx.value.drawImage(img, 0, 0, canvasEl.width, canvasEl.height)
+  }
+}
+onMounted(() => {
+  resizeCanvas()
+  window.addEventListener("resize", resizeCanvas)
+})
+onBeforeUnmount(() => {
+  window.removeEventListener("resize", resizeCanvas)
+})
 </script>
 <style scoped>
 /* سلايدر مخصص */
