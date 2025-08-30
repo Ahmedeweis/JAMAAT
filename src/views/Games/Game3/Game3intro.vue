@@ -149,7 +149,7 @@ const startGame = () => {
     return
   }
   router.push({
-    path: '/chooseplayer',
+    path: '/chooseplayer3',
     query: {
       categories: selectedCategories.value.join(',')
     }

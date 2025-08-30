@@ -75,7 +75,7 @@ const routes = [
     name: "ChooseGame",
     component: () => import("../views/Games/ChooseGame.vue"),
   },
-    {
+  {
     path: "/GameLib",
     name: "GameLib",
     component: () => import("../views/Games/GameLib.vue"),
@@ -115,22 +115,32 @@ const routes = [
     name: "PaymentMethods",
     component: () => import("../views/Addtions/PaymentMethods.vue"),
   },
-    {
+  {
     path: "/PaymentPage",
     name: "PaymentPage",
     component: () => import("../views/Addtions/PaymentPage.vue"),
   },
-        {
+  {
     path: "/Game3intro",
     name: "Game3intro",
     component: () => import("../views/Games/Game3/Game3intro.vue"),
   },
-      {
+  {
+    path: "/chooseplayer3",
+    name: "chooseplayer3",
+    component: () => import("../views/Games/Game3/chooseplayer3.vue"),
+  },
+    {
+    path: "/Game3Home",
+    name: "Game3Home",
+    component: () => import("../views/Games/Game3/Game3Home.vue"),
+  },
+  {
     path: "/testo",
     name: "testo",
     component: () => import("../views/test/testo.vue"),
   },
-        {
+  {
     path: "/apitest",
     name: "apitest",
     component: () => import("../views/test/apitest.vue"),

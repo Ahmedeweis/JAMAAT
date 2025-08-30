@@ -1,0 +1,245 @@
+{
+    "status": 200,
+    "message": "success",
+    "data": [
+        {
+            "id": 500,
+            "name": "الرياضة العالمية",
+            "image_url": "https://api.mkhmkh.com/media/History.png",
+            "hint": "فئة تحتوي على أسئلة متنوعة عن الرياضة العالمية",
+            "parent": {
+                "id": 72,
+                "name": "تيشرت رياضي",
+                "image_url": "https://api.mkhmkh.com/media/Teams.png"
+            },
+            "questions": [
+                {
+                    "id": 1,
+                    "title": "أول كأس عالم",
+                    "question_text": "في أي عام أقيمت أول بطولة لكأس العالم لكرة القدم؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "1930",
+                    "points": 100
+                },
+                {
+                    "id": 2,
+                    "title": "هداف المونديال",
+                    "question_text": "من هو الهداف التاريخي لكأس العالم حتى الآن؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "ميروسلاف كلوزه",
+                    "points": 200
+                },
+                {
+                    "id": 3,
+                    "title": "كرة السلة",
+                    "question_text": "كم عدد اللاعبين في كل فريق كرة سلة داخل الملعب؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "5",
+                    "points": 150
+                },
+                {
+                    "id": 4,
+                    "title": "ألعاب أولمبية",
+                    "question_text": "في أي مدينة أقيمت أول دورة ألعاب أولمبية حديثة سنة 1896؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "أثينا",
+                    "points": 250
+                },
+                {
+                    "id": 5,
+                    "title": "كرة الطائرة",
+                    "question_text": "كم عدد النقاط المطلوبة للفوز بشوط واحد في الكرة الطائرة؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "25",
+                    "points": 150
+                },
+                {
+                    "id": 6,
+                    "title": "أسرع عداء",
+                    "question_text": "من هو أسرع عداء في العالم وحامل الرقم القياسي في 100 متر؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "يوسين بولت",
+                    "points": 200
+                },
+                {
+                    "id": 7,
+                    "title": "ملاكمة",
+                    "question_text": "كم عدد الجولات في نزال الملاكمة المحترف؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "12",
+                    "points": 150
+                },
+                {
+                    "id": 8,
+                    "title": "التنس",
+                    "question_text": "من هو اللاعب الأكثر تتويجًا ببطولات الجراند سلام في التنس؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "نوفاك دجوكوفيتش",
+                    "points": 300
+                },
+                {
+                    "id": 9,
+                    "title": "كرة اليد",
+                    "question_text": "كم لاعب أساسي يتواجد في فريق كرة اليد؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "7",
+                    "points": 100
+                },
+                {
+                    "id": 10,
+                    "title": "البيسبول",
+                    "question_text": "أي دولة تُعتبر مهد لعبة البيسبول؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "الولايات المتحدة",
+                    "points": 200
+                },
+                {
+                    "id": 11,
+                    "title": "كرة القدم",
+                    "question_text": "من هو النادي الأكثر فوزًا بدوري أبطال أوروبا؟",
+                    "question_image": "images/questions/realmadrid.jpg",
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "ريال مدريد",
+                    "points": 500
+                },
+                {
+                    "id": 12,
+                    "title": "شعار نادي",
+                    "question_text": "إلى أي فريق ينتمي هذا الشعار؟",
+                    "question_image": "images/questions/barca.png",
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "برشلونة",
+                    "points": 400
+                },
+                {
+                    "id": 13,
+                    "title": "معلق رياضي",
+                    "question_text": "استمع لهذا الصوت وحدد اسم المعلق الرياضي.",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": "audios/questions/commentator.mp3",
+                    "correct_answer": "رؤوف خليف",
+                    "points": 600
+                },
+                {
+                    "id": 14,
+                    "title": "ملعب شهير",
+                    "question_text": "ما اسم هذا الملعب؟",
+                    "question_image": "images/questions/campnou.jpg",
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "كامب نو",
+                    "points": 300
+                },
+                {
+                    "id": 15,
+                    "title": "أولمبياد",
+                    "question_text": "شاهد الفيديو وحدد اسم الرياضة.",
+                    "question_image": null,
+                    "question_video": "videos/questions/olympic.mp4",
+                    "question_audio": null,
+                    "correct_answer": "الجمباز",
+                    "points": 450
+                },
+                {
+                    "id": 16,
+                    "title": "كريستيانو رونالدو",
+                    "question_text": "في أي فريق لعب كريستيانو رونالدو قبل انتقاله إلى ريال مدريد؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "مانشستر يونايتد",
+                    "points": 350
+                },
+                {
+                    "id": 17,
+                    "title": "ميسي",
+                    "question_text": "كم عدد الكرات الذهبية التي فاز بها ليونيل ميسي حتى 2023؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "8",
+                    "points": 500
+                },
+                {
+                    "id": 18,
+                    "title": "كأس أفريقيا",
+                    "question_text": "أي منتخب فاز بكأس أمم إفريقيا 2006؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "مصر",
+                    "points": 300
+                },
+                {
+                    "id": 19,
+                    "title": "السباحة",
+                    "question_text": "ما المسافة الرسمية لسباق السباحة الحرة الأولمبي الأشهر؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "100 متر",
+                    "points": 250
+                },
+                {
+                    "id": 20,
+                    "title": "الهوكي",
+                    "question_text": "أي دولة تُعتبر الأقوى في رياضة الهوكي على الجليد؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "كندا",
+                    "points": 200
+                },
+                {
+                    "id": 21,
+                    "title": "كرة طاولة",
+                    "question_text": "من هو بطل العالم الحالي في تنس الطاولة؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "فان تشنغدونغ",
+                    "points": 400
+                },
+                {
+                    "id": 22,
+                    "title": "بطولة آسيا",
+                    "question_text": "في أي دولة أقيمت بطولة كأس آسيا 2019؟",
+                    "question_image": null,
+                    "question_video": null,
+                    "question_audio": null,
+                    "correct_answer": "الإمارات",
+                    "points": 300
+                }
+            ]
+        }
+    ],
+    "meta": {
+        "current_page": 1,
+        "last_page": 1,
+        "per_page": 22,
+        "total": 22
+    }
+}

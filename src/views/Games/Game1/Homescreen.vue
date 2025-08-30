@@ -232,57 +232,93 @@ import placeholderImg from '../../../assets/imgs/upload.png';
 import playIcon from '../../../assets/imgs/play.png';
 import pauseIcon from '../../../assets/imgs/pause.svg';
 import bg from '../../../assets/imgs/splash.png';
-/* -------------------- 2. المتغيرات -------------------- */
-// أزرار التحكم بالنقاط
-const doublePoints = ref(false);
-const blockPoints = ref(false);
-// بيانات اللعبة
+/* -------------------- 2. التوجيه (Router) -------------------- */
 const router = useRouter();
 const route = useRoute();
 const gameId = route.query.id;
+/* -------------------- 3. بيانات اللعبة -------------------- */
 const gameData = ref(null);
 const games = ref([]);
 const loading = ref(true);
 const error = ref(null);
-// عرض السؤال والإجابة
+onMounted(async () => {
+  try {
+    const res = await getUserGames();
+    games.value = res.data.data || [];
+    const idFromRoute = Number(gameId);
+    const foundGame = games.value.find(item => item.game?.id === idFromRoute);
+    if (foundGame) {
+      gameData.value = foundGame.game;
+      console.log("✅ تم العثور على اللعبة:", foundGame.game);
+    } else {
+      console.warn("⚠️ لم يتم العثور على اللعبة بالمعرف:", gameId);
+    }
+  } catch (err) {
+    console.error('❌ فشل جلب الألعاب:', err);
+    error.value = 'حدث خطأ أثناء تحميل الألعاب';
+  } finally {
+    loading.value = false;
+  }
+});
+/* -------------------- 4. عرض السؤال والإجابة -------------------- */
 const showModal = ref(false);
 const currentQuestion = ref(null);
 const answeredQuestions = ref([]);
 const showAnswer = ref(false);
 const answerResult = ref(null); // "correct" أو "wrong"
-// المؤقت
+const selectedQuestion = ref(null);
+const selectedColumn = ref(null);
+const selectQuestion = (question, column) => {
+  selectedQuestion.value = question.points;
+  selectedColumn.value = column;
+  currentQuestion.value = question;
+  showModal.value = true;
+  doublePoints.value = false;
+  blockPoints.value = false;
+  startTimer();
+};
+const revealAnswer = () => {
+  showAnswer.value = true;
+  answerResult.value = null;
+  clearInterval(countdownInterval);
+  if (currentQuestion.value && !answeredQuestions.value.includes(currentQuestion.value.id)) {
+    answeredQuestions.value.push(currentQuestion.value.id);
+  }
+  setTimeout(() => {
+    showModal.value = false;
+    showAnswer.value = false;
+    toggleTeam();
+  }, 2000);
+};
+const confirmAnswer = (isCorrect) => {
+  showModal.value = false;
+  showAnswer.value = false;
+  let pointsToAdd = 0;
+  if (isCorrect) {
+    pointsToAdd = currentQuestion.value.points || 0;
+    if (blockPoints.value) pointsToAdd = 0;
+    else if (doublePoints.value) pointsToAdd *= 2;
+  }
+  if (currentTeam.value === 1) score1.value += pointsToAdd;
+  else score2.value += pointsToAdd;
+  answeredQuestions.value.push(currentQuestion.value.id);
+  answerResult.value = isCorrect ? "correct" : "wrong";
+  toggleTeam();
+};
+const closeModal = () => {
+  showModal.value = false;
+  answeredQuestions.value.push(currentQuestion.value.id);
+  let pointsToAdd = currentQuestion.value.points || 0;
+  if (blockPoints.value) pointsToAdd = 0;
+  else if (doublePoints.value) pointsToAdd *= 2;
+  if (currentTeam.value === 1) score1.value += pointsToAdd;
+  else score2.value += pointsToAdd;
+  toggleTeam();
+};
+/* -------------------- 5. المؤقت -------------------- */
 const timer = ref(30);
 const isPaused = ref(false);
 let countdownInterval = null;
-// الفرق والنقاط
-const currentTeam = ref(1);
-const selectedQuestion = ref(null);
-const selectedColumn = ref(null);
-const score1 = ref(0);
-const score2 = ref(0);
-/* -------------------- 3. الدوال -------------------- */
-const getMediaUrl = (question) => {
-  if (!question) return placeholderImg;
-  if (question.question_video) {
-    if (question.question_video.startsWith('http')) {
-      return question.question_video;
-    }
-    return `https://game-wise.smartleadtech.com/${question.question_video}`;
-  }
-  if (question.question_image) {
-    if (question.question_image.startsWith('http')) {
-      return question.question_image;
-    }
-    return `https://game-wise.smartleadtech.com/${question.question_image}`;
-  }
-  return placeholderImg;
-};
-const goToWinGame = () => {
-  router.push({
-    path: '/WinGame',
-    query: { score1: score1.value, score2: score2.value }
-  });
-};
 const startTimer = () => {
   clearInterval(countdownInterval);
   timer.value = 30;
@@ -305,92 +341,48 @@ const formatTime = (seconds) => {
   const secs = String(seconds % 60).padStart(2, '0');
   return `${mins}:${secs}`;
 };
+/* -------------------- 6. الفرق والنقاط -------------------- */
+const currentTeam = ref(1);
+const score1 = ref(0);
+const score2 = ref(0);
+const doublePoints = ref(false);
+const blockPoints = ref(false);
 const toggleTeam = () => {
   currentTeam.value = currentTeam.value === 1 ? 2 : 1;
 };
-const selectQuestion = (question, column) => {
-  selectedQuestion.value = question.points;
-  selectedColumn.value = column;
-  currentQuestion.value = question;
-  showModal.value = true;
-  doublePoints.value = false;
-  blockPoints.value = false;
-  startTimer();
+const increaseScore1 = () => score1.value += 10;
+const decreaseScore1 = () => score1.value = Math.max(0, score1.value - 10);
+const increaseScore2 = () => score2.value += 10;
+const decreaseScore2 = () => score2.value = Math.max(0, score2.value - 10);
+/* -------------------- 7. الميديا -------------------- */
+const getMediaUrl = (question) => {
+  if (!question) return placeholderImg;
+  if (question.question_video) {
+    if (question.question_video.startsWith('http')) {
+      return question.question_video;
+    }
+    return `https://game-wise.smartleadtech.com/${question.question_video}`;
+  }
+  if (question.question_image) {
+    if (question.question_image.startsWith('http')) {
+      return question.question_image;
+    }
+    return `https://game-wise.smartleadtech.com/${question.question_image}`;
+  }
+  return placeholderImg;
 };
-const revealAnswer = () => {
-  showAnswer.value = true;
-  answerResult.value = null; // لا تُحسب نقاط
-  clearInterval(countdownInterval);
-  // تعليم السؤال كمحلول
-  if (currentQuestion.value && !answeredQuestions.value.includes(currentQuestion.value.id)) {
-    answeredQuestions.value.push(currentQuestion.value.id);
-  }
-  setTimeout(() => {
-    showModal.value = false;
-    showAnswer.value = false;
-    toggleTeam(); // تبديل الفريق
-  }, 2000);
-};
-const confirmAnswer = (isCorrect) => {
-  showModal.value = false;
-  showAnswer.value = false;
-  let pointsToAdd = 0;
-  if (isCorrect) {
-    pointsToAdd = currentQuestion.value.points || 0;
-    if (blockPoints.value) pointsToAdd = 0;
-    else if (doublePoints.value) pointsToAdd *= 2;
-  }
-  if (currentTeam.value === 1) score1.value += pointsToAdd;
-  else score2.value += pointsToAdd;
-  answeredQuestions.value.push(currentQuestion.value.id);
-  answerResult.value = isCorrect ? "correct" : "wrong";
-  toggleTeam();
-};
-const closeModal = () => {
-  showModal.value = false;
-  answeredQuestions.value.push(currentQuestion.value.id);
-  let pointsToAdd = currentQuestion.value.points || 0;
-  if (blockPoints.value) {
-    pointsToAdd = 0;
-  } else if (doublePoints.value) {
-    pointsToAdd *= 2;
-  }
-  if (currentTeam.value === 1) {
-    score1.value += pointsToAdd;
-  } else {
-    score2.value += pointsToAdd;
-  }
-  toggleTeam();
+/* -------------------- 8. التنقل -------------------- */
+const goToWinGame = () => {
+  router.push({
+    path: '/WinGame',
+    query: { score1: score1.value, score2: score2.value }
+  });
 };
 const goTo = (path, message) => {
   if (confirm(message)) {
     router.push(path);
   }
 };
-const increaseScore1 = () => score1.value += 10;
-const decreaseScore1 = () => score1.value = Math.max(0, score1.value - 10);
-const increaseScore2 = () => score2.value += 10;
-const decreaseScore2 = () => score2.value = Math.max(0, score2.value - 10);
-/* -------------------- 4. عند التحميل -------------------- */
-onMounted(async () => {
-  try {
-    const res = await getUserGames();
-    games.value = res.data.data || [];
-    const idFromRoute = Number(gameId);
-    const foundGame = games.value.find(item => item.game?.id === idFromRoute);
-    if (foundGame) {
-      gameData.value = foundGame.game;
-      console.log("✅ تم العثور على اللعبة:", foundGame.game);
-    } else {
-      console.warn("⚠️ لم يتم العثور على اللعبة بالمعرف:", gameId);
-    }
-  } catch (error) {
-    console.error('❌ فشل جلب الألعاب:', error);
-    error.value = 'حدث خطأ أثناء تحميل الألعاب';
-  } finally {
-    loading.value = false;
-  }
-});
 </script>
 <style scoped>
 .font-arabic {
