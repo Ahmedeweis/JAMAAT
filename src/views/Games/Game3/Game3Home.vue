@@ -238,41 +238,6 @@ v-if="showModal2"
   </div>
   <!-- الفرق -->
   <div class="flex flex-col lg:flex-row gap-6">
-    <!-- الفريق الأول -->
-    <div class="flex-1  bg-white rounded-lg p-6 shadow-md">
-      <h3 class="text-lg font-semibold text-center text-purple-900 mb-4">الفريق الأول</h3>
-      <!-- النقاط الحالية -->
-      <!-- <div v-if="currentTeamIndex === 1" class="text-center text-2xl font-bold text-purple-900 mb-4">
-        {{ currentPoints }}
-      </div> -->
-      <!-- الإدخالات -->
-      <div class="flex flex-wrap gap-2 justify-start">
-        <input
-          v-for="(input, idx) in team1Inputs.slice(0, switchCount)"
-          :key="idx"
-          v-if="input !== ''"
-          v-model="team1Inputs[idx]"
-          readonly
-          class="p-2 border rounded w-[100px]  bg-gray-600 text-white  cursor-not-allowed text-center"
-          placeholder="X"
-        />
-<div class="flex justify-center items-center">
-                                  <button
-          v-if="currentTeamIndex === 1"
-          @click="submitTeam1"
-          class="bg-purple-600 text-white px-4 w-[100px]  cursor-pointer py-2 rounded-lg hover:bg-purple-700 shadow-md transition"
-        >
-          أرسل
-        </button>
-        <input
-          v-if="currentTeamIndex === 1"
-          v-model="team1Inputs[switchCount]"
-          class="p-2 border rounded w-[100px] bg-amber-300 text-black text-center ml-3"
-          placeholder="أدخل الإجابة"
-        />
-</div>
-      </div>
-    </div>
     <!-- الفريق الثاني -->
     <div class="flex-1 bg-white rounded-lg p-6 shadow-md">
       <h3 class="text-lg font-semibold text-center text-purple-900 mb-4">الفريق الثاني</h3>
@@ -306,6 +271,41 @@ v-if="showModal2"
           placeholder="أدخل الإجابة"
         />
         </div>
+      </div>
+    </div>
+        <!-- الفريق الأول -->
+    <div class="flex-1  bg-white rounded-lg p-6 shadow-md">
+      <h3 class="text-lg font-semibold text-center text-purple-900 mb-4">الفريق الأول</h3>
+      <!-- النقاط الحالية -->
+      <!-- <div v-if="currentTeamIndex === 1" class="text-center text-2xl font-bold text-purple-900 mb-4">
+        {{ currentPoints }}
+      </div> -->
+      <!-- الإدخالات -->
+      <div class="flex flex-wrap gap-2 justify-start">
+        <input
+          v-for="(input, idx) in team1Inputs.slice(0, switchCount)"
+          :key="idx"
+          v-if="input !== ''"
+          v-model="team1Inputs[idx]"
+          readonly
+          class="p-2 border rounded w-[100px]  bg-gray-600 text-white  cursor-not-allowed text-center"
+          placeholder="X"
+        />
+<div class="flex justify-center items-center">
+                                  <button
+          v-if="currentTeamIndex === 1"
+          @click="submitTeam1"
+          class="bg-purple-600 text-white px-4 w-[100px]  cursor-pointer py-2 rounded-lg hover:bg-purple-700 shadow-md transition"
+        >
+          أرسل
+        </button>
+        <input
+          v-if="currentTeamIndex === 1"
+          v-model="team1Inputs[switchCount]"
+          class="p-2 border rounded w-[100px] bg-amber-300 text-black text-center ml-3"
+          placeholder="أدخل الإجابة"
+        />
+</div>
       </div>
     </div>
   </div>
