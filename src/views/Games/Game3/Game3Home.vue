@@ -5,17 +5,25 @@
 <div>
     <nav style="font-family: 'Kufam', 'sans-serif';" class="flex flex-col sm:flex-row sm:justify-between sm:items-center rounded-3xl bg-white text-black p-4 shadow-md gap-3 sm:gap-0">
   <!-- زر دور الفريق -->
-  <button @click="toggleTeam"
-    class="relative w-full sm:w-1/4 bg-[#ECE1FB] border-2 border-[#3F0092] px-4 py-2 sm:py-3 rounded-full flex items-center justify-center sm:justify-start cursor-pointer">
-    <span class="text-[#24054D] font-bold text-sm sm:text-base">
-      {{ $t("teamTurn") }} {{ currentTeam === 1 ? team1Name : team2Name }}
-    </span>
-    <img
-      src="../../../assets/imgs/switch.svg"
-      alt="Switch"
-      class="w-8 h-8 sm:w-13 sm:h-13 absolute sm:-left-3 sm:top-1/2 sm:-translate-y-1/2 hidden sm:block"
-    />
-  </button>
+<button
+  @click="toggleTeam"
+  :disabled="selectedRound === 3"
+  :class="[
+    'relative w-full sm:w-1/4 px-4 py-2 sm:py-3 rounded-full flex items-center justify-center sm:justify-start',
+    selectedRound === 3
+      ? 'bg-gray-300 border-gray-400 text-gray-500 cursor-not-allowed'
+      : 'bg-[#ECE1FB] border-2 border-[#3F0092] text-[#24054D] font-bold cursor-pointer'
+  ]"
+>
+  <span class="text-sm sm:text-base font-bold">
+    {{ $t("teamTurn") }} {{ currentTeam === 1 ? team1Name : team2Name }}
+  </span>
+  <img
+    src="../../../assets/imgs/switch.svg"
+    alt="Switch"
+    class="w-8 h-8 sm:w-13 sm:h-13 absolute sm:-left-3 sm:top-1/2 sm:-translate-y-1/2 hidden sm:block"
+  />
+</button>
   <!-- العنوان -->
   <h1 class="text-lg sm:text-xl font-bold text-[#24054D] text-center flex-1 order-first sm:order-none">
      {{ $t("gameThree") }}
@@ -76,24 +84,266 @@
 >
   تحدّي الرسم
 </button>
-    <!-- كلمة السر -->
-    <button
-      @click="selectedRound = 3"
-      :class="[
-        'px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold',
-        selectedRound === 3
-          ? 'bg-indigo-600 text-white'
-          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-      ]"
-    >
-      كلمة السر
-    </button>
+<button
+  @click="selectedRound = 3"
+  :class="[
+    'px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold transition',
+    selectedRound === 3
+      ? 'bg-indigo-600 text-white'
+      : round2Completed
+        ? 'bg-green-500 text-white animate-bounce'
+        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+  ]"
+>
+  كلمة السر
+</button>
           <div class="ms-auto flex items-center gap-2">
           </div>
         </div>
 </div>
 </div>
+<div v-if="selectedRound === 3" class="flex flex-col sm:flex-row sm:flex-wrap justify-between gap-4 mb-6">
+  <div class="bg-white rounded-lg p-4 shadow-md w-full sm:w-[30%]">
+    <h3 class="text-lg font-semibold mb-2 text-center text-[#24054D]">
+      الأسئلة المشتركة
+    </h3>
+    <div class="space-y-2">
+      <!-- إذا فيه أسئلة -->
+      <template v-if="questionsRound3.length > 0">
+<button
+  v-for="(question, index) in questionsRound3"
+  :key="question.id || index"
+  @click="selectQuestion3(question)"
+  :class="[
+    'w-full py-2 rounded-lg shadow-sm transition border font-bold cursor-pointer',
+    answeredQuestionsRound3.includes(question.id)
+      ? 'bg-[#24054D] text-white cursor-not-allowed'  // سؤال تم الإجابة عليه
+      : currentQuestion3?.id === question.id
+        ? 'bg-[#24054D] text-white'  // السؤال الحالي
+        : 'bg-[#FCFAFF] text-[#B984FF] border-[#ECE1FB]' // باقي الأسئلة
+  ]"
+>
+  أظهر السؤال
+</button>
+      </template>
+      <!-- إذا ما فيهش أسئلة -->
+      <template v-else>
+        <div class="w-full py-2 rounded-lg shadow-sm border text-center text-sm italic text-gray-400 bg-[#F9F9F9]">
+          لا توجد أسئلة
+        </div>
+      </template>
+    </div>
+  </div>
+</div>
+   <!-- Modal 2 -->
 <div>
+<div
+v-if="showModal2"
+  :class="[
+    'fixed inset-0 bg-black/50 flex justify-center z-50 px-2 sm:px-4 py-6 overflow-y-auto',
+    selectedRound === 3 ? 'items-start' : 'items-center'
+  ]"
+>
+  <div
+    class="bg-white rounded-[20px] shadow-lg relative w-full min-h-[400px] sm:w-[90%] max-w-[1100px] p-6 sm:p-8 flex flex-col-reverse lg:flex-row gap-6 border-[4px] border-[#D6B4FF]"
+    :dir="currentLang === 'ar' ? 'ltr' : 'rtl'"
+  >
+    <!-- زر الإغلاق -->
+<button
+  @click="showModal2 = false; timor = 15; showTimor = false; switchCount = 0; team1Inputs = Array(12).fill(''); team2Inputs = Array(12).fill(''); currentPoints = pointsSteps[0]; isReady3 = false; showAnswer3 = false; questionRevealed3 = false"
+  class="absolute top-4 left-4 cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md"
+>
+  ✕
+</button>
+    <!-- الجانب الأيسر -->
+<!-- داخل المودال -->
+<div class="flex-1 text-center w-full " >
+  <!-- لو السؤال لسه ما اتكشفش -->
+<div v-if="!questionRevealed3" class="flex flex-col justify-between items-center h-full">
+    <img src="../../../assets/imgs/scan.png" class="w-64 h-64 mx-auto mb-4" />
+    <button
+      @click="questionRevealed3 = true"
+      class="bg-[#24B758] cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
+      أظهر السؤال
+    </button>
+  </div>
+  <!-- لو السؤال اتكشف -->
+<div v-else>
+  <h2 class="text-2xl font-bold text-[#24054D] mb-6">
+    {{ currentQuestion3?.question_text || $t("noTitle") }}
+  </h2>
+   <div class="media-container mx-auto mb-6">
+    <video
+      v-if="currentQuestion3?.question_video"
+      :src="getMediaUrl(currentQuestion3)"
+      controls
+      class="max-h-[250px] w-auto mx-auto rounded-md"
+    ></video>
+    <img
+      v-else
+      :src="getMediaUrl(currentQuestion3)"
+      alt="صورة السؤال"
+      class="mx-auto max-h-[150px] rounded-md"
+    />
+  </div>
+<!-- زر جاهز / أظهر الإجابة / تقييم الإجابة -->
+<div class="flex justify-center flex-col items-center w-full">
+  <!-- زر جاهز -->
+  <button
+    v-if="!isReady3 && !awaitingValidation3"
+    @click="handleReady3"
+    class="bg-indigo-600 cursor-pointer hover:bg-indigo-800 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
+    جاهز ؟
+  </button>
+  <!-- زر أظهر الإجابة -->
+  <button
+    v-else-if="isReady3 && !awaitingValidation3"
+    @click="handleReveal3"
+    class="bg-orange-500 cursor-pointer hover:bg-orange-600 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
+    أظهر الإجابة
+  </button>
+<div v-if="isReady3" class="flex flex-col gap-6 p-4 relative bg-gray-50 w-full rounded-lg">
+  <!-- شريط المؤقت والنقاط -->
+  <div
+    v-if="showTimor"
+    class="absolute top-4 left-1/2 transform -translate-x-1/2 flex flex-col sm:flex-row items-center justify-between gap-4 bg-white shadow-xl rounded-xl p-4 border-2 border-purple-600 animate-fadeIn w-[90%] max-w-md"
+  >
+    <!-- المؤقت -->
+    <div class="flex items-center gap-2">
+      <span class="text-2xl font-extrabold text-red-600 animate-pulse">{{ timor }}s</span>
+      <svg class="w-6 h-6 text-red-600 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke-width="4" stroke-opacity="0.25"/>
+        <path d="M12 2a10 10 0 0 1 10 10" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <!-- النقاط -->
+    <div class="text-center sm:text-left">
+      <p class="text-purple-700 font-semibold text-lg">نقاط: {{ currentPoints }}</p>
+    </div>
+    <!-- أزرار التحكم -->
+    <div class="flex gap-2 sm:gap-4">
+      <button
+        @click="markCorrect"
+        class="bg-green-600 hover:bg-green-700  cursor-pointer text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
+      >
+        إجابة صحيحة
+      </button>
+      <button
+        @click="switchTeam"
+        class="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
+      >
+        تبديل الفريق
+      </button>
+    </div>
+  </div>
+  <!-- الفرق -->
+  <div class="flex flex-col lg:flex-row gap-6">
+    <!-- الفريق الأول -->
+    <div class="flex-1  bg-white rounded-lg p-6 shadow-md">
+      <h3 class="text-lg font-semibold text-center text-purple-900 mb-4">الفريق الأول</h3>
+      <!-- النقاط الحالية -->
+      <!-- <div v-if="currentTeamIndex === 1" class="text-center text-2xl font-bold text-purple-900 mb-4">
+        {{ currentPoints }}
+      </div> -->
+      <!-- الإدخالات -->
+      <div class="flex flex-wrap gap-2 justify-start">
+        <input
+          v-for="(input, idx) in team1Inputs.slice(0, switchCount)"
+          :key="idx"
+          v-if="input !== ''"
+          v-model="team1Inputs[idx]"
+          readonly
+          class="p-2 border rounded w-[100px]  bg-gray-600 text-white  cursor-not-allowed text-center"
+          placeholder="X"
+        />
+<div class="flex justify-center items-center">
+                                  <button
+          v-if="currentTeamIndex === 1"
+          @click="submitTeam1"
+          class="bg-purple-600 text-white px-4 w-[100px]  cursor-pointer py-2 rounded-lg hover:bg-purple-700 shadow-md transition"
+        >
+          أرسل
+        </button>
+        <input
+          v-if="currentTeamIndex === 1"
+          v-model="team1Inputs[switchCount]"
+          class="p-2 border rounded w-[100px] bg-amber-300 text-black text-center ml-3"
+          placeholder="أدخل الإجابة"
+        />
+</div>
+      </div>
+    </div>
+    <!-- الفريق الثاني -->
+    <div class="flex-1 bg-white rounded-lg p-6 shadow-md">
+      <h3 class="text-lg font-semibold text-center text-purple-900 mb-4">الفريق الثاني</h3>
+      <!-- النقاط الحالية -->
+      <!-- <div v-if="currentTeamIndex === 2" class="text-center text-2xl font-bold text-purple-900 mb-4">
+        {{ currentPoints }}
+      </div> -->
+      <!-- الإدخالات -->
+      <div class="flex flex-wrap gap-2 justify-start">
+        <input
+          v-for="(input, idx) in team2Inputs.slice(0, switchCount)"
+          :key="idx"
+          v-if="input !== ''"
+          v-model="team2Inputs[idx]"
+          readonly
+          class="p-2 border rounded w-[100px]  bg-gray-600 text-white  cursor-not-allowed text-center"
+          placeholder="X"
+        />
+        <div class="flex justify-center items-center">
+                                          <button
+          v-if="currentTeamIndex === 2"
+          @click="submitTeam2"
+          class="bg-purple-600 text-white  cursor-pointer px-4 w-[100px] py-2 rounded-lg hover:bg-purple-700 shadow-md transition"
+        >
+          أرسل
+        </button>
+        <input
+          v-if="currentTeamIndex === 2"
+          v-model="team2Inputs[switchCount]"
+          class="p-2 border rounded w-[100px] bg-amber-300 text-black  text-center ml-3"
+          placeholder="أدخل الإجابة"
+        />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- الإجابة -->
+  <div v-if="showAnswer3" class="mt-4 p-4 bg-green-100 text-green-800 rounded-lg font-bold">
+    {{ currentQuestion3?.correct_answer || 'لا توجد إجابة' }}
+  </div>
+<!-- تقييم الإجابة -->
+<div v-if="awaitingValidation" class="flex flex-col items-center gap-4 mt-4">
+  <!-- النص التوضيحي -->
+<p class="text-lg font-semibold text-[#24054D]">
+  هل أجاب الفريق
+  <span dir="auto" class="font-bold text-indigo-700">
+    {{ currentTeam === 1 ? team1Name : team2Name }}
+  </span>
+  الإجابة الصحيحة؟
+</p>
+  <!-- الأزرار -->
+  <div class="flex gap-4">
+    <button
+      @click="validateAnswer(true)"
+      class="bg-green-600 cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
+     {{ $t("correct") }}
+    </button>
+    <button
+      @click="validateAnswer(false)"
+      class="bg-red-600 cursor-pointer hover:bg-red-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
+    {{ $t("wrong") }}
+    </button>
+  </div>
+</div>
+</div>
+</div>
+</div>
+    <!-- الجانب الأيمن -->
+  </div>
+</div>
     <!-- Questions Grid -->
 <!-- الأعمدة للجولة الأولى -->
 <div v-if="selectedRound === 1" class="flex flex-col sm:flex-row sm:flex-wrap justify-between gap-4 mb-6">
@@ -360,7 +610,7 @@
   </div>
 <DrowBoard v-if="selectedRound === 2 && showDrawingBoard" />
 <!-- زر جاهز / أظهر الإجابة / تقييم الإجابة -->
-<div class="flex justify-center flex-col items-center">
+<div class="flex justify-center flex-col items-center ">
   <!-- زر جاهز -->
   <button
     v-if="!isReady && !awaitingValidation"
@@ -436,6 +686,7 @@
     </div>
   </div>
 </div>
+<!-- ---------- -->
 </template>
 <script setup>
 /* -------------------- 1. الإستيراد -------------------- */
@@ -448,6 +699,129 @@ import bg from '../../../assets/imgs/splash.png';
 import placeholderImg from '../../../assets/imgs/upload.png';
 import { useToast } from "vue-toastification"
 import DrowBoard from '../../../components/DrowBoard.vue';
+/* ----------------  Round 3 ----------------------  */
+// بيانات الفريقين
+const team1Inputs = ref(Array(12).fill(''));
+const team2Inputs = ref(Array(12).fill(''));
+const pointsSteps = [60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5,0];
+const switchCount = ref(0);
+const currentTeamIndex = ref(1); // الفريق الحالي (1 أو 2)
+const showTimor = ref(false);
+const timor = ref(15);
+const currentPoints = ref(60); // مهم جدا
+let timerInterval = null;
+// دالة بدء المؤقت
+const startTimor = (points) => {
+  showTimor.value = true;
+  currentPoints.value = points;
+  timor.value = 15;
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (timor.value > 0 && currentPoints.value > 0) { // شرط جديد
+      timor.value--;
+    } else {
+      clearInterval(timerInterval);
+      // الوقت انتهى أو النقاط وصلت 0 → بدّل الفريق أو انهي السؤال
+      if (currentPoints.value <= 0) {
+        endQuestion3(); // ننهي السؤال فورًا
+      } else {
+        switchTeam();
+      }
+    }
+  }, 1000);
+};
+// إرسال الفريق الأول
+const submitTeam1 = () => {
+  startTimor(currentPoints.value);
+};
+const submitTeam2 = () => {
+  startTimor(currentPoints.value);
+};
+// دالة لإنهاء السؤال وإعادة كل شيء للديفولت
+const endQuestion3 = () => {
+  timor.value = 15;
+  showTimor.value = false;
+  switchCount.value = 0;
+  team1Inputs.value = Array(12).fill('');
+  team2Inputs.value = Array(12).fill('');
+  currentPoints.value = pointsSteps[0];
+  isReady3.value = false;
+  showAnswer3.value = false;
+  questionRevealed3.value = false;
+  showModal2.value = false;
+  // يمكن إضافة أي عمليات إضافية عند انتهاء السؤال
+  toast.info('انتهى السؤال ');
+};
+// تعديل switchTeam لتتحقق من النقاط
+const switchTeam = () => {
+  switchCount.value++;
+  if (switchCount.value >= pointsSteps.length) {
+    endQuestion3();
+    return;
+  }
+  currentPoints.value = pointsSteps[switchCount.value];
+  currentTeamIndex.value = currentTeamIndex.value === 1 ? 2 : 1;
+  timor.value = 15;
+  showTimor.value = false;
+};
+const currentQuestion3 = ref(null);
+const questionsRound3 = ref([]);
+const answeredQuestionsRound3 = ref([]);
+const questionRevealed3 = ref(false);
+const showModal2 = ref(false);
+const isReady3 = ref(false);
+const awaitingValidation3 = ref(false);
+const showAnswer3 = ref(false);
+const selectQuestion3 = (question) => {
+  if (!answeredQuestionsRound3.value.includes(question.id)) {
+    answeredQuestionsRound3.value.push(question.id);
+    currentQuestion3.value = question;
+    questionRevealed3.value = false;
+    isReady3.value = false;
+    awaitingValidation3.value = false;
+    showAnswer3.value = false;
+    showTimor.value = false;
+    timor.value = 15;
+    currentPoints.value = pointsSteps[0];
+    team1Inputs.value = Array(12).fill('');
+    team2Inputs.value = Array(12).fill('');
+    switchCount.value = 0;
+    showModal2.value = true;
+  }
+};
+const handleReady3 = () => {
+  isReady3.value = true;
+};
+const handleReveal3 = () => {
+  showAnswer3.value = true;
+  awaitingValidation3.value = false;
+};
+const markCorrect = () => {
+  if (!currentQuestion3.value) return;
+  const points = currentPoints.value || 0;
+  // إضافة النقاط للفريق الحالي
+  if (currentTeamIndex.value === 1) {
+    score1.value += points;
+  } else {
+    score2.value += points;
+  }
+  toast.success(`تم إضافة ${points} نقطة للفريق ${currentTeamIndex.value === 1 ? team1Name.value : team2Name.value}`);
+  // أعد ضبط القيم قبل تبديل الفريق
+  timor.value = 15;
+  showTimor.value = false;
+  switchCount.value = 0;
+  team1Inputs.value = Array(12).fill('');
+  team2Inputs.value = Array(12).fill('');
+  currentPoints.value = pointsSteps[0];
+  isReady3.value = false;
+  showAnswer3.value = false;
+  questionRevealed3.value = false;
+  // بدل الفريق تلقائيًا
+  currentTeamIndex.value = currentTeamIndex.value === 1 ? 2 : 1;
+  // ابقي المودال مفتوحًا للفريق التالي
+  showModal2.value = false;
+};
+/*  -------------------- Round 3 ------------------------- */
 const toast = useToast()
 const selectedRound = ref(1);
 /* -------------------- 2. التوجيه (Router + Params) -------------------- */
@@ -473,10 +847,8 @@ const decreaseScore2 = () => score2.value = Math.max(0, score2.value - 10);
 /* -------------------- 4. الأسئلة -------------------- */
 const questions = ref([]);
 const questionsRound2 = ref([]);
-const questionsRound3 = ref([]);
 const answeredQuestions = ref([]);
 const answeredQuestionsRound2 = ref([]);
-const answeredQuestionsRound3 = ref([]);
 const loadQuestions = () => {
   if (data && data.data && data.data.length > 0) {
     const all = data.data[0].questions.map(question => ({
@@ -499,6 +871,7 @@ const loadQuestions = () => {
     console.error('No questions loaded from JSON');
   }
 };
+/*------------------------------------------*/
 /* -------------------- 5. عرض السؤال والإجابة -------------------- */
 const showModal = ref(false);
 const currentQuestion = ref(null);
@@ -619,18 +992,18 @@ const revealAnswer = () => {
   clearInterval(countdownInterval);
 };
 const confirmAnswer = (isCorrect) => {
-  showModal.value = false;
-  showAnswer.value = false;
-  let pointsToAdd = 0;
-  if (isCorrect) {
-    pointsToAdd = currentQuestion.value.points || 0;
-    if (blockPoints.value) pointsToAdd = 0;
-    else if (doublePoints.value) pointsToAdd *= 2;
-  }
-  if (currentTeam.value === 1) score1.value += pointsToAdd;
-  else score2.value += pointsToAdd;
-  answerResult.value = isCorrect ? "correct" : "wrong";
-  toggleTeam();
+    showModal.value = false;
+    showAnswer.value = false;
+    let pointsToAdd = 0;
+    if (isCorrect) {
+      pointsToAdd = currentQuestion.value.points || 0;
+      if (blockPoints.value) pointsToAdd = 0;
+      else if (doublePoints.value) pointsToAdd *= 2;
+    }
+    if (currentTeam.value === 1) score1.value += pointsToAdd;
+    else score2.value += pointsToAdd;
+    answerResult.value = isCorrect ? "correct" : "wrong";
+    toggleTeam();
 };
 /* -------------------- 6. المؤقت -------------------- */
 const timer = ref(60);
@@ -718,6 +1091,17 @@ watch(round1Completed, (completed) => {
     })
   }
 })
+const round2Completed = computed(() => {
+  return answeredQuestionsRound2.value.length >= questionsRound2.value.length;
+});
+watch(round2Completed, (completed) => {
+  if (completed) {
+    toast.success("✅ أحسنت! اضغط على 'كلمة السر' للانتقال للجولة الثالثة", {
+      timeout: 4000,
+      position: "top-center",
+    });
+  }
+});
 </script>
 <style scoped>
 /* .rouned {
