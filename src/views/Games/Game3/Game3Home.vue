@@ -58,41 +58,40 @@
 </nav>
 <div class="flex flex-col sm:flex-row items-center  sm:items-center rounded-xl mt-2 mb-3 bg-white text-black p-4 shadow-md gap-3 sm:gap-0">
         <div class="flex flex-wrap items-center gap-2 ">
-              <h2 class="font-bold">الجولات : </h2>
+              <h2 class="font-bold text-xl">الجولة الحالية  </h2>
+<!-- الجولة 1 -->
 <button
-      @click="selectedRound = 1"
-      :class="[
-        'px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold',
-        selectedRound === 1
-          ? 'bg-indigo-600 text-white'
-          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-      ]"
-    >
-      بدون كلام
-    </button>
-    <!-- تحدي الرسم -->
-<button
-  @click="selectedRound = 2"
+v-if="selectedRound == 1  "
+  :disabled="selectedRound !== 1"
   :class="[
-    'px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold transition',
-    selectedRound === 2
-      ? 'bg-indigo-600 text-white'
-      : round1Completed
-        ? 'bg-green-500 text-white animate-bounce'
-        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+    'px-3 py-2 rounded-lg text-xl font-semibold',
+    selectedRound === 1 ? 'bg-indigo-600 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+  ]"
+>
+  بدون كلام
+</button>
+<!-- الجولة 2 -->
+<button
+v-if="selectedRound == 2"
+  :disabled="!round1Completed"
+  :class="[
+   'px-3 py-2 rounded-lg text-xl font-semibold',
+    selectedRound === 2 ? 'bg-indigo-600 text-white'
+      : !round1Completed ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+      : 'bg-green-500 text-white animate-bounce'
   ]"
 >
   تحدّي الرسم
 </button>
+<!-- الجولة 3 -->
 <button
-  @click="selectedRound = 3"
+v-if="selectedRound == 3"
+  :disabled="!round2Completed"
   :class="[
-    'px-3 py-2 rounded-lg text-sm cursor-pointer font-semibold transition',
-    selectedRound === 3
-      ? 'bg-indigo-600 text-white'
-      : round2Completed
-        ? 'bg-green-500 text-white animate-bounce'
-        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+    'px-3 py-2 rounded-lg text-xl font-semibold',
+    selectedRound === 3 ? 'bg-indigo-600 text-white'
+      : !round2Completed ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+      : 'bg-green-500 text-white animate-bounce'
   ]"
 >
   كلمة السر
@@ -170,7 +169,7 @@ v-if="showModal2"
   <!-- لو السؤال اتكشف -->
 <div v-else>
   <h2 class="text-2xl font-bold text-[#24054D] mb-6">
-    {{ currentQuestion3?.question_text || $t("noTitle") }}
+    <!-- {{ currentQuestion3?.question_text || $t("noTitle") }} -->
   </h2>
    <div class="media-container mx-auto mb-6">
     <video
@@ -580,7 +579,7 @@ v-if="showModal2"
   <!-- لو السؤال اتكشف -->
 <div v-else>
   <h2 class="text-2xl font-bold text-[#24054D] mb-6">
-    {{ currentQuestion?.question_text || $t("noTitle") }}
+    <!-- {{ currentQuestion?.question_text || $t("noTitle") }} -->
   </h2>
 <!-- المؤقت -->
 <div v-if="isReady || awaitingValidation" class="flex items-center justify-center mb-4 gap-4">
@@ -700,6 +699,7 @@ import placeholderImg from '../../../assets/imgs/upload.png';
 import { useToast } from "vue-toastification"
 import DrowBoard from '../../../components/DrowBoard.vue';
 /* ----------------  Round 3 ----------------------  */
+const changer = ref(false);
 // بيانات الفريقين
 const team1Inputs = ref(Array(12).fill(''));
 const team2Inputs = ref(Array(12).fill(''));
@@ -881,11 +881,11 @@ const selectedQuestion = ref(null);
 const selectedColumn = ref(null);
 const doublePoints = ref(false);
 const blockPoints = ref(false);
-const currentLang = ref('ar'); // افتراضيًا اللغة العربية
+const currentLang = ref('ar');
 const selectQuestion = (question, column) => {
   if (selectedRound.value === 1) {
   if (!answeredQuestions.value.includes(question.id)) {
-    answeredQuestions.value.push(question.id);
+    // answeredQuestions.value.push(question.id);
     selectedQuestion.value = question.points;
     selectedColumn.value = column;
     currentQuestion.value = question;
@@ -947,6 +947,7 @@ const validateAnswer = (isCorrect) => {
     isPaused.value = true
     timer.value = 0
     toggleTeam();
+        answeredQuestions.value.push(currentQuestion.value.id);
     showModal.value = false
   } else {
     if (!isTransferred.value) {
@@ -960,6 +961,7 @@ const validateAnswer = (isCorrect) => {
       showAnswer.value = false
       isPaused.value = true
       timer.value = 0
+          answeredQuestions.value.push(currentQuestion.value.id);
       showModal.value = false
       currentTeam.value = currentTeam.value === 1 ? 2 : 1
       toggleTeam();
@@ -992,6 +994,7 @@ const revealAnswer = () => {
   clearInterval(countdownInterval);
 };
 const confirmAnswer = (isCorrect) => {
+      answeredQuestions.value.push(currentQuestion.value.id);
     showModal.value = false;
     showAnswer.value = false;
     let pointsToAdd = 0;
@@ -1085,10 +1088,11 @@ const round1Completed = computed(() => {
 })
 watch(round1Completed, (completed) => {
   if (completed) {
-    toast.success("✅ أحسنت! اضغط على 'تحدي الرسم' للانتقال للجولة الثانية", {
-      timeout: 4000,
+    toast.success("✅ أحسنت! الانتقال للجولة الثانية...", {
+      timeout: 3000,
       position: "top-center",
     })
+    selectedRound.value = 2
   }
 })
 const round2Completed = computed(() => {
@@ -1102,6 +1106,18 @@ watch(round2Completed, (completed) => {
     });
   }
 });
+const round3Completed  = ref(true);
+watch(round1Completed, (val) => {
+  if (val) selectedRound.value = 2
+})
+watch(round2Completed, (val) => {
+  if (val) selectedRound.value = 3
+})
+watch(round3Completed, (val) => {
+  if (val) {
+    showEndGameModal.value = true
+  }
+})
 </script>
 <style scoped>
 /* .rouned {
