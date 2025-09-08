@@ -17,36 +17,53 @@
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div class="flex flex-col text-right">
               <label class="text-[#663D9C] mb-1  text-justify">{{ $t('firstName') }}</label>
-              <input v-model="lname" type="text" :placeholder="$t('pleaseEnterUserName')"
-                class="p-2 rounded-3xl text-[#24054C] bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none text-right placeholder-[#D5C1EE]" />
+<input
+  v-model="lname"
+  type="text"
+  :placeholder="$t('enterName')"
+  :class="[
+    'p-2 rounded-3xl text-[#24054C] bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none',
+  ]"
+/>
             </div>
             <div class="flex flex-col text-right">
               <label class="text-[#663D9C] mb-1  text-justify"> {{ $t('lastName') }}</label>
-              <input v-model="fname" type="text"
-                class="p-2 rounded-3xl text-[#24054C] bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none text-right placeholder-[#D5C1EE]"
-                placeholder="سجل الإسم" />
+<input
+  v-model="fname"
+  type="text"
+  :placeholder="$t('enterName')"
+  :class="[
+    'p-2 rounded-3xl text-[#24054C] bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none',
+  ]"
+/>
             </div>
           </div>
           <div class="flex flex-col text-right">
             <label class="text-purple-800 mb-1  text-justify">{{ $t('email') }}</label>
             <input type="email" v-model="email" :placeholder="$t('pleaseEnterEmail')"
-              class="p-2 placeholder-[#D5C1EE] text-[#24054C] font-bold text-left rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" />
+              class="p-2 placeholder-[#D5C1EE] text-[#24054C] font-bold  rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" />
           </div>
           <div class="flex flex-col text-right">
             <label class="text-purple-800 mb-1  text-justify">{{ $t('phone') }}</label>
             <input type="tel" v-model="phone" :placeholder="$t('pleaseEnterPhone')"
-              class="p-2 placeholder-[#D5C1EE] text-[#24054C] text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" />
+              class="p-2 placeholder-[#D5C1EE] text-[#24054C]  rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" />
+          </div>
+          <!-- حقل كلمة المرور الجديدة -->
+          <div class="flex flex-col text-right">
+            <label class="text-purple-800 mb-1 text-justify">{{ $t('newPassword') }}</label>
+            <input type="password" v-model="password" placeholder="********"
+              class="p-2 placeholder-[#D5C1EE] text-[#24054C]  rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none" />
           </div>
           <div class="flex justify-center items-center gap-3 mt-6">
             <button @click="changeLang('ar')" :class="`px-4 py-2 rounded-full font-semibold transition-all duration-300   cursor-pointer ${$i18n.locale === 'ar'
-                ? 'bg-[#663D9C] text-white shadow-md'
-                : 'bg-purple-100 text-[#663D9C] hover:bg-purple-200'
+              ? 'bg-[#663D9C] text-white shadow-md'
+              : 'bg-purple-100 text-[#663D9C] hover:bg-purple-200'
               }`">
               🇪🇬 العربية
             </button>
             <button @click="changeLang('en')" :class="`px-4 py-2 rounded-full font-semibold transition-all duration-300  cursor-pointer ${$i18n.locale === 'en'
-                ? 'bg-[#663D9C] text-white shadow-md'
-                : 'bg-purple-100 text-[#663D9C] hover:bg-purple-200'
+              ? 'bg-[#663D9C] text-white shadow-md'
+              : 'bg-purple-100 text-[#663D9C] hover:bg-purple-200'
               }`">
               🇺🇸 English
             </button>
@@ -182,15 +199,16 @@ const handleUpdateProfile = async () => {
       email: email.value,
       phone: phone.value,
       country_code,
-      lang: locale.value  // أهم شيء: نرسل اللغة الحالية
+      lang: locale.value
     }
-    if (password.value.trim()) payload.password = password.value.trim()
+    if (password.value.trim()) payload.password = password.value.trim() // ✅ إرسال كلمة المرور الجديدة فقط إذا تم إدخالها
     const res = await updateProfile(payload)
     toast.success(res.data.message || 'تم تحديث بياناتك بنجاح')
     // تحديث localStorage
     localStorage.setItem('name', payload.name)
     localStorage.setItem('email', payload.email)
     localStorage.setItem('phone', payload.phone)
+    password.value = '' // مسح الحقل بعد التحديث
   } catch (err) {
     toast.error(err.response?.data?.message || 'فشل التحديث')
   }

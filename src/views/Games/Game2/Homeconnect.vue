@@ -45,7 +45,7 @@
   <div v-if="showModal"
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-1000 px-2 sm:px-4 py-6 overflow-y-auto">
     <div
-      class="bg-white rounded-[20px] shadow-lg relative w-full sm:w-[90%] max-w-[500px] h-[600px] p-4 sm:p-6 flex flex-col gap-4 justify-between items-center">
+      class="bg-white rounded-[20px] shadow-lg relative w-full sm:w-[90%] max-w-[500px] h-[650px] p-4 sm:p-6 flex flex-col gap-4 justify-between items-center">
       <!-- زر الإغلاق -->
       <img src="../../../assets/imgs/close_btn.svg" alt="Close" @click="closeModal"
         class="absolute top-[-15px] right-[-15px] cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md" />
@@ -78,12 +78,19 @@
         <h2 class="text-[#024E28] text-xl font-bold text-center w-full mb-6">
           {{ currentQuestion.title || $t("noTitle")  }}
         </h2>
-        <!-- فيديو -->
-        <video v-if="currentQuestion?.question_video" :src="getMediaUrl(currentQuestion)" controls
-          class="max-h-[300px] w-auto mx-auto rounded-md" @error="handleVideoError"></video>
-        <!-- صورة -->
-        <img v-else :src="getMediaUrl(currentQuestion)" alt="صورة السؤال"
-          class="max-h-[250px] w-auto mx-auto rounded-md" />
+                <div class="media-container mx-auto mb-6">
+          <!-- فيديو -->
+          <video v-if="currentQuestion?.question_video" :src="getMediaUrl(currentQuestion)" controls
+            class="max-h-[250px] w-auto mx-auto rounded-md"></video>
+          <!-- صورة -->
+          <img v-else-if="currentQuestion?.question_image" :src="getMediaUrl(currentQuestion)"
+            :alt="$t('questionImage')" class="mx-auto max-h-[150px] rounded-md" />
+          <!-- أوديو -->
+          <audio v-else-if="currentQuestion?.question_audio" :src="getMediaUrl(currentQuestion)" controls
+            class="mx-auto mt-4"></audio>
+          <!-- Placeholder -->
+          <img v-else :src="placeholderImg" :alt="$t('noMedia')" class="mx-auto max-h-[150px] rounded-md" />
+        </div>
       </div>
       <!-- زر إظهار الإجابة -->
       <button v-if="!showAnswer && currentQuestion && currentQuestion.id !== -1" @click="revealAnswer"
@@ -189,7 +196,7 @@ onMounted(async () => {
   }
   try {
       const currentLang = locale.value
-    const res = await getCategories({}, currentLang)
+const res = await getCategories({ game: 2 }, currentLang)
     const apiData = res?.data?.result?.data || res?.data?.data
     if (!apiData) {
       throw new Error('الـ API لم يرجع بيانات صحيحة')
@@ -226,7 +233,7 @@ onMounted(async () => {
     console.log('📌 الأسئلة:', allQuestions.value)
   } catch (err) {
     console.error('❌ خطأ في جلب الكاتيجوريز:', err)
-    toast.error('فشل في تحميل الكاتيجوريز')
+    toast.error('فشل في تحميل الكاتيج وريز')
   } finally {
     loading.value = false
   }
@@ -321,16 +328,19 @@ const revealAnswer = () => {
 const getMediaUrl = (question) => {
   if (!question) return placeholderImg;
   if (question.question_video) {
-    if (question.question_video.startsWith('http')) {
-      return question.question_video;
-    }
-    return `https://game-wise.smartleadtech.com/${question.question_video.replace(/^\/+/, '')}`;
+    return question.question_video.startsWith('http')
+      ? question.question_video
+      : `https://game-wise.smartleadtech.com/${question.question_video}`;
   }
   if (question.question_image) {
-    if (question.question_image.startsWith('http')) {
-      return question.question_image;
-    }
-    return `https://game-wise.smartleadtech.com/${question.question_image.replace(/^\/+/, '')}`;
+    return question.question_image.startsWith('http')
+      ? question.question_image
+      : `https://game-wise.smartleadtech.com/${question.question_image}`;
+  }
+  if (question.question_audio) {
+    return question.question_audio.startsWith('http')
+      ? question.question_audio
+      : `https://game-wise.smartleadtech.com/${question.question_audio}`;
   }
   return placeholderImg;
 };

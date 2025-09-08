@@ -158,8 +158,11 @@ v-if="showModal2"
 <!-- داخل المودال -->
 <div class="flex-1 text-center w-full " >
   <!-- لو السؤال لسه ما اتكشفش -->
-<div v-if="!questionRevealed3" class="flex flex-col justify-between items-center h-full">
-    <img src="../../../assets/imgs/scan.png" class="w-64 h-64 mx-auto mb-4" />
+<div v-if="!questionRevealed3" class="flex flex-col justify-center items-center h-full">
+    <div class="p-6">
+    <h1 class="text-xl font-bold mb-4">أمسح QR Code لعرض الصورة</h1>
+    <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" />
+  </div>
     <button
       @click="questionRevealed3 = true"
       class="bg-[#24B758] cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
@@ -171,20 +174,13 @@ v-if="showModal2"
   <h2 class="text-2xl font-bold text-[#24054D] mb-6">
     <!-- {{ currentQuestion3?.question_text || $t("noTitle") }} -->
   </h2>
-   <div class="media-container mx-auto mb-6">
-    <video
-      v-if="currentQuestion3?.question_video"
-      :src="getMediaUrl(currentQuestion3)"
-      controls
-      class="max-h-[250px] w-auto mx-auto rounded-md"
-    ></video>
-    <img
-      v-else
-      :src="getMediaUrl(currentQuestion3)"
-      alt="صورة السؤال"
-      class="mx-auto max-h-[150px] rounded-md"
-    />
-  </div>
+        <div class="media-container mx-auto mb-6">
+          <!-- صورة -->
+          <img v-if="currentQuestion?.question_image" :src="getMediaUrl(currentQuestion)"
+            :alt="$t('questionImage')" class="mx-auto max-h-[150px] rounded-md" />
+          <!-- Placeholder -->
+          <img v-else :src="placeholderImg" :alt="$t('noMedia')" class="mx-auto max-h-[150px] rounded-md" />
+        </div>
 <!-- زر جاهز / أظهر الإجابة / تقييم الإجابة -->
 <div class="flex justify-center flex-col items-center w-full">
   <!-- زر جاهز -->
@@ -352,7 +348,7 @@ v-if="showModal2"
       فريق {{ team1Name }}
     </h3>
     <div class="space-y-2">
-      <template v-if="questions.length >= 4">
+      <template v-if="questions.length >= 1">
         <button
           v-for="(question, qIndex) in questions.slice(0, 4)"
           :key="qIndex"
@@ -383,7 +379,7 @@ v-if="showModal2"
       فريق {{ team2Name }}
     </h3>
     <div class="space-y-2">
-      <template v-if="questions.length >= 8">
+      <template v-if="questions.length >= 1">
         <button
           v-for="(question, qIndex) in questions.slice(4, 8)"
           :key="qIndex"
@@ -568,14 +564,19 @@ v-if="showModal2"
 <!-- داخل المودال -->
 <div class="flex-1 text-center " >
   <!-- لو السؤال لسه ما اتكشفش -->
-<div v-if="!questionRevealed" class="flex flex-col justify-between items-center h-full">
-    <img src="../../../assets/imgs/scan.png" class="w-64 h-64 mx-auto mb-4" />
-    <button
-      @click="questionRevealed = true"
-      class="bg-[#24B758] cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
-      أظهر السؤال
-    </button>
-  </div>
+<div v-if="!questionRevealed" class="flex flex-col justify-center items-center h-full text-center px-4">
+  <h2 class="text-xl sm:text-2xl font-semibold text-[#24054D] mb-4 leading-relaxed">
+    جهّز هاتف آخر لمسح الباركود<br />
+    ثم اضغط على <span class="font-bold text-green-600">أظهر السؤال</span>
+  </h2>
+  <img :src="scan" alt="scan" class="h-64 w-64 mb-6 rounded-lg shadow-md" />
+  <button
+    @click="questionRevealed = true"
+    class="bg-[#24B758] hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition transform hover:scale-105"
+  >
+    أظهر السؤال
+  </button>
+</div>
   <!-- لو السؤال اتكشف -->
 <div v-else>
   <h2 class="text-2xl font-bold text-[#24054D] mb-6">
@@ -593,20 +594,17 @@ v-if="showModal2"
     <img :src="isPaused ? playIcon : pauseIcon" class="w-6 h-6" />
   </button>
 </div>
-   <div class="media-container mx-auto mb-6">
-    <video
-      v-if="currentQuestion?.question_video"
-      :src="getMediaUrl(currentQuestion)"
-      controls
-      class="max-h-[250px] w-auto mx-auto rounded-md"
-    ></video>
-    <img
-      v-else
-      :src="getMediaUrl(currentQuestion)"
-      alt="صورة السؤال"
-      class="mx-auto max-h-[150px] rounded-md"
-    />
+        <div class="media-container mx-auto mb-6">
+               <div class="p-6 text-center flex flex-col justify-center items-center">
+    <h1 class="text-xl font-bold mb-4">أمسح الصورة لعرض QR Code</h1>
+    <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" />
   </div>
+          <!-- صورة -->
+          <!-- <img v-if="currentQuestion?.question_image" :src="getMediaUrl(currentQuestion)"
+            :alt="$t('questionImage')" class="mx-auto max-h-[150px] rounded-md" /> -->
+          <!-- Placeholder -->
+          <!-- <img v-else :src="placeholderImg" :alt="$t('noMedia')" class="mx-auto max-h-[150px] rounded-md" /> -->
+        </div>
 <DrowBoard v-if="selectedRound === 2 && showDrawingBoard" />
 <!-- زر جاهز / أظهر الإجابة / تقييم الإجابة -->
 <div class="flex justify-center flex-col items-center ">
@@ -691,13 +689,25 @@ v-if="showModal2"
 /* -------------------- 1. الإستيراد -------------------- */
 import { ref, onMounted ,watch ,computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import data from './sports-category.json';
+// import data from './sports-category.json';
 import playIcon from '../../../assets/imgs/play.png';
+import scan from '../../../assets/imgs/scan.png';
 import pauseIcon from '../../../assets/imgs/pause.svg';
 import bg from '../../../assets/imgs/splash.png';
 import placeholderImg from '../../../assets/imgs/upload.png';
 import { useToast } from "vue-toastification"
 import DrowBoard from '../../../components/DrowBoard.vue';
+import { getCategoryById } from '../../../services/categoryService';
+import QRCode from 'qrcode';
+const qrCodeData = ref('');
+onMounted(async () => {
+  const imageUrl = 'https://game-wise.smartleadtech.com/images/questions/1757344336.jpg';
+  try {
+    qrCodeData.value = await QRCode.toDataURL(imageUrl);
+  } catch (err) {
+    console.error('خطأ في توليد QR code:', err);
+  }
+});
 /* ----------------  Round 3 ----------------------  */
 const changer = ref(false);
 // بيانات الفريقين
@@ -766,13 +776,14 @@ const switchTeam = () => {
 };
 const currentQuestion3 = ref(null);
 const questionsRound3 = ref([]);
+const qrCodes = ref({}); // { [questionId]: qrCodeData }
 const answeredQuestionsRound3 = ref([]);
 const questionRevealed3 = ref(false);
 const showModal2 = ref(false);
 const isReady3 = ref(false);
 const awaitingValidation3 = ref(false);
 const showAnswer3 = ref(false);
-const selectQuestion3 = (question) => {
+const selectQuestion3 = async (question) => {
   if (!answeredQuestionsRound3.value.includes(question.id)) {
     answeredQuestionsRound3.value.push(question.id);
     currentQuestion3.value = question;
@@ -787,6 +798,11 @@ const selectQuestion3 = (question) => {
     team2Inputs.value = Array(12).fill('');
     switchCount.value = 0;
     showModal2.value = true;
+    try {
+      qrCodeData.value = await QRCode.toDataURL(getMediaUrl(question)); // توليد QR للصورة الخاصة بالسؤال
+    } catch (err) {
+      console.error('خطأ في توليد QR code:', err);
+    }
   }
 };
 const handleReady3 = () => {
@@ -849,26 +865,36 @@ const questions = ref([]);
 const questionsRound2 = ref([]);
 const answeredQuestions = ref([]);
 const answeredQuestionsRound2 = ref([]);
-const loadQuestions = () => {
-  if (data && data.data && data.data.length > 0) {
-    const all = data.data[0].questions.map(question => ({
-      id: question.id,
-      title: question.title,
-      question_text: question.question_text,
-      question_image: question.question_image,
-      question_video: question.question_video,
-      question_audio: question.question_audio,
-      correct_answer: question.correct_answer,
-      points: question.points
+import { getCategories } from '../../../services/categoryService';
+const loadQuestions = async (categoryId, currentLang) => {
+  try {
+    const res = await getCategories({ game: 2 }, currentLang);
+    const categoriesData = res?.data?.result?.data || res?.data?.data;
+    if (!categoriesData) {
+      console.error("No categories data received from API");
+      return;
+    }
+    const category = categoriesData.find(cat => cat.id === categoryId);
+    if (!category || !category.questions) {
+      console.error("No questions found for this category");
+      return;
+    }
+    const all = category.questions.map(q => ({
+      id: q.id,
+      title: q.title,
+      question_text: q.question_text,
+      question_image: q.question_image,
+      question_video: q.question_video,
+      question_audio: q.question_audio,
+      correct_answer: q.correct_answer,
+      points: q.points
     }));
-    questions.value = all.slice(0, 8);
-    questionsRound2.value = all.slice(8, 16);
-    questionsRound3.value = all.slice(16);
-    console.log('Loaded questions:', questions.value);
-    console.log('Loaded questionsRound2:', questionsRound2.value);
-    console.log('Loaded questionsRound3:', questionsRound3.value);
-  } else {
-    console.error('No questions loaded from JSON');
+    // slice مع التحقق من عدد الأسئلة المتوفرة
+    questions.value = all.slice(0, Math.min(8, all.length));
+    questionsRound2.value = all.slice(8, Math.min(16, all.length));
+    questionsRound3.value = all.slice(16); // لو ما فيش حاجه هتكون فاضية تلقائياً
+  } catch (error) {
+    console.error("Error loading questions from API:", error);
   }
 };
 /*------------------------------------------*/
@@ -882,28 +908,38 @@ const selectedColumn = ref(null);
 const doublePoints = ref(false);
 const blockPoints = ref(false);
 const currentLang = ref('ar');
-const selectQuestion = (question, column) => {
+const selectQuestion = async (question, column) => {
   if (selectedRound.value === 1) {
-  if (!answeredQuestions.value.includes(question.id)) {
-    // answeredQuestions.value.push(question.id);
-    selectedQuestion.value = question.points;
-    selectedColumn.value = column;
-    currentQuestion.value = question;
-    showModal.value = true;
-    doublePoints.value = false;
-    blockPoints.value = false;
-    questionRevealed.value = false;
-  }
- }else if (selectedRound.value === 2) {
+    if (!answeredQuestions.value.includes(question.id)) {
+      selectedQuestion.value = question.points;
+      selectedColumn.value = column;
+      currentQuestion.value = question;
+      showModal.value = true;
+      doublePoints.value = false;
+      blockPoints.value = false;
+      questionRevealed.value = false;
+      // توليد QR ديناميكي للصورة أو الرابط الخاص بالسؤال
+      try {
+        qrCodeData.value = await QRCode.toDataURL(getMediaUrl(question));
+      } catch (err) {
+        console.error('خطأ في توليد QR code:', err);
+      }
+    }
+  } else if (selectedRound.value === 2) {
     if (!answeredQuestionsRound2.value.includes(question.id)) {
       answeredQuestionsRound2.value.push(question.id);
-     selectedQuestion.value = question.points;
-    selectedColumn.value = column;
-    currentQuestion.value = question;
-    showModal.value = true;
-    doublePoints.value = false;
-    blockPoints.value = false;
-    questionRevealed.value = false;
+      selectedQuestion.value = question.points;
+      selectedColumn.value = column;
+      currentQuestion.value = question;
+      showModal.value = true;
+      doublePoints.value = false;
+      blockPoints.value = false;
+      questionRevealed.value = false;
+      try {
+        qrCodeData.value = await QRCode.toDataURL(getMediaUrl(question));
+      } catch (err) {
+        console.error('خطأ في توليد QR code:', err);
+      }
     }
   }
 };
@@ -973,20 +1009,11 @@ const awaitingValidation = ref(false);
 /*----------------------------------------------------- */
 /* -------------------- 7. الميديا -------------------- */
 const getMediaUrl = (question) => {
-  if (!question) return placeholderImg;
-  if (question.question_video) {
-    if (question.question_video.startsWith('http')) {
-      return question.question_video;
-    }
-    return `https://game-wise.smartleadtech.com/${question.question_video}`;
-  }
-  if (question.question_image) {
-    if (question.question_image.startsWith('http')) {
-      return question.question_image;
-    }
-    return `https://game-wise.smartleadtech.com/${question.question_image}`;
-  }
-  return placeholderImg;
+  const baseUrl = 'https://game-wise.smartleadtech.com/';
+  if (question.question_image) return baseUrl + question.question_image;
+  if (question.question_video) return baseUrl + question.question_video;
+  if (question.question_audio) return baseUrl + question.question_audio;
+  return '';
 };
 const revealAnswer = () => {
   showAnswer.value = true;
@@ -1063,9 +1090,12 @@ const goToWinGame = () => {
 }
 /* -------------------- 8. عند التحميل -------------------- */
 onMounted(() => {
-  loadQuestions();
 const team1Name = ref(localStorage.getItem("team1Name") || "الفريق الأول")
 const team2Name = ref(localStorage.getItem("team2Name") || "الفريق الثاني")
+});
+onMounted(() => {
+  const categoryId = categories[0] || 1; // الكاتيجوري الافتراضي أو من الـ query
+  loadQuestions(categoryId);
 });
 /* ----------------------------------------------- */
 const showDrawingBoard = ref(false)

@@ -139,7 +139,7 @@ onMounted(async () => {
 });
 onMounted(async () => {
   const currentLang = locale.value
-     const res = await getCategories({}, currentLang)
+const res = await getCategories({ game: 2 }, currentLang)
   categories.value = res.data.data
 })
 const visibleCategories = computed(() => categories.value.slice(0, itemsToShow.value));
