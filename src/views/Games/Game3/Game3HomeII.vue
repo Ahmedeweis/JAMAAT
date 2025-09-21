@@ -865,21 +865,14 @@ const questions = ref([]);
 const questionsRound2 = ref([]);
 const answeredQuestions = ref([]);
 const answeredQuestionsRound2 = ref([]);
-import { getCategories } from '../../../services/categoryService';
+import categoriesData from '../../../services/updated_questions.json';
 const loadQuestions = async (categoryId, currentLang) => {
   try {
-    const res = await getCategories({ game: 2 }, currentLang);
-    const categoriesData = res?.data?.result?.data || res?.data?.data;
-    if (!categoriesData) {
-      console.error("No categories data received from API");
-      return;
-    }
-    const category = categoriesData.find(cat => cat.id === categoryId);
-    if (!category || !category.questions) {
-      console.error("No questions found for this category");
-      return;
-    }
-    const all = category.questions.map(q => ({
+    // دور على الكاتيجوري حسب الـ ID ولو مش موجود خده أول واحد
+    const category = categoriesData.data.find(cat => cat.id === categoryId)
+                   || categoriesData.data[0];
+    // حضر كل الأسئلة
+    let all = category.questions.map(q => ({
       id: q.id,
       title: q.title,
       question_text: q.question_text,
@@ -889,12 +882,20 @@ const loadQuestions = async (categoryId, currentLang) => {
       correct_answer: q.correct_answer,
       points: q.points
     }));
-    // slice مع التحقق من عدد الأسئلة المتوفرة
-    questions.value = all.slice(0, Math.min(8, all.length));
-    questionsRound2.value = all.slice(8, Math.min(16, all.length));
-    questionsRound3.value = all.slice(16); // لو ما فيش حاجه هتكون فاضية تلقائياً
+    // لو عدد الأسئلة أقل من 8 → كرر لحد ما نوصل على الأقل 8
+    if (all.length < 8) {
+      const repeated = [];
+      while (repeated.length < 8) {
+        repeated.push(...all);
+      }
+      all = repeated;
+    }
+    // وزّع الأسئلة (8 + 8 + 6)
+    questions.value = all.slice(0, 8);
+    questionsRound2.value = all.slice(0, 8); // نفس الـ 8
+    questionsRound3.value = all.slice(0, 6); // نفس الأسئلة لكن 6 بس
   } catch (error) {
-    console.error("Error loading questions from API:", error);
+    console.error("Error loading questions from JSON:", error);
   }
 };
 /*------------------------------------------*/

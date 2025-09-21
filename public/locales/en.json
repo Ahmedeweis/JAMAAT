@@ -1,4 +1,7 @@
 {
+  "scanToShowQR": "Scan the image to display the QR Code",
+  "preparePhone": "Prepare another phone to scan the QR code",
+  "pressTo": "Then press",
   "resetTitle": "Are you sure?",
   "resetText": "The board will be cleared and the game will restart!",
   "resetDoneTitle": "Reset Done!",
@@ -36,6 +39,7 @@
   "newPassword": "New Password",
   "noTitle": "No Title",
   "questionImage": "Question Image",
+  "showQuestion": "Show Question",
   "points": "Points",
   "showAnswer": "Show Answer",
   "noAnswer": "No Answer",
@@ -234,5 +238,14 @@
   "loading": "Loading",
   "game": "Game",
   "dataNotFound": "Data Not Found",
-  "tryAgain": "Try Again"
+  "tryAgain": "Try Again",
+  "silentRound": "Silent Round",
+  "drawingChallenge": "Drawing Challenge",
+  "secretWord": "Secret Word",
+  "sharedQuestions": "Shared Questions",
+  "Ready": "Ready ?",
+  "RightAnswer": " Right Answer",
+  "TheSecondTeam": "Second Team",
+  "didTeamAnswerCorrectly": "Did team {team} answer correctly?",
+  "currentRound": "Current Round"
 }

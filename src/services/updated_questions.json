@@ -1,0 +1,250 @@
+{
+  "status": 200,
+  "message": "success",
+  "data": [
+    {
+      "id": 31,
+      "name": "سيارات",
+      "questions": [
+        {
+          "id": 10000,
+          "title": "Car_Q1",
+          "question_text": "ما هي أسرع سيارة في العالم 2025؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "Bugatti Chiron Super Sport",
+          "points": 100
+        },
+        {
+          "id": 10001,
+          "title": "Car_Q2",
+          "question_text": "ما هي الدولة التي تأسست فيها شركة مرسيدس؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "ألمانيا",
+          "points": 110
+        },
+        {
+          "id": 10002,
+          "title": "Car_Q3",
+          "question_text": "ما هو اسم أول سيارة صنعتها تويوتا؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "Toyota AA",
+          "points": 120
+        },
+        {
+          "id": 10003,
+          "title": "Car_Q4",
+          "question_text": "كم عدد عجلات سيارة الفورمولا 1؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "4",
+          "points": 90
+        },
+        {
+          "id": 10004,
+          "title": "Car_Q5",
+          "question_text": "ما نوع وقود سيارة تسلا؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "كهرباء",
+          "points": 95
+        },
+        {
+          "id": 10005,
+          "title": "Car_Q6",
+          "question_text": "ما هي الشركة المصنعة لسيارة موستانج؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "فورد",
+          "points": 105
+        },
+        {
+          "id": 10006,
+          "title": "Car_Q7",
+          "question_text": "ما هي جنسية شركة فيراري؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "إيطالية",
+          "points": 115
+        },
+        {
+          "id": 10007,
+          "title": "Car_Q8",
+          "question_text": "ما هي السيارة الأكثر مبيعًا في العالم؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "تويوتا كورولا",
+          "points": 125
+        }
+      ]
+    },
+    {
+      "id": 262,
+      "name": "الشخصيات الشهيرة",
+      "questions": [
+        {
+          "id": 10008,
+          "title": "Celeb_Q1",
+          "question_text": "من هو مؤسس شركة مايكروسوفت؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "Bill Gates",
+          "points": 130
+        },
+        {
+          "id": 10009,
+          "title": "Celeb_Q2",
+          "question_text": "من هو مخترع المصباح الكهربائي؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "Thomas Edison",
+          "points": 135
+        },
+        {
+          "id": 10010,
+          "title": "Celeb_Q3",
+          "question_text": "من هو اللاعب الذي يُلقب بالبرغوث؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "ليونيل ميسي",
+          "points": 125
+        },
+        {
+          "id": 10011,
+          "title": "Celeb_Q4",
+          "question_text": "من هو العالم الذي اكتشف الجاذبية؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "إسحاق نيوتن",
+          "points": 120
+        },
+        {
+          "id": 10012,
+          "title": "Celeb_Q5",
+          "question_text": "من هو مؤسس شركة أبل؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "ستيف جوبز",
+          "points": 140
+        },
+        {
+          "id": 10013,
+          "title": "Celeb_Q6",
+          "question_text": "من هو أول رئيس للولايات المتحدة الأمريكية؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "جورج واشنطن",
+          "points": 110
+        },
+        {
+          "id": 10014,
+          "title": "Celeb_Q7",
+          "question_text": "من هو اللاعب الذي يُلقب بالدون؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "كريستيانو رونالدو",
+          "points": 115
+        }
+      ]
+    },
+    {
+      "id": 193,
+      "name": "رياضيات",
+      "questions": [
+        {
+          "id": 10015,
+          "title": "Math_Q1",
+          "question_text": "ما ناتج 12 × 12؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "144",
+          "points": 90
+        },
+        {
+          "id": 10016,
+          "title": "Math_Q2",
+          "question_text": "ما ناتج 25 ÷ 5؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "5",
+          "points": 80
+        },
+        {
+          "id": 10017,
+          "title": "Math_Q3",
+          "question_text": "ما الجذر التربيعي للعدد 81؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "9",
+          "points": 85
+        },
+        {
+          "id": 10018,
+          "title": "Math_Q4",
+          "question_text": "كم يساوي 7 + 15؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "22",
+          "points": 70
+        },
+        {
+          "id": 10019,
+          "title": "Math_Q5",
+          "question_text": "ما ناتج 100 - 45؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "55",
+          "points": 95
+        },
+        {
+          "id": 10020,
+          "title": "Math_Q6",
+          "question_text": "ما قيمة π (باي) بالتقريب؟",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "3.14",
+          "points": 120
+        },
+        {
+          "id": 10021,
+          "title": "Math_Q7",
+          "question_text": "حل المعادلة: 2x + 6 = 10",
+          "question_image": null,
+          "question_video": null,
+          "question_audio": null,
+          "correct_answer": "x = 2",
+          "points": 130
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "current_page": 1,
+    "last_page": 1,
+    "per_page": 10,
+    "total": 3
+  }
+}

@@ -1,4 +1,7 @@
 {
+  "scanToShowQR": "أمسح الصورة لعرض QR Code",
+  "preparePhone": "جهّز هاتف آخر لمسح الباركود",
+  "pressTo": "ثم اضغط على",
   "resetTitle": "هل أنت متأكد؟",
   "resetText": "سيتم مسح البورد وإعادة اللعب من البداية!",
   "resetDoneTitle": "تم إعادة التعيين!",
@@ -35,6 +38,7 @@
   "team2Points3": "نقاط فريق",
   "noTitle": "لا يوجد عنوان",
   "questionImage": "صورة السؤال",
+  "showQuestion": "أظهر السؤال",
   "points": "نقطة",
   "showAnswer": "أظهر الإجابة",
   "noAnswer": "لا توجد إجابة",
@@ -234,5 +238,14 @@
   "congratulationsForTheSecondTeam": "تهانينا للفريق الثاني",
   "loading": "جاري التحميل",
   "dataNotFound": "لم يتم العثور على البيانات",
-  "tryAgain": "حاول مرة أخرى"
+  "tryAgain": "حاول مرة أخرى",
+  "silentRound": "بدون كلام",
+  "drawingChallenge": "تحدّي الرسم",
+  "secretWord": "كلمة السر",
+  "sharedQuestions": "الأسئلة المشتركة",
+  "Ready": "    جاهز ؟",
+  "RightAnswer": "   إجابة صحيح",
+  "TheSecondTeam": "الفريق الثاني",
+  "didTeamAnswerCorrectly": "هل أجاب الفريق {team} الإجابة الصحيحة؟",
+  "currentRound": "الجولة الحالية "
 }
