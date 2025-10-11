@@ -163,7 +163,7 @@ const createGameHandler = async () => {
 onMounted(async () => {
   try {
     const lang = localStorage.getItem('locale') || locale.value || 'ar'
-    const res = await getCategories({}, lang)
+    const res = await getCategories({ game: 1 }, lang)
     categories.value = res.data.data.map(cat => ({
       ...cat,
       image_url: cat.image_url

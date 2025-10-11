@@ -162,8 +162,9 @@ v-if="showModal2"
 <div class="flex-1 text-center w-full " >
   <!-- لو السؤال لسه ما اتكشفش -->
 <div v-if="!questionRevealed3" class="flex flex-col justify-center items-center h-full">
-    <div class="p-6">
-    <h1 class="text-xl font-bold mb-4">أمسح QR Code لعرض الصورة</h1>
+    <div class="p-6"
+    style="text-align: -webkit-center;">
+    <h1  v-if="true" class="text-xl font-bold mb-4 text-black ">أمسح QR Code لعرض الصورة</h1>
     <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" />
   </div>
     <button
@@ -179,7 +180,7 @@ v-if="showModal2"
   </h2>
         <div class="media-container mx-auto mb-6">
           <!-- صورة -->
-          <img v-if="currentQuestion?.question_image" :src="getMediaUrl(currentQuestion)"
+          <img v-if="qrCodeData" :src="qrCodeData"
             :alt="$t('questionImage')" class="mx-auto max-h-[150px] rounded-md" />
           <!-- Placeholder -->
           <img v-else :src="placeholderImg" :alt="$t('noMedia')" class="mx-auto max-h-[150px] rounded-md" />
@@ -440,7 +441,7 @@ v-if="showModal2"
       </template>
     </div>
   </div>
-  <!-- عمود الفريق الثاني تحدي الرسم -->
+  <!-- عمود الفريق الثاني تحدي الرسم bg-white rounded-lg p-4 shadow-md w-full sm:w-[30%]-->
   <div class="bg-white rounded-lg p-4 shadow-md w-full sm:w-[30%]">
     <h3 class="text-lg font-semibold mb-2 text-center text-[#24054D]">
       فريق {{ team2Name }} (رسم)

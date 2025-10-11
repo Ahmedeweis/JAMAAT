@@ -125,13 +125,13 @@ const toggleHint = (id) => {
 // })
 onMounted(async () => {
   try {
-     const currentLang = locale.value
-      const res = await getCategories({}, currentLang)
+    const currentLang = locale.value;
+    const res = await getCategories({ game: 3 }, currentLang);
     categories.value = res.data.result.data.map(cat => ({
       ...cat,
       image_url: cat.image.startsWith('http')
         ? cat.image
-        : `http://game-wise.smartleadtech.com/${cat.image.replace(/^\/+/, '')}`
+        : `http://game-wise.smartleadtech.com/${cat.image.replace(/^\/+/, '')}`,
     }));
   } catch (err) {
     console.error("فشل في جلب التصنيفات", err);
@@ -139,7 +139,7 @@ onMounted(async () => {
 });
 onMounted(async () => {
   const currentLang = locale.value
-     const res = await getCategories({}, currentLang)
+     const res = await getCategories({ game: 3 }, currentLang)
   categories.value = res.data.data
 })
 const visibleCategories = computed(() => categories.value.slice(0, itemsToShow.value));

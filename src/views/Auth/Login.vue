@@ -16,31 +16,47 @@
         </div>
         <form class="bg-white rounded-3xl p-6 w-full h-[300px] md:h-[430px] max-w-md shadow-lg"
               style="font-family: 'Cairo', sans-serif;">
-          <div class="flex flex-col text-right">
-            <label class="text-purple-800 mb-1 text-justify">{{ $t('emailOrPhone') }}</label>
+          <div class="flex flex-col ">
+      <label
+  class="text-purple-800 mb-1"
+  :class="{
+    'text-left': $i18n.locale === 'en',
+    'text-right': $i18n.locale === 'ar'
+  }"
+>
+  {{ $t('emailOrPhone') }}
+</label>
 <input
   type="text"
   v-model="emailOrPhone"
   class="p-2 placeholder-[#D5C1EE] text-[#24054C] font-bold rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
+  placeholder="Ali123@gmail.com"
+/>
+<!--
   :class="{
     'text-left': $i18n.locale === 'en',
     'text-right': $i18n.locale === 'ar'
   }"
-  placeholder="Ali123@gmail.com"
-/>
+-->
           </div>
-          <div class="flex flex-col text-right mt-[15px]">
-            <label class="text-purple-800 mb-1 text-justify">{{ $t('password') }}</label>
+          <div class="flex flex-col  mt-[15px]">
+            <label class="text-purple-800 mb-1 text-justify"
+              :class="{
+    'text-left': $i18n.locale === 'en',
+    'text-right': $i18n.locale === 'ar'
+  }">{{ $t('password') }}</label>
 <input
   type="password"
   v-model="password"
   class="p-2 placeholder-[#D5C1EE] text-[#24054C] rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
+  :placeholder="$t('passwordPlaceholder')"
+/>
+<!--
   :class="{
     'text-left': $i18n.locale === 'en',
     'text-right': $i18n.locale === 'ar'
   }"
-  :placeholder="$t('passwordPlaceholder')"
-/>
+   -->
           </div>
           <router-link to="/forgetpassword" class="text-[#E3614E] mt-[10px] block text-justify">
             {{ $t('forgetPassword') }}

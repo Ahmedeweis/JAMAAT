@@ -13,8 +13,7 @@
       <button @click="toggleTeam"
         class="relative w-full sm:w-1/4 bg-[#ECE1FB] border-2 border-[#3F0092] px-4 py-2 sm:py-3 rounded-full flex items-center justify-center sm:justify-start cursor-pointer">
         <span class="text-[#24054D] font-bold text-sm sm:text-base">
-          {{ $t("teamTurn") }}
-          {{ currentTeam === 1 ? $t("first") : $t("second") }}
+         {{ $t("teamTurn") }}  {{ currentTeam === 1 ? team1Name : team2Name }}
         </span>
         <img src="../../../assets/imgs/switch.svg" alt="Switch"
           class="w-8 h-8 sm:w-13 sm:h-13 absolute sm:-left-3 sm:top-1/2 sm:-translate-y-1/2 hidden sm:block" />
@@ -101,7 +100,11 @@
           </div>
         </div>
         <!-- اللوجو -->
-        <img src="../../../assets/imgs/JAMAAT.svg" alt="Logo" class="mb-2 sm:mb-4 w-20 sm:w-auto" />
+        <h1
+        style=" font-family:'Andalus','Kufam', 'sans-serif'"
+         class="mb-2 sm:mb-4 text-[#E3614D] text-4xl sm:text-5xl tracking-wide select-none">
+  جمعات
+</h1>
         <!-- نقاط الفريق الثاني -->
         <div class="text-center w-full sm:w-auto">
           <h3 class="text-base sm:text-lg font-semibold mb-2">
@@ -207,10 +210,9 @@
       <div class="w-full lg:w-[220px] bg-[#F9F5FF] rounded-[20px] p-4 flex flex-col gap-6" v-if="showPreQuestion">
         <!-- الفريق الحالي -->
         <div>
-          <div class="bg-black text-white text-center rounded-lg py-2 font-bold mb-3">
-            {{ $t("team") }}
-            {{ currentTeam === 1 ? $t("first") : $t("second") }}
-          </div>
+<div class="bg-black text-white text-center rounded-lg py-2 font-bold mb-3">
+   مساعدات فريق {{ currentTeam === 1 ? team1Name : team2Name }}
+</div>
           <!-- أزرار الفريق الحالي -->
           <div class="flex flex-col gap-2">
             <!-- المضاعفة (دفاعية) -->
@@ -229,10 +231,9 @@
         </div>
         <!-- الفريق الخصم -->
         <div>
-          <div class="bg-black text-white text-center rounded-lg py-2 font-bold mb-3">
-            {{ $t("team") }}
-            {{ currentTeam === 1 ? $t("second") : $t("first") }}
-          </div>
+<div class="bg-black text-white text-center rounded-lg py-2 font-bold mb-3">
+   مساعدات فريق {{ currentTeam === 2 ? team1Name : team2Name }}
+</div>
           <!-- أزرار هجومية ضد الخصم -->
           <div class="flex flex-col gap-2">
             <!-- منع الخصم -->
@@ -272,14 +273,21 @@
         <!-- الفريق الحالي -->
         <div>
           <div class="bg-black text-white text-center rounded-lg py-2 font-bold mb-3">
-            {{ $t("team") }}
-            {{ currentTeam === 1 ? $t("first") : $t("second") }}
+            {{ $t("teama") }}
+         {{ currentTeam === 1 ? team1Name : team2Name }}
           </div>
+          <!--
+              <span class="text-[#9747FF]">
+      {{ currentTeam === 1 ? team1Name : team2Name }}
+    </span>
+     -->
         </div>
         <!-- رسالة وسيلة المساعدة -->
-<div v-if="currentHelpMessage"
-     class="bg-purple-50 border border-purple-300 rounded-lg p-3 text-center text-sm font-semibold text-purple-800 shadow-sm animate-fade-in">
-  {{ currentHelpMessage }}
+<div v-if="currentHelpMessages.length"
+     class="bg-purple-50 border border-purple-300 rounded-lg p-3 text-center text-sm font-semibold text-purple-800 shadow-sm animate-fade-in space-y-1">
+  <div v-for="(msg, i) in currentHelpMessages" :key="i">
+    {{ msg }}
+  </div>
 </div>
       </div>
       <!-- ----------------------- -->
@@ -295,6 +303,8 @@ import placeholderImg from '../../../assets/imgs/upload.png';
 import playIcon from '../../../assets/imgs/play.png';
 import pauseIcon from '../../../assets/imgs/pause.svg';
 import bg from '../../../assets/imgs/splash.png';
+import { useToast } from "vue-toastification";
+const toast = useToast();
 /* -------------------- 2. التوجيه (Router) -------------------- */
 const router = useRouter();
 const route = useRoute();
@@ -304,9 +314,11 @@ const gameData = ref(null);
 const games = ref([]);
 const loading = ref(true);
 const error = ref(null);
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n() // ناخد اللغة الحالية من i18n
 onMounted(async () => {
   try {
-    const res = await getUserGames();
+    const res = await getUserGames(locale.value); // هنا بنحدد اللغة عربي
     games.value = res.data.data || [];
     const idFromRoute = Number(gameId);
     const foundGame = games.value.find(item => item.game?.id === idFromRoute);
@@ -435,6 +447,13 @@ const opponentTeam = computed(() => (currentTeam.value === 1 ? 2 : 1));
 const getHelps = (team) => (team === 1 ? team1Helps.value : team2Helps.value);
 const useHelp = (type, team) => {
   const helps = getHelps(team);
+if ((type === "block" && halfPoints.value) || (type === "half" && blockPoints.value)) {
+  toast.error("❌ لا يمكن استخدام مساعدة أخرى هجومية في نفس السؤال!", {
+    timeout: 3000,
+    position: "top-center",
+  });
+  return;
+}
   if (helps[type] > 0) {
     helps[type] -= 1;
     if (type === "double") doublePoints.value = true;
@@ -481,12 +500,15 @@ const goTo = (path, message) => {
     router.push(path);
   }
 };
-const currentHelpMessage = computed(() => {
-  if (doublePoints.value) return 'تم مضاعفة نقاط السؤال';
-  if (blockPoints.value) return 'تم منعك من الإجابة';
-  if (halfPoints.value) return 'تم خصم نصف نقاط السؤال';
-  return '';
+const currentHelpMessages = computed(() => {
+  const messages = [];
+  if (doublePoints.value) messages.push(' تم مضاعفة نقاط السؤال');
+  if (blockPoints.value) messages.push(' تم منع الخصم من الإجابة');
+  if (halfPoints.value) messages.push(' تم خصم نصف نقاط السؤال');
+  return messages;
 });
+const team1Name = ref(localStorage.getItem("team1Name") || "الفريق الأول");
+const team2Name = ref(localStorage.getItem("team2Name") || "الفريق الثاني");
 </script>
 <style scoped>
 .font-arabic {

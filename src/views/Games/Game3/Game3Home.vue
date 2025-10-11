@@ -100,6 +100,7 @@ v-if="selectedRound == 3"
   {{ $t('secretWord') }}
 </button>
           <div class="ms-auto flex items-center gap-2">
+          <h1>Bee</h1>
           </div>
         </div>
 </div>
@@ -224,7 +225,7 @@ v-if="showModal2"
         @click="markCorrect"
         class="bg-green-600 hover:bg-green-700  cursor-pointer text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
       >
-         {{ $t(" RightAnswer") }}
+         {{ $t("RightAnswer") }}
       </button>
       <button
         @click="switchTeam"
@@ -868,7 +869,7 @@ const answeredQuestionsRound2 = ref([]);
 import { getCategories } from '../../../services/categoryService';
 const loadQuestions = async (categoryId, currentLang) => {
   try {
-    const res = await getCategories({ game: 2 }, currentLang);
+    const res = await getCategories({ game: 3 }, currentLang);
     const categoriesData = res?.data?.result?.data || res?.data?.data;
     if (!categoriesData) {
       console.error("No categories data received from API");
