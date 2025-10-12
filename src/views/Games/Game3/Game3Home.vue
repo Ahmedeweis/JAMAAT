@@ -357,9 +357,9 @@ v-if="showModal2"
   </div>
 </div>
   <!-- الإجابة -->
-  <div v-if="showAnswer3" class=" p-4 bg-green-100 text-green-800 rounded-lg font-bold">
+  <!-- <div v-if="showAnswer3" class=" p-4 bg-green-100 text-green-800 rounded-lg font-bold">
     {{ currentQuestion3?.correct_answer || 'لا توجد إجابة' }}
-  </div>
+  </div> -->
 <!-- تقييم الإجابة -->
 <div v-if="awaitingValidation" class="flex flex-col items-center gap-4 mt-4">
   <!-- النص التوضيحي -->
@@ -371,17 +371,27 @@ v-if="showModal2"
   الإجابة الصحيحة؟
 </p>
   <!-- الأزرار -->
-  <div class="flex gap-4">
-    <button
-      @click="validateAnswer(true)"
-      class="bg-green-600 cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
-     {{ $t("correct") }}
-    </button>
-    <button
-      @click="validateAnswer(false)"
-      class="bg-red-600 cursor-pointer hover:bg-red-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
-    {{ $t("wrong") }}
-    </button>
+  <div class="flex gap-4 mt-4">
+<button
+  @click="validateAnswer(true)"
+  :disabled="disableValidationBtn"
+  :class="[
+    'bg-green-600 cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition',
+    disableValidationBtn ? 'bg-gray-400 cursor-not-allowed' : ''
+  ]"
+>
+  {{ $t("correct") }}
+</button>
+<button
+  @click="validateAnswer(false)"
+  :disabled="disableValidationBtn"
+  :class="[
+    'bg-red-600 cursor-pointer hover:bg-red-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition',
+    disableValidationBtn ? 'bg-gray-400 cursor-not-allowed' : ''
+  ]"
+>
+  {{ $t("wrong") }}
+</button>
   </div>
 </div>
 </div>
@@ -672,13 +682,25 @@ v-if="showModal2"
     class="bg-orange-500 cursor-pointer hover:bg-orange-600 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
   {{ $t("showAnswer") }}
   </button>
+  <!-- داخل المودال الخاص بالجولة الأولى -->
 <!-- الإجابة -->
-<div v-if="showAnswer" class=" p-4 bg-green-100 text-green-800 rounded-lg font-bold">
+<!-- <div v-if="showAnswer" class=" p-4 bg-green-100 text-green-800 rounded-lg font-bold">
   {{ currentQuestion?.correct_answer || 'لا توجد إجابة' }}
-</div>
+</div> -->
 <!-- تقييم الإجابة -->
-<div v-if="awaitingValidation" class="flex flex-col items-center gap-4 mt-4">
+<div v-if="awaitingValidation" class="flex flex-col items-center gap-4 mt-4 relative">
   <!-- النص التوضيحي -->
+<transition name="slide-fade">
+  <div
+    v-if="showTransferNotice"
+    class="absolute top-0 left-0 w-full bg-orange-500 text-white font-bold text-center py-3 z-50 rounded-lg animate-slideDown"
+  >
+    <span class="text-white">تم نقل السؤال لفريق </span>
+    <span class="text-black font-bold text-xl">
+      {{ currentTeam === 1 ? team1Name : team2Name }}
+    </span>
+  </div>
+</transition>
 <p
   class="text-lg font-semibold text-[#24054D]"
   v-html="$t('didTeamAnswerCorrectly', {
@@ -686,17 +708,26 @@ v-if="showModal2"
   })"
 ></p>
   <!-- الأزرار -->
-  <div class="flex gap-4">
-    <button
-      @click="validateAnswer(true)"
-      class="bg-green-600 cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
-     {{ $t("correct") }}
-    </button>
-    <button
-      @click="validateAnswer(false)"
-      class="bg-red-600 cursor-pointer hover:bg-red-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
-    {{ $t("wrong") }}
-    </button>
+  <div class="flex gap-4 mt-4">
+<button
+  @click="validateAnswer(true)"
+  :disabled="disableValidationBtn"
+  :class="[
+    'bg-green-600 cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition',
+  ]"
+>
+  {{ $t("correct") }}
+</button>
+<button
+  @click="validateAnswer(false)"
+  :disabled="disableValidationBtn"
+  :class="[
+    ' text-lg font-bold px-6 py-3  rounded-full shadow-lg transition',
+    disableValidationBtn ? 'bg-gray-400 cursor-not-allowed' : 'cursor-pointer bg-red-600 hover:bg-red-700 text-white'
+  ]"
+>
+  {{ $t("wrong") }}
+</button>
   </div>
 </div>
 </div>
@@ -760,6 +791,7 @@ onMounted(async () => {
     console.error('خطأ في توليد QR code:', err);
   }
 });
+const disableValidationBtn = ref(false);
 /* ----------------  Round 3 ----------------------  */
 const changer = ref(false);
 // بيانات الفريقين
@@ -800,7 +832,7 @@ const submitTeam2 = () => {
   startTimor(currentPoints.value);
 };
 // دالة لإنهاء السؤال وإعادة كل شيء للديفولت
-const endQuestion3 = () => {
+const endQuestion3 = async (imageUrl = null) => {
   timor.value = 15;
   showTimor.value = false;
   switchCount.value = 0;
@@ -810,10 +842,21 @@ const endQuestion3 = () => {
   isReady3.value = false;
   showAnswer3.value = false;
   questionRevealed3.value = false;
-  showModal2.value = false;
-  // يمكن إضافة أي عمليات إضافية عند انتهاء السؤال
+  // لو فيه رابط صورة من السيرفر
+  if (imageUrl) {
+    serverImage.value = imageUrl; // متغير ref لعرض الصورة
+    showServerImage.value = true; // نتحكم بالعرض
+  }
   toast.info('انتهى السؤال ');
+  // تأخير قبل غلق المودال (مثلاً 3 ثواني)
+  setTimeout(() => {
+    showModal2.value = false;
+    showServerImage.value = false; // اخفي الصورة بعد غلق المودال
+  }, 3000);
 };
+// متغيرات جديدة
+const serverImage = ref(''); // رابط الصورة من السيرفر
+const showServerImage = ref(false); // هل نعرض الصورة قبل غلق المودال؟
 // تعديل switchTeam لتتحقق من النقاط
 const switchTeam = () => {
   switchCount.value++;
@@ -1010,7 +1053,12 @@ const handleReveal = () => {
   awaitingValidation.value = true;
 };
 const isTransferred = ref(false)
+const showTransferNotice = ref(false);
 const validateAnswer = (isCorrect) => {
+    disableValidationBtn.value = true;
+  setTimeout(() => {
+    disableValidationBtn.value = false;
+  }, 3000); // مدة التعطيل بالمللي ثانية
   if (isCorrect) {
     if (isTransferred.value) {
       // ✅ لو السؤال منقول → الفريق الثاني ياخد 15 نقطة ثابتة
@@ -1043,6 +1091,10 @@ const validateAnswer = (isCorrect) => {
       isTransferred.value = true
       currentTeam.value = currentTeam.value === 1 ? 2 : 1
      toast.info("تم نقل السؤال للفريق الآخر ✅", { timeout: 3000 })
+ showTransferNotice.value = true;
+setTimeout(() => {
+  showTransferNotice.value = false;
+}, 3000);
     } else {
       isTransferred.value = false
       awaitingValidation.value = false
