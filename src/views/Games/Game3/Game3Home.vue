@@ -242,12 +242,6 @@ v-if="showModal2"
     {{ $t('Ready') }}
   </button>
   <!-- زر أظهر الإجابة -->
-  <button
-    v-else-if="isReady3 && !awaitingValidation3"
-    @click="handleReveal3"
-    class="bg-orange-500 cursor-pointer hover:bg-orange-600 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
-  {{ $t('showAnswer') }}
-  </button>
 <div v-if="isReady3" class="flex flex-col gap-6 p-4 relative bg-gray-50 w-full rounded-lg">
   <!-- شريط المؤقت والنقاط -->
   <div

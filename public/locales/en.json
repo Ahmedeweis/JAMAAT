@@ -39,6 +39,7 @@
   "connectwin": "Congratulations to Winner ",
   "titleWin": "Congratulations to Team {team}",
   "teamTurn": "ًWrong Answer",
+  "teamTurno": "current team",
   "first": "First",
   "second": "Second",
   "gameConnect": "Connect 4",

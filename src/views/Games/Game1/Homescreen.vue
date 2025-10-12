@@ -13,7 +13,7 @@
       <button @click="toggleTeam"
         class="relative w-full sm:w-1/4 bg-[#ECE1FB] border-2 border-[#3F0092] px-4 py-2 sm:py-3 rounded-full flex items-center justify-center sm:justify-start cursor-pointer">
         <span class="text-[#24054D] font-bold text-sm sm:text-base">
-         {{ $t("teamTurn") }}  {{ currentTeam === 1 ? team1Name : team2Name }}
+         {{ $t("teamTurno") }}  {{ currentTeam === 1 ? team1Name : team2Name }}
         </span>
         <img src="../../../assets/imgs/switch.svg" alt="Switch"
           class="w-8 h-8 sm:w-13 sm:h-13 absolute sm:-left-3 sm:top-1/2 sm:-translate-y-1/2 hidden sm:block" />
