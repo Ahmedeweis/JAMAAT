@@ -225,7 +225,7 @@ v-if="showModal2"
   </div>
   <!-- لو السؤال اتكشف -->
 <div v-else>
-  <h2 class="text-2xl font-bold text-[#24054D] ">
+  <h2 class="text-2xl font-bold text-[#24054D] mb-6">
     <!-- {{ currentQuestion3?.question_text || $t("noTitle") }} -->
   </h2>
         <div class="media-container mx-auto">
@@ -372,11 +372,11 @@ v-if="showModal2"
 </p>
   <!-- الأزرار -->
   <div class="flex gap-4">
-<button
-  @click="validateAnswer(true)"
-  class="bg-green-600 cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
-  {{ $t("correct") }}
-</button>
+    <button
+      @click="validateAnswer(true)"
+      class="bg-green-600 cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
+     {{ $t("correct") }}
+    </button>
     <button
       @click="validateAnswer(false)"
       class="bg-red-600 cursor-pointer hover:bg-red-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
@@ -603,15 +603,6 @@ v-if="showModal2"
     class="bg-white rounded-[20px] shadow-lg relative w-full min-h-[400px] sm:w-[90%] max-w-[1100px] p-6 sm:p-8 flex flex-col-reverse lg:flex-row gap-6 border-[4px] border-[#D6B4FF]"
     :dir="currentLang === 'ar' ? 'ltr' : 'rtl'"
   >
-    <!-- هنا ضيف إشعار النقل -->
-<transition name="slide-fade">
-  <div
-    v-if="showTransferNotice"
-    class="absolute top-0 left-0 w-full bg-orange-500 text-white font-bold text-center py-3 z-50 rounded-t-[20px]"
-  >
-    تم نقل السؤال للفريق {{ currentTeam === 1 ? team1Name : team2Name }}
-  </div>
-</transition>
     <!-- زر الإغلاق -->
     <button
       @click="confirmAnswer()"
@@ -653,7 +644,7 @@ v-if="showModal2"
     <img :src="isPaused ? playIcon : pauseIcon" class="w-6 h-6" />
   </button>
 </div>
-        <div class="media-container mx-auto">
+        <div class="media-container mx-auto mb-6">
                <div class="p-6 text-center flex flex-col justify-center items-center">
     <h1 class="text-xl font-bold mb-4">{{ $t("scanToShowQR") }}</h1>
     <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" />
@@ -1019,44 +1010,52 @@ const handleReveal = () => {
   awaitingValidation.value = true;
 };
 const isTransferred = ref(false)
-const showTransferNotice = ref(false);
 const validateAnswer = (isCorrect) => {
   if (isCorrect) {
-    let pointsToAdd = 0;
     if (isTransferred.value) {
-      pointsToAdd = 15;
+      // ✅ لو السؤال منقول → الفريق الثاني ياخد 15 نقطة ثابتة
+      if (currentTeam.value === 1) {
+        score1.value += 15
+         toggleTeam();
+      } else {
+        score2.value += 15
+         toggleTeam();
+      }
     } else {
-      pointsToAdd = timer.value;
+      // ✅ لو الفريق الأساسي جاوب صح → ياخد عدد الثواني المتبقية
+      if (currentTeam.value === 1) {
+        score1.value += timer.value
+      } else {
+        score2.value += timer.value
+      }
     }
-    if (currentTeam.value === 1) score1.value += pointsToAdd;
-    else score2.value += pointsToAdd;
-    answeredQuestions.value.push(currentQuestion.value.id);
-    showModal.value = false;
-    showAnswer.value = false;
-    showTransferNotice.value = false;
-    isTransferred.value = false;
+    isTransferred.value = false
+    awaitingValidation.value = false
+    showAnswer.value = false
+    isPaused.value = true
+    timer.value = 0
     toggleTeam();
+        answeredQuestions.value.push(currentQuestion.value.id);
+    showModal.value = false
   } else {
-    // نقل السؤال للفريق الآخر إذا لم يتم النقل من قبل
     if (!isTransferred.value) {
-      isTransferred.value = true;
-      currentTeam.value = currentTeam.value === 1 ? 2 : 1;
-      showTransferNotice.value = true;
-      setTimeout(() => {
-        showTransferNotice.value = false;
-      }, 3000);
-      // لا تغلق المودال هنا!
+      // ❌ الفريق الأساسي جاوب غلط → ننقل السؤال
+      isTransferred.value = true
+      currentTeam.value = currentTeam.value === 1 ? 2 : 1
+     toast.info("تم نقل السؤال للفريق الآخر ✅", { timeout: 3000 })
     } else {
-      // إذا كانت الإجابة خاطئة بعد النقل، أغلق المودال ولا يحصل أي فريق على نقاط
-      answeredQuestions.value.push(currentQuestion.value.id); // أضف السؤال هنا أيضا
-      showTransferNotice.value = false;
-      showModal.value = false;
-      showAnswer.value = false;
-      isTransferred.value = false;
+      isTransferred.value = false
+      awaitingValidation.value = false
+      showAnswer.value = false
+      isPaused.value = true
+      timer.value = 0
+          answeredQuestions.value.push(currentQuestion.value.id);
+      showModal.value = false
+      currentTeam.value = currentTeam.value === 1 ? 2 : 1
       toggleTeam();
     }
   }
-};
+}
 /* ---------------------------------------------- */
 const awaitingValidation = ref(false);
 /*----------------------------------------------------- */
@@ -1210,23 +1209,4 @@ watch(round3Completed, (val) => {
     background-color: #4F39F6;
     color: white;
 } */
- .slide-fade-enter-active, .slide-fade-leave-active {
-  transition: all 0.5s ease;
-}
-.slide-fade-enter-from {
-  transform: translateY(-100%);
-  opacity: 0;
-}
-.slide-fade-enter-to {
-  transform: translateY(0);
-  opacity: 1;
-}
-.slide-fade-leave-from {
-  transform: translateY(0);
-  opacity: 1;
-}
-.slide-fade-leave-to {
-  transform: translateY(-100%);
-  opacity: 0;
-}
 </style>
