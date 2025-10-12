@@ -99,25 +99,45 @@
               </svg>
               {{ $t('deleteAccount') }}
             </button>
-            <!-- البوب أب -->
-            <div v-if="showDeleteModal" class="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
-              <div class="bg-white p-6 rounded-lg shadow-lg w-80 text-center">
-                <h2 class="text-lg font-bold mb-4 text-red-600"> {{ $t('confirmDeleteAccount') }}</h2>
-                <p class="mb-6 text-gray-600">
-                  {{ $t('areYouSureToDeleteAccount') }}
-                </p>
-                <div class="flex gap-4 justify-center">
-                  <button @click="confirmDelete"
-                    class="px-4 py-2 cursor-pointer bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
-                    {{ $t('deleteAccount') }}
-                  </button>
-                  <button @click="showDeleteModal = false"
-                    class="px-4 py-2 cursor-pointer  bg-gray-200 rounded-lg hover:bg-gray-300 transition">
-                    {{ $t('cancel') }}
-                  </button>
-                </div>
-              </div>
-            </div>
+<!-- ✅ مودال تأكيد حذف الحساب -->
+<div v-if="showDeleteModal" class="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-2xl shadow-xl w-96 text-center space-y-4">
+    <h2 class="text-xl font-bold text-red-600">{{ $t('confirmDeleteAccount') }}</h2>
+    <p class="text-gray-700">⚠️ {{ $t('areYouSureToDeleteAccount') }}</p>
+    <!-- لو فيه اشتراك مدفوع -->
+    <div v-if="hasPaidSubscription" class="bg-yellow-100 text-yellow-800 p-3 rounded-lg text-sm font-semibold">
+      <p>{{ $t('paidSubscriptionWarning') }}</p>
+    </div>
+    <!-- حقل التأكيد -->
+    <div class="flex flex-col text-right">
+      <label class="text-gray-600 text-sm mb-1">
+        {{ $t('typeDeleteToConfirm') }}
+      </label>
+      <input
+        type="text"
+        v-model="confirmationText"
+        :placeholder="$t('typeDeletePlaceholder')"
+        class="p-2 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-400"
+      />
+    </div>
+    <!-- الأزرار -->
+    <div class="flex gap-4 justify-center mt-4">
+      <button
+        @click="confirmDelete"
+        :disabled="!['حذف', 'Delete'].includes(confirmationText.trim())"
+        class="px-5 py-2 cursor-pointer bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+      >
+        {{ $t('deleteAccount') }}
+      </button>
+      <button
+        @click="showDeleteModal = false"
+        class="px-5 py-2 cursor-pointer bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+      >
+        {{ $t('cancel') }}
+      </button>
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </div>
@@ -222,16 +242,36 @@ const handleLogout = () => {
   router.push('/login')
 }
 // ✅ حذف الحساب
+const confirmationText = ref('')
 const confirmDelete = async () => {
+  // ✅ تحقق من النص
+  if (!['حذف', 'Delete'].includes(confirmationText.value.trim())) {
+    toast.error('يجب كتابة "حذف" أو "Delete" لتأكيد العملية')
+    return
+  }
   try {
-    const res = await deleteAccount()
-    toast.success(res.data.message || 'تم حذف الحساب بنجاح')
+    loadingDelete.value = true
+    // ✅ استدعاء الخدمة
+    const response = await deleteAccount()
+    toast.success(
+      response.data?.message ||
+      (locale.value === 'en' ? 'Account deleted successfully' : 'تم حذف الحساب بنجاح')
+    )
+    // 🧹 تنظيف البيانات وتوجيه المستخدم
     localStorage.clear()
+    showDeleteModal.value = false
+    confirmationText.value = ''
     router.push('/signup')
   } catch (err) {
-    toast.error(err.response?.data?.message || 'فشل حذف الحساب')
+    console.error(err)
+    toast.error(
+      err.response?.data?.message ||
+      (locale.value === 'en'
+        ? 'An error occurred while deleting your account'
+        : 'حدث خطأ أثناء حذف الحساب')
+    )
   } finally {
-    showDeleteModal.value = false
+    loadingDelete.value = false
   }
 }
 </script>

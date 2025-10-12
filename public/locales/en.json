@@ -1,4 +1,19 @@
 {
+  "roundExplanation": " roundExplanation",
+  "gameGuide": " gameGuide",
+  "gotIt": "gotIt ",
+  "round1": {
+    "title": "Round 1 (Acting)",
+    "description": "Scan the QR code displayed on another device and explain to your teammate using gestures only — no talking or hints allowed.\n\nScoring: The faster you answer, the more points you earn. Your seconds count as points!"
+  },
+  "round2": {
+    "title": "Round 2 (Drawing)",
+    "description": "Scan the QR code displayed on another device and explain to your teammate by drawing only — no talking, and don’t use letters or numbers.\n\nScoring: The faster you answer, the more points you earn. Your seconds count as points!"
+  },
+  "round3": {
+    "title": "Round 3 (One Word)",
+    "description": "Scan the QR code displayed on another device and explain to your teammate using only one word — without mentioning the object in the picture.\n\nScoring: The fewer words you use, the more points you earn."
+  },
   "scanToShowQR": "Scan the image to display the QR Code",
   "preparePhone": "Prepare another phone to scan the QR code",
   "pressTo": "Then press",
@@ -23,7 +38,7 @@
   "titleDraw": "Good luck to both",
   "connectwin": "Congratulations to Winner ",
   "titleWin": "Congratulations to Team {team}",
-  "teamTurn": "Team Turn",
+  "teamTurn": "ًWrong Answer",
   "first": "First",
   "second": "Second",
   "gameConnect": "Connect 4",
@@ -50,7 +65,7 @@
   "doublePoints": "Double Points",
   "blockPoints": "Block Points",
   "halfPoints": "half Points",
-  "startGameTitle": "Start IQ Game",
+  "startGameTitle": "Without Talking",
   "startGameTitle3": "Start Game 3",
   "team1Name": "Team 1 Name",
   "enterTeam1Name": "Enter Team 1 Name",
@@ -129,6 +144,10 @@
   "deleteAccount": "Delete Account",
   "confirmDeleteAccount": "Confirm Delete Account",
   "areYouSureToDeleteAccount": "Are you sure you want to delete your account?",
+  "paidSubscriptionWarning": "It seems you have a paid subscription. You won't be able to refund after deletion.",
+  "enterPasswordToConfirmDelete": "Enter your password to confirm deletion:",
+  "typeDeleteToConfirm": "Type the word 'Delete' to confirm the operation:",
+  "typeDeletePlaceholder": "Type Delete here",
   "email": "Email",
   "myAccount": "Account",
   "signup": "Sign Up",

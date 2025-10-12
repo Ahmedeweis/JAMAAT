@@ -35,20 +35,23 @@
 </template>
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import bg from '../../assets/imgs/splash.png'
 import side from '../../components/side.vue'
 import { GetFAQ } from '../../services/supportService'
 const faqs = ref([])
+const { locale } = useI18n() // 👈 هنا بنجيب اللغة الحالية من i18n
 onMounted(async () => {
   try {
-    const lang = localStorage.getItem("lang") || "ar"   // 👈 هنا تجيبها
-    const res = await GetFAQ(lang)                      // 👈 وتباصيها
+    const currentLang = locale.value || 'ar' // 👈 fallback للغة افتراضية لو فاضية
+    console.log('🟢 اللغة المرسلة:', currentLang)
+    const res = await GetFAQ(currentLang) // 👈 نبعت اللغة الحالية
     faqs.value = res.data.data.map(item => ({
       ...item,
       open: false
     }))
   } catch (error) {
-    console.error('حدث خطأ أثناء تحميل الأسئلة:', error)
+    console.error('❌ حدث خطأ أثناء تحميل الأسئلة:', error)
   }
 })
 const toggleFAQ = (index) => {

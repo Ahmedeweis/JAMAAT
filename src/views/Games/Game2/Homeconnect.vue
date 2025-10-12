@@ -228,6 +228,7 @@ const res = await getCategories({ game: 2 }, currentLang)
       question_video: null
     }
     allQuestions.value.push(defaultQuestion) // إضافة السؤال الافتراضي
+console.log(allQuestions.value)
     remainingQuestions.value = [...allQuestions.value]
     console.log('📌 الكاتيجوريز بعد الفلترة:', categories.value)
     console.log('📌 الأسئلة:', allQuestions.value)
@@ -398,18 +399,17 @@ const checkWinner = (player) => {
 };
 // دالة الإجابة
 const handleAnswer = (isCorrect) => {
-  // إضافة الدائرة في أي حال
+  // ✅ إضافة الدائرة في أي حال
   for (let row = rows - 1; row >= 0; row--) {
     if (!board.value[row][pendingCol.value]) {
       board.value[row][pendingCol.value] = isCorrect ? currentPlayer.value : 'gray';
       break;
     }
   }
+  // ✅ لو الإجابة صحيحة زوّد النقاط وتحقق من الفوز
   if (isCorrect) {
-    // زيادة النقاط
     if (currentPlayer.value === 'red') player1Score.value += 10;
     else player2Score.value += 10;
-    // التحقق من الفوز
     if (checkWinner(currentPlayer.value)) {
       wing.value = currentPlayer.value === 'red' ? player1.value : player2.value;
       winer.value = true;
@@ -417,9 +417,31 @@ const handleAnswer = (isCorrect) => {
       return;
     }
   }
-  // تبديل الدور
+  // ✅ تحقق من امتلاء اللوحة (تعادل أو فوز بالأكثر)
+  const isFull = board.value.every(row => row.every(cell => cell !== null));
+  if (isFull) {
+    let redCount = 0;
+    let yellowCount = 0;
+    for (const row of board.value) {
+      for (const cell of row) {
+        if (cell === 'red') redCount++;
+        else if (cell === 'yellow') yellowCount++;
+      }
+    }
+    if (redCount > yellowCount) {
+      wing.value = player1.value;
+    } else if (yellowCount > redCount) {
+      wing.value = player2.value;
+    } else {
+      wing.value = t("draw") || "تعادل 🤝";
+    }
+    winer.value = true;
+    closeModal();
+    return;
+  }
+  // ✅ تبديل الدور بين اللاعبين
   currentPlayer.value = currentPlayer.value === "red" ? "yellow" : "red";
-  // غلق المودال
+  // ✅ غلق المودال وتهيئة السؤال
   showModal.value = false;
   currentQuestion.value = null;
   showAnswer.value = false;

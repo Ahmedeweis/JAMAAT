@@ -1,7 +1,18 @@
 <template>
-  <router-view />
+  <div :dir="dir">
+    <router-view />
+  </div>
 </template>
 <script setup>
+import { computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+const { locale } = useI18n()
+// كل ما اللغة تتغير، الاتجاه يتحدث فوراً
+const dir = computed(() => (locale.value === 'ar' ? 'rtl' : 'ltr'))
+watch(locale, (newLang) => {
+  document.dir = newLang === 'ar' ? 'rtl' : 'ltr'
+  document.documentElement.lang = newLang
+})
 </script>
 <style scoped>
 .logo {

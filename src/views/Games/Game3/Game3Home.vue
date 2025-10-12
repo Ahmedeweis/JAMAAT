@@ -59,50 +59,100 @@
 </button>
   </div>
 </nav>
-<div class="flex flex-1 flex-col sm:flex-row items-center  sm:items-center rounded-xl mt-2 mb-3 bg-white text-black p-4 shadow-md gap-3 sm:gap-0">
- <div :class="locale === 'ar' ? ' flex-row' : 'flex-row-reverse'" class="flex flex-wrap items-center gap-2">
-              <h2 class="font-bold text-xl">  {{ $t('currentRound') }} </h2>
-<!-- الجولة 1 -->
-<button
-v-if="selectedRound == 1  "
-  :disabled="selectedRound !== 1"
-  :class="[
-    'px-3 py-2 rounded-lg text-xl font-semibold',
-    selectedRound === 1 ? 'bg-indigo-600 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-  ]"
->
- {{ $t('silentRound') }}
-</button>
-<!-- الجولة 2 -->
-<button
-v-if="selectedRound == 2"
-  :disabled="!round1Completed"
-  :class="[
-   'px-3 py-2 rounded-lg text-xl font-semibold',
-    selectedRound === 2 ? 'bg-indigo-600 text-white'
-      : !round1Completed ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-      : 'bg-green-500 text-white animate-bounce'
-  ]"
->
-  {{ $t('drawingChallenge') }}
-</button>
-<!-- الجولة 3 -->
-<button
-v-if="selectedRound == 3"
-  :disabled="!round2Completed"
-  :class="[
-    'px-3 py-2 rounded-lg text-xl font-semibold',
-    selectedRound === 3 ? 'bg-indigo-600 text-white'
-      : !round2Completed ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-      : 'bg-green-500 text-white animate-bounce'
-  ]"
->
-  {{ $t('secretWord') }}
-</button>
-          <div class="ms-auto flex items-center gap-2">
-          <h1>Bee</h1>
-          </div>
-        </div>
+<div class="flex flex-1 flex-col sm:flex-row items-center justify-between rounded-xl mt-2 mb-3 bg-white text-black p-4 shadow-md gap-3">
+  <!-- ✅ الجولات -->
+  <div :class="locale === 'ar' ? 'flex-row' : 'flex-row-reverse'" class="flex flex-wrap items-center gap-2">
+    <h2 class="font-bold text-xl">{{ $t('currentRound') }}</h2>
+    <!-- الجولة 1 -->
+    <button
+      v-if="selectedRound == 1"
+      :disabled="selectedRound !== 1"
+      :class="[
+        'px-4 py-2 rounded-lg  font-semibold',
+        selectedRound === 1
+          ? 'bg-indigo-600 text-white'
+          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+      ]"
+    >
+      {{ $t('silentRound') }}
+    </button>
+    <!-- الجولة 2 -->
+    <button
+      v-if="selectedRound == 2"
+      :disabled="!round1Completed"
+      :class="[
+         'px-4 py-2 rounded-lg  font-semibold',
+        selectedRound === 2
+          ? 'bg-indigo-600 text-white'
+          : !round1Completed
+          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          : 'bg-green-500 text-white animate-bounce'
+      ]"
+    >
+      {{ $t('drawingChallenge') }}
+    </button>
+    <!-- الجولة 3 -->
+    <button
+      v-if="selectedRound == 3"
+      :disabled="!round2Completed"
+      :class="[
+           'px-4 py-2 rounded-lg  font-semibold',
+        selectedRound === 3
+          ? 'bg-indigo-600 text-white'
+          : !round2Completed
+          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          : 'bg-green-500 text-white animate-bounce'
+      ]"
+    >
+      {{ $t('secretWord') }}
+    </button>
+  </div>
+  <!-- ✅ زر شرح الجولة (على الشمال لو عربي، اليمين لو إنجليزي) -->
+  <div :class="locale === 'ar' ? 'self-start sm:self-auto' : 'self-end sm:self-auto'">
+    <button
+      @click="showHelp = true"
+      class="px-4 py-2 bg-indigo-600 cursor-pointer text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
+    >
+      {{ $t('roundExplanation') }}
+    </button>
+  </div>
+  <!-- 🟢 نافذة المساعدة -->
+  <div
+    v-if="showHelp"
+    class="fixed inset-0 bg-black/20 flex items-center justify-center z-50"
+  >
+    <div
+      class="bg-white p-6 rounded-2xl shadow-xl w-11/12 sm:w-96 text-center space-y-4 relative"
+    >
+      <!-- زر الإغلاق -->
+      <button
+        @click="showHelp = false"
+        class="absolute top-3 right-3 text-gray-500 cursor-pointer hover:text-red-500 text-lg"
+      >
+        ✕
+      </button>
+      <!-- المحتوى حسب الجولة -->
+      <h2 class="text-xl font-bold text-indigo-600">{{ $t('gameGuide') }}</h2>
+<p v-if="selectedRound === 1" class="text-gray-700 leading-relaxed whitespace-pre-line">
+   <b>{{ $t('round1.title') }}</b><br />
+  {{ $t('round1.description') }}
+</p>
+<p v-else-if="selectedRound === 2" class="text-gray-700 leading-relaxed whitespace-pre-line">
+   <b>{{ $t('round2.title') }}</b><br />
+  {{ $t('round2.description') }}
+</p>
+<p v-else-if="selectedRound === 3" class="text-gray-700 leading-relaxed whitespace-pre-line">
+   <b>{{ $t('round3.title') }}</b><br />
+  {{ $t('round3.description') }}
+</p>
+      <button
+        @click="showHelp = false"
+        class="mt-4 bg-indigo-600 cursor-pointer text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
+      >
+        {{ $t('gotIt') }}
+      </button>
+    </div>
+  </div>
 </div>
 </div>
 <div v-if="selectedRound === 3" class="flex flex-col sm:flex-row sm:flex-wrap justify-between gap-4 mb-6">
@@ -163,8 +213,8 @@ v-if="showModal2"
 <div class="flex-1 text-center w-full " >
   <!-- لو السؤال لسه ما اتكشفش -->
 <div v-if="!questionRevealed3" class="flex flex-col justify-center items-center h-full">
-    <div class="p-6">
-    <h1 class="text-xl font-bold mb-4">أمسح QR Code لعرض الصورة</h1>
+    <div class="p-6 flex flex-col items-centerrounded-lg  mb-6">
+    <h1 class="text-xl font-bold mb-4 text-black"> {{ $t("scanToShowQR") }}</h1>
     <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" />
   </div>
     <button
@@ -175,15 +225,12 @@ v-if="showModal2"
   </div>
   <!-- لو السؤال اتكشف -->
 <div v-else>
-  <h2 class="text-2xl font-bold text-[#24054D] mb-6">
+  <h2 class="text-2xl font-bold text-[#24054D] ">
     <!-- {{ currentQuestion3?.question_text || $t("noTitle") }} -->
   </h2>
-        <div class="media-container mx-auto mb-6">
+        <div class="media-container mx-auto">
           <!-- صورة -->
-          <img v-if="currentQuestion?.question_image" :src="getMediaUrl(currentQuestion)"
-            :alt="$t('questionImage')" class="mx-auto max-h-[150px] rounded-md" />
-          <!-- Placeholder -->
-          <img v-else :src="placeholderImg" :alt="$t('noMedia')" class="mx-auto max-h-[150px] rounded-md" />
+           <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" class="mx-auto max-h-[150px] rounded-md"  />
         </div>
 <!-- زر جاهز / أظهر الإجابة / تقييم الإجابة -->
 <div class="flex justify-center flex-col items-center w-full">
@@ -229,7 +276,7 @@ v-if="showModal2"
       </button>
       <button
         @click="switchTeam"
-        class="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
+        class="bg-red-600 hover:bg-red-700 cursor-pointer text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
       >
       {{ $t("teamTurn") }}
       </button>
@@ -266,7 +313,7 @@ v-if="showModal2"
         <input
           v-if="currentTeamIndex === 2"
           v-model="team2Inputs[switchCount]"
-          class="p-2 border rounded w-[100px] bg-amber-300 text-black  text-center ml-3"
+          class="p-2 border rounded w-[100px] bg-amber-300 text-black font-bold  text-center ml-3"
           placeholder="أدخل الإجابة"
         />
         </div>
@@ -301,7 +348,7 @@ v-if="showModal2"
         <input
           v-if="currentTeamIndex === 1"
           v-model="team1Inputs[switchCount]"
-          class="p-2 border rounded w-[100px] bg-amber-300 text-black text-center ml-3"
+          class="p-2 border rounded w-[100px] bg-amber-300 text-black font-bold  text-center ml-3"
           placeholder="أدخل الإجابة"
         />
 </div>
@@ -310,7 +357,7 @@ v-if="showModal2"
   </div>
 </div>
   <!-- الإجابة -->
-  <div v-if="showAnswer3" class="mt-4 p-4 bg-green-100 text-green-800 rounded-lg font-bold">
+  <div v-if="showAnswer3" class=" p-4 bg-green-100 text-green-800 rounded-lg font-bold">
     {{ currentQuestion3?.correct_answer || 'لا توجد إجابة' }}
   </div>
 <!-- تقييم الإجابة -->
@@ -325,11 +372,11 @@ v-if="showModal2"
 </p>
   <!-- الأزرار -->
   <div class="flex gap-4">
-    <button
-      @click="validateAnswer(true)"
-      class="bg-green-600 cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
-     {{ $t("correct") }}
-    </button>
+<button
+  @click="validateAnswer(true)"
+  class="bg-green-600 cursor-pointer hover:bg-green-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
+  {{ $t("correct") }}
+</button>
     <button
       @click="validateAnswer(false)"
       class="bg-red-600 cursor-pointer hover:bg-red-700 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
@@ -556,6 +603,15 @@ v-if="showModal2"
     class="bg-white rounded-[20px] shadow-lg relative w-full min-h-[400px] sm:w-[90%] max-w-[1100px] p-6 sm:p-8 flex flex-col-reverse lg:flex-row gap-6 border-[4px] border-[#D6B4FF]"
     :dir="currentLang === 'ar' ? 'ltr' : 'rtl'"
   >
+    <!-- هنا ضيف إشعار النقل -->
+<transition name="slide-fade">
+  <div
+    v-if="showTransferNotice"
+    class="absolute top-0 left-0 w-full bg-orange-500 text-white font-bold text-center py-3 z-50 rounded-t-[20px]"
+  >
+    تم نقل السؤال للفريق {{ currentTeam === 1 ? team1Name : team2Name }}
+  </div>
+</transition>
     <!-- زر الإغلاق -->
     <button
       @click="confirmAnswer()"
@@ -597,7 +653,7 @@ v-if="showModal2"
     <img :src="isPaused ? playIcon : pauseIcon" class="w-6 h-6" />
   </button>
 </div>
-        <div class="media-container mx-auto mb-6">
+        <div class="media-container mx-auto">
                <div class="p-6 text-center flex flex-col justify-center items-center">
     <h1 class="text-xl font-bold mb-4">{{ $t("scanToShowQR") }}</h1>
     <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" />
@@ -626,15 +682,18 @@ v-if="showModal2"
   {{ $t("showAnswer") }}
   </button>
 <!-- الإجابة -->
-<div v-if="showAnswer" class="mt-4 p-4 bg-green-100 text-green-800 rounded-lg font-bold">
+<div v-if="showAnswer" class=" p-4 bg-green-100 text-green-800 rounded-lg font-bold">
   {{ currentQuestion?.correct_answer || 'لا توجد إجابة' }}
 </div>
 <!-- تقييم الإجابة -->
 <div v-if="awaitingValidation" class="flex flex-col items-center gap-4 mt-4">
   <!-- النص التوضيحي -->
-<p class="text-lg font-semibold text-[#24054D]">
-  {{ $t("didTeamAnswerCorrectly", { team: currentTeam === 1 ? team1Name : team2Name }) }}
-</p>
+<p
+  class="text-lg font-semibold text-[#24054D]"
+  v-html="$t('didTeamAnswerCorrectly', {
+    team: `<span class='text-orange-500 font-bold'>${currentTeam === 1 ? team1Name : team2Name}</span>`
+  })"
+></p>
   <!-- الأزرار -->
   <div class="flex gap-4">
     <button
@@ -698,7 +757,8 @@ import { useToast } from "vue-toastification"
 import DrowBoard from '../../../components/DrowBoard.vue';
 import { getCategoryById } from '../../../services/categoryService';
 import { useI18n } from 'vue-i18n';
-const { locale } = useI18n();
+const { locale } = useI18n()
+const showHelp = ref(false)
 import QRCode from 'qrcode';
 const qrCodeData = ref('');
 onMounted(async () => {
@@ -959,52 +1019,44 @@ const handleReveal = () => {
   awaitingValidation.value = true;
 };
 const isTransferred = ref(false)
+const showTransferNotice = ref(false);
 const validateAnswer = (isCorrect) => {
   if (isCorrect) {
+    let pointsToAdd = 0;
     if (isTransferred.value) {
-      // ✅ لو السؤال منقول → الفريق الثاني ياخد 15 نقطة ثابتة
-      if (currentTeam.value === 1) {
-        score1.value += 15
-         toggleTeam();
-      } else {
-        score2.value += 15
-         toggleTeam();
-      }
+      pointsToAdd = 15;
     } else {
-      // ✅ لو الفريق الأساسي جاوب صح → ياخد عدد الثواني المتبقية
-      if (currentTeam.value === 1) {
-        score1.value += timer.value
-      } else {
-        score2.value += timer.value
-      }
+      pointsToAdd = timer.value;
     }
-    isTransferred.value = false
-    awaitingValidation.value = false
-    showAnswer.value = false
-    isPaused.value = true
-    timer.value = 0
+    if (currentTeam.value === 1) score1.value += pointsToAdd;
+    else score2.value += pointsToAdd;
+    answeredQuestions.value.push(currentQuestion.value.id);
+    showModal.value = false;
+    showAnswer.value = false;
+    showTransferNotice.value = false;
+    isTransferred.value = false;
     toggleTeam();
-        answeredQuestions.value.push(currentQuestion.value.id);
-    showModal.value = false
   } else {
+    // نقل السؤال للفريق الآخر إذا لم يتم النقل من قبل
     if (!isTransferred.value) {
-      // ❌ الفريق الأساسي جاوب غلط → ننقل السؤال
-      isTransferred.value = true
-      currentTeam.value = currentTeam.value === 1 ? 2 : 1
-     toast.info("تم نقل السؤال للفريق الآخر ✅", { timeout: 3000 })
+      isTransferred.value = true;
+      currentTeam.value = currentTeam.value === 1 ? 2 : 1;
+      showTransferNotice.value = true;
+      setTimeout(() => {
+        showTransferNotice.value = false;
+      }, 3000);
+      // لا تغلق المودال هنا!
     } else {
-      isTransferred.value = false
-      awaitingValidation.value = false
-      showAnswer.value = false
-      isPaused.value = true
-      timer.value = 0
-          answeredQuestions.value.push(currentQuestion.value.id);
-      showModal.value = false
-      currentTeam.value = currentTeam.value === 1 ? 2 : 1
+      // إذا كانت الإجابة خاطئة بعد النقل، أغلق المودال ولا يحصل أي فريق على نقاط
+      answeredQuestions.value.push(currentQuestion.value.id); // أضف السؤال هنا أيضا
+      showTransferNotice.value = false;
+      showModal.value = false;
+      showAnswer.value = false;
+      isTransferred.value = false;
       toggleTeam();
     }
   }
-}
+};
 /* ---------------------------------------------- */
 const awaitingValidation = ref(false);
 /*----------------------------------------------------- */
@@ -1158,4 +1210,23 @@ watch(round3Completed, (val) => {
     background-color: #4F39F6;
     color: white;
 } */
+ .slide-fade-enter-active, .slide-fade-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-fade-enter-from {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+.slide-fade-enter-to {
+  transform: translateY(0);
+  opacity: 1;
+}
+.slide-fade-leave-from {
+  transform: translateY(0);
+  opacity: 1;
+}
+.slide-fade-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
 </style>
