@@ -48,11 +48,19 @@
 - **Vue I18n** (تعدد اللغات)
 - **Vercel** للنشر
 ---
-# استنساخ المشروع من GitHub
-git clone https://github.com/Ahmedeweis/JAMAAT.git
-# الانتقال إلى مجلد المشروع
-cd JAMAAT
-# تثبيت الاعتمادات
+## Installation
+```bash
 npm install
-# تشغيل بيئة التطوير
+```
+## Compile and Hot-Reload for Development
+```bash
 npm run dev
+```
+## Type-Check, Compile and Minify for Production
+```bash
+npm run build
+```
+## Lint with ESLint
+```bash
+npm run lint
+```
