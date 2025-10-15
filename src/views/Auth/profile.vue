@@ -73,72 +73,94 @@
                             class="p-2 placeholder-[#D5C1EE] text-[#24054C]  text-right rounded-3xl bg-purple-50 border-2 border-purple-50 focus:border-[#3F0092] focus:outline-none"
                             placeholder="كلمة المرور (ضروري عند الحفظ)">
                     </div> -->
-          <button @click="handleUpdateProfile" class="w-full cursor-pointer bg-[#E3614D] text-white py-3 rounded-4xl font-bold
+          <button @click="handleUpdateProfile" class="w-full mb-0 cursor-pointer bg-[#E3614D] text-white py-3 rounded-4xl font-bold
          shadow-[5px_5px_15px_#C33520]
          transition duration-300">
             {{ $t('saveChanges') }}
           </button>
-          <div class="flex flex-col sm:flex-row gap-4 mt-6 justify-center items-center">
-            <!-- زر تسجيل الخروج -->
-            <button @click="handleLogout"
-              class="flex items-center justify-center cursor-pointer gap-2 px-6 py-3 bg-gradient-to-r from-pink-100 to-red-100 text-red-700 font-semibold rounded-xl shadow hover:from-pink-200 hover:to-red-200 transition-all duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
-              </svg>
-              {{ $t('logout') }}
-            </button>
-            <!-- زر حذف الحساب -->
-            <button @click="showDeleteModal = true"
-              class="flex items-center justify-center cursor-pointer gap-2 px-6 py-3 bg-red-500 text-white font-semibold rounded-xl shadow hover:bg-red-600 transition-all duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V4a1 1 0 011-1h6a1 1 0 011 1v3" />
-              </svg>
-              {{ $t('deleteAccount') }}
-            </button>
-<!-- ✅ مودال تأكيد حذف الحساب -->
-<div v-if="showDeleteModal" class="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded-2xl shadow-xl w-96 text-center space-y-4">
-    <h2 class="text-xl font-bold text-red-600">{{ $t('confirmDeleteAccount') }}</h2>
-    <p class="text-gray-700">⚠️ {{ $t('areYouSureToDeleteAccount') }}</p>
-    <!-- لو فيه اشتراك مدفوع -->
-    <div v-if="hasPaidSubscription" class="bg-yellow-100 text-yellow-800 p-3 rounded-lg text-sm font-semibold">
-      <p>{{ $t('paidSubscriptionWarning') }}</p>
-    </div>
-    <!-- حقل التأكيد -->
-    <div class="flex flex-col text-right">
-      <label class="text-gray-600 text-sm mb-1">
-        {{ $t('typeDeleteToConfirm') }}
-      </label>
-      <input
-        type="text"
-        v-model="confirmationText"
-        :placeholder="$t('typeDeletePlaceholder')"
-        class="p-2 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-400"
-      />
-    </div>
-    <!-- الأزرار -->
-    <div class="flex gap-4 justify-center mt-4">
-      <button
-        @click="confirmDelete"
-        :disabled="!['حذف', 'Delete'].includes(confirmationText.trim())"
-        class="px-5 py-2 cursor-pointer bg-red-500 text-white rounded-lg hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
+<div class="flex flex-col sm:flex-row gap-4 mt-6 justify-center items-center">
+  <!-- زر تسجيل الخروج -->
+  <button
+    @click="handleLogout"
+    class="flex items-center justify-center cursor-pointer gap-2 w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3
+           bg-gradient-to-r from-pink-100 to-red-100 text-red-700 font-semibold
+           rounded-lg sm:rounded-xl shadow
+           hover:from-pink-200 hover:to-red-200
+           transition-all duration-300 text-sm sm:text-base"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+    </svg>
+    {{ $t('logout') }}
+  </button>
+  <!-- زر حذف الحساب -->
+  <button
+    @click="showDeleteModal = true"
+    class="flex items-center justify-center cursor-pointer gap-2 w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3
+           bg-red-500 text-white font-semibold rounded-lg sm:rounded-xl
+           shadow hover:bg-red-600 transition-all duration-300 text-sm sm:text-base"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V4a1 1 0 011-1h6a1 1 0 011 1v3" />
+    </svg>
+    {{ $t('deleteAccount') }}
+  </button>
+  <!-- ✅ مودال تأكيد حذف الحساب -->
+  <div
+    v-if="showDeleteModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"
+  >
+    <div
+      class="bg-white p-4 sm:p-6 rounded-2xl shadow-xl w-full max-w-xs sm:max-w-md text-center space-y-4"
+    >
+      <h2 class="text-lg sm:text-xl font-bold text-red-600">
+        {{ $t('confirmDeleteAccount') }}
+      </h2>
+      <p class="text-gray-700 text-sm sm:text-base">
+        ⚠️ {{ $t('areYouSureToDeleteAccount') }}
+      </p>
+      <!-- تحذير الاشتراك -->
+      <div
+        v-if="hasPaidSubscription"
+        class="bg-yellow-100 text-yellow-800 p-2 sm:p-3 rounded-lg text-xs sm:text-sm font-semibold"
       >
-        {{ $t('deleteAccount') }}
-      </button>
-      <button
-        @click="showDeleteModal = false"
-        class="px-5 py-2 cursor-pointer bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-      >
-        {{ $t('cancel') }}
-      </button>
+        <p>{{ $t('paidSubscriptionWarning') }}</p>
+      </div>
+      <!-- حقل التأكيد -->
+      <div class="flex flex-col text-right">
+        <label class="text-gray-600 text-xs sm:text-sm mb-1">
+          {{ $t('typeDeleteToConfirm') }}
+        </label>
+        <input
+          type="text"
+          v-model="confirmationText"
+          :placeholder="$t('typeDeletePlaceholder')"
+          class="p-2 sm:p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-red-400 text-sm"
+        />
+      </div>
+      <!-- الأزرار -->
+      <div class="flex flex-col sm:flex-row gap-3 justify-center mt-3">
+        <button
+          @click="confirmDelete"
+          :disabled="!['حذف', 'Delete'].includes(confirmationText.trim())"
+          class="px-4 sm:px-5 py-2 cursor-pointer bg-red-500 text-white rounded-lg
+                 hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed transition text-sm sm:text-base"
+        >
+          {{ $t('deleteAccount') }}
+        </button>
+        <button
+          @click="showDeleteModal = false"
+          class="px-4 sm:px-5 py-2 cursor-pointer bg-gray-200 rounded-lg
+                 hover:bg-gray-300 transition text-sm sm:text-base"
+        >
+          {{ $t('cancel') }}
+        </button>
+      </div>
     </div>
   </div>
 </div>
-          </div>
         </div>
       </div>
     </div>

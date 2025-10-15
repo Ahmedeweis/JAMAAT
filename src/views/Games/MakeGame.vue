@@ -5,7 +5,7 @@
         <h1 class="text-3xl md:text-4xl font-bold pt-4 " style="font-family: 'Kufam', sans-serif;"> {{ $t("createGame")
           }} </h1>
         <div class="w-full space-y-4">
-          <div class="mx-auto bg-white shadow-xl rounded-2xl space-y-6">
+          <div class="mx-auto bg-white  rounded-2xl space-y-6">
             <!-- إدخال اسم اللعبة -->
             <div class="w-full space-y-4 mt-4" :dir="dir">
               <div class="flex flex-col" :class="dir === 'rtl' ? 'text-right' : 'text-left'">
@@ -25,12 +25,12 @@
               </div>
             </div>
             <!-- إرشادات -->
-            <p class="text-sm text-gray-500 font-bold" :class="dir === 'rtl' ? 'text-end' : 'text-start'">
+            <p class="text-lg text-black font-bold" >
               {{ $t("chooseCategories") }}
             </p>
             <div class="space-y-6 my-3" style="margin: 20px 10px; padding: 20px 0;">
               <!-- عرض حسب parent -->
-              <div v-for="parentName in parentCategories" :key="parentName" class="bg-white rounded-2xl p-4 shadow-md">
+              <div v-for="parentName in parentCategories" :key="parentName" class="bg-white rounded-2xl p-4 ">
                 <!-- عنوان التصنيف الأب -->
                 <h2 class="text-xl sm:text-2xl font-bold text-purple-700 mb-4"
                     :class="dir === 'rtl' ? 'text-right' : 'text-left'">

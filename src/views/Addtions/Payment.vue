@@ -21,7 +21,7 @@
           </h2>
           <!-- First Plan -->
           <div v-if="firstPlan" @click="selectedPlan = firstPlan.id"
-               class="bg-white rounded-3xl shadow-lg w-47 text-center pb-5 cursor-pointer transition-all"
+               class="plan-card bg-white rounded-3xl shadow-lg w-47 text-center pb-5 cursor-pointer transition-all"
                :class="selectedPlan === firstPlan.id ? 'ring-4 ring-[#9747FF] scale-105' : ''"
                dir="ltr"
                style="margin: 20px 10px; font-family: 'Kufam', sans-serif;">
@@ -37,7 +37,7 @@
             </div>
           </div>
           <!-- Other Plans -->
-          <div class="flex flex-wrap justify-start items-center flex-row-reverse">
+        <div class="flex flex-wrap justify-center sm:justify-start items-center">
             <div  v-for="plan in plans" :key="plan.id" @click="selectedPlan = plan.id"
                  class="bg-white rounded-3xl shadow-lg w-50 text-center pb-5 cursor-pointer transition-all"
                  :class="selectedPlan === plan.id ? 'ring-4 ring-[#9747FF] scale-105' : ''"
@@ -158,3 +158,10 @@ const goToPayment = () => {
   });
 };
 </script>
+<style scoped>
+@media (max-width: 640px) {
+  .plan-card {
+    align-self: center;
+  }
+}
+</style>

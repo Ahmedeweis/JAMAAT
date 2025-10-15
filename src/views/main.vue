@@ -10,7 +10,7 @@ style="  display: flex;
   <!-- Input + Button في صف واحد -->
   <div class="flex w-full sm:max-w-[350px] items-end gap-2">
     <div class="flex flex-col flex-1">
-      <div class="flex items-center justify-end sm:justify-start gap-2 mb-2">
+      <div class="flex items-center justify-start  gap-2 mb-2">
         <span class="text-base sm:text-lg font-semibold text-black truncate">{{ $t("activateYourBalance") }}</span>
         <img src="../assets/imgs/lighting.svg" class="w-4 h-4 sm:w-5 sm:h-5">
       </div>
@@ -49,10 +49,17 @@ style="  display: flex;
         <div class="flex-1 bg-white text-gray-800 flex justify-center items-center flex-col mt-2 sm:mt-2 rounded-2xl p-2 sm:p-6 text-center">
           <h2 class="text-base sm:text-2xl font-bold text-red-500"> {{ $t("buyMoreSaveMore") }}</h2>
           <p class="m-2 sm:m-4 text-xs sm:text-base">{{ $t("maxGamesNotice") }}</p>
-          <router-link to="/MakeGame"
-            class="w-full md:w-2/3 cursor-pointer bg-[#E3614D] flex justify-center items-center text-white py-2 sm:py-3 rounded-4xl font-bold shadow-[5px_5px_15px_#C33520] transition duration-300 text-xs sm:text-base">
-            {{ $t("createGame") }}
-          </router-link>
+<router-link
+  to="/MakeGame"
+  class="w-11/12 sm:w-3/4 md:w-2/3 cursor-pointer bg-[#E3614D]
+         flex justify-center items-center text-white
+         py-1.5 sm:py-3 rounded-3xl font-bold
+         shadow-[3px_3px_10px_#C33520]
+         transition duration-300
+         text-[13px] sm:text-base"
+>
+  {{ $t("createGame") }}
+</router-link>
         </div>
       </div>
       <div class="bg-white text-gray-800 rounded-2xl p-3 sm:p-6 mb-2 sm:mb-4 text-center"
@@ -126,51 +133,70 @@ style="  display: flex;
         </div>
         <div v-else v-for="game in games" :key="game.id" class="mb-3 sm:mb-6 bg-white p-2 sm:p-3 rounded-2xl">
           <div class="bg-[#FEF2E7] p-2 sm:p-4 rounded-2xl shadow-md">
-            <div class="flex flex-col sm:flex-row items-center justify-between mb-2 sm:mb-4">
-              <router-link :to="{
-                name: 'StartGame',
-                query: { id: game.game.id }
-              }" class="cursor-pointer bg-red-500 w-20 sm:w-25 text-center text-white px-2 sm:px-3 py-1 sm:px-6 sm:py-2 text-xs sm:text-base rounded-full font-semibold hover:text-red-600 hover:bg-white transition duration-200">
-                {{ $t("start") }}
-              </router-link>
-              <h2 class="text-lg sm:text-2xl font-bold mb-2 sm:mb-4 text-purple-700 text-end"> {{ game.game.name }}</h2>
-            </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4" dir="rtl">
-              <div v-for="categoryWrapper in game.game.game_category" :key="categoryWrapper.category.id"
-                class="rounded-xl shadow-md hover:shadow-xl transition-all duration-300 relative group p-2 sm:p-4
-                bg-gradient-to-b from-yellow-400 to-red-500">
-                <img :src="categoryWrapper.category.image_url" alt="صورة التصنيف"
-                  class="w-full h-20 sm:h-36 object-contain mb-2 sm:mb-3 rounded-xl mt-2 sm:mt-3" />
-                <div class="flex items-center justify-between mb-1 sm:mb-4 px-1 sm:px-2">
-                  <h5 class="text-xs sm:text-[16px] font-bold text-white truncate line-clamp-2 text-end ml-1 sm:ml-2"
-                    dir="rtl">
-                    {{ categoryWrapper.category.name }}
-                  </h5>
-                  <button @click="toggleHint(categoryWrapper.category.id)"
-                    class="text-amber-700 cursor-pointer text-xs sm:text-sm bg-white rounded-full px-2 sm:px-3 py-1 font-bold hover:bg-yellow-200 focus:outline-none"
-                    title="عرض التلميح">
-                    i
-                  </button>
-                </div>
-                <div v-if="activeHintId !== null"
-                  class="fixed bottom-0 left-0 w-full text-white text-xs sm:text-sm p-2 sm:p-4 rounded-t-lg shadow-lg z-50
-                  bg-gradient-to-l from-red-500 to-yellow-400 "
-                  dir="rtl">
-                  <div class="max-w-7xl mx-auto flex justify-between items-center ">
-                    <div>
-                      💡
-                      {{
-                        categories.find(cat => cat.id === activeHintId)?.hint || 'لا يوجد تلميح'
-                      }}
-                    </div>
-                    <button @click="activeHintId = null"
-                      class="text-white cursor-pointer font-bold px-2 sm:px-3 py-1 rounded transition">
-                      {{ $t("close") }}
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+<div class="flex flex-row items-center justify-between mb-2 sm:mb-4">
+  <router-link
+    :to="{
+      name: 'StartGame',
+      query: { id: game.game.id }
+    }"
+    class="cursor-pointer bg-red-500 w-20 sm:w-28 text-center text-white px-2 sm:px-4 py-1 sm:py-2 text-[10px] sm:text-base rounded-full font-semibold hover:text-red-600 hover:bg-white transition duration-200"
+  >
+    {{ $t("start") }}
+  </router-link>
+  <h2 class="text-sm sm:text-2xl font-bold text-purple-700 text-end truncate max-w-[70%]">
+    {{ game.game.name }}
+  </h2>
+</div>
+ <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4" dir="rtl">
+  <div
+    v-for="categoryWrapper in game.game.game_category"
+    :key="categoryWrapper.category.id"
+    class="rounded-xl shadow-md hover:shadow-xl transition-all duration-300 relative group p-2 sm:p-4
+           bg-gradient-to-b from-yellow-400 to-red-500"
+  >
+    <img
+      :src="categoryWrapper.category.image_url"
+      alt="صورة التصنيف"
+      class="w-full h-24 sm:h-36 object-contain mb-2 sm:mb-3 rounded-xl mt-2 sm:mt-3"
+    />
+    <div class="flex items-center justify-between mb-1 sm:mb-4 px-1 sm:px-2">
+      <h5
+        class="text-xs sm:text-[16px] font-bold text-white truncate line-clamp-2 text-end ml-1 sm:ml-2"
+        dir="rtl"
+      >
+        {{ categoryWrapper.category.name }}
+      </h5>
+      <button
+        @click="toggleHint(categoryWrapper.category.id)"
+        class="text-amber-700 cursor-pointer text-xs sm:text-sm bg-white rounded-full px-2 sm:px-3 py-1 font-bold hover:bg-yellow-200 focus:outline-none"
+        title="عرض التلميح"
+      >
+        i
+      </button>
+    </div>
+    <div
+      v-if="activeHintId !== null"
+      class="fixed bottom-0 left-0 w-full text-white text-xs sm:text-sm p-2 sm:p-4 rounded-t-lg shadow-lg z-50
+             bg-gradient-to-l from-red-500 to-yellow-400"
+      dir="rtl"
+    >
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <div>
+          💡
+          {{
+            categories.find(cat => cat.id === activeHintId)?.hint || 'لا يوجد تلميح'
+          }}
+        </div>
+        <button
+          @click="activeHintId = null"
+          class="text-white cursor-pointer font-bold px-2 sm:px-3 py-1 rounded transition"
+        >
+          {{ $t("close") }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
           </div>
         </div>
       </div>
