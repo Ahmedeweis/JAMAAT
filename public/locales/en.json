@@ -272,5 +272,9 @@
   "TheSecondTeam": "Second Team",
   "didTeamAnswerCorrectly": "Did team {team} answer correctly?",
   "currentRound": "Current Round",
-  "point": "Points"
+  "point": "Points",
+  "teamHelp": "Team Assistance",
+  "doublePointsActivated": "Double points activated",
+  "blockOpponent": "Opponent blocked from answering",
+  "halfPointsLost": "Half points deducted"
 }

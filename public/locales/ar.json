@@ -272,5 +272,9 @@
   "TheSecondTeam": "الفريق الثاني",
   "didTeamAnswerCorrectly": "هل أجاب الفريق {team} الإجابة الصحيحة؟",
   "currentRound": "الجولة الحالية ",
-  "point": "نقاط"
+  "point": "نقاط",
+  "teamHelp": "مساعدات الفريق",
+  "doublePointsActivated": "تم مضاعفة نقاط السؤال",
+  "blockOpponent": "تم منع الخصم من الإجابة",
+  "halfPointsLost": "تم خصم نصف نقاط السؤال"
 }

@@ -177,9 +177,9 @@
           <!-- Placeholder -->
           <img v-else :src="placeholderImg" :alt="$t('noMedia')" class="mx-auto max-h-[150px] rounded-md" />
         </div>
-        <p class="text-sm text-gray-600 mb-4">
-          ({{ currentQuestion?.points }} {{ $t("points") }})
-        </p>
+<p class=" text-[#29005a] text-bold text-2xl mb-4">
+  {{ finalPoints }} {{ $t("points") }}
+</p>
         <div class="mt-6">
           <!-- المرحلة 1: زر عرض الإجابة -->
           <button v-if="!showAnswer" @click="showAnswer = true"
@@ -211,59 +211,61 @@
         <!-- الفريق الحالي -->
         <div>
 <div class="bg-black text-white text-center rounded-lg py-2 font-bold mb-3">
-   مساعدات فريق {{ currentTeam === 1 ? team1Name : team2Name }}
+    {{ $t('teamHelp') }} {{ currentTeam === 1 ? team1Name : team2Name }}
 </div>
           <!-- أزرار الفريق الحالي -->
           <div class="flex flex-col gap-2">
             <!-- المضاعفة (دفاعية) -->
-            <button @click="useHelp('double', currentTeam)" :disabled="getHelps(currentTeam).double === 0" :class="[
-              'flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-bold transition',
-              !doublePoints ? 'bg-purple-100 text-purple-600' : '',
-              doublePoints ? 'bg-purple-600 text-white' : '',
-              getHelps(currentTeam).double === 0
-                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                : 'cursor-pointer ',
-            ]">
-              <img src="../../../assets/imgs/double.svg" class="w-5 h-5" />
-              {{ $t("doublePoints") }}
-            </button>
+<button
+  @click="useHelp('double', currentTeam)"
+  :disabled="getHelps(currentTeam).double === 0"
+  :class="[
+    'flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-bold transition',
+    !doublePoints ? 'bg-purple-100 text-purple-600' : '',
+    doublePoints ? 'bg-purple-600 text-white' : '',
+    isHelpUsed('double', currentTeam) ? 'bg-gray-500 text-white cursor-not-allowed' : '',
+  ]"
+>
+  <img src="../../../assets/imgs/double.svg" class="w-5 h-5" />
+  {{ $t('doublePoints') }}
+</button>
           </div>
         </div>
         <!-- الفريق الخصم -->
         <div>
 <div class="bg-black text-white text-center rounded-lg py-2 font-bold mb-3">
-   مساعدات فريق {{ currentTeam === 2 ? team1Name : team2Name }}
+    {{ $t('teamHelp') }} {{ currentTeam === 2 ? team1Name : team2Name }}
 </div>
           <!-- أزرار هجومية ضد الخصم -->
           <div class="flex flex-col gap-2">
             <!-- منع الخصم -->
-            <button @click="useHelp('block', opponentTeam)" :disabled="getHelps(opponentTeam).block === 0" :class="[
-              'flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-bold transition',
-              !blockPoints ? 'bg-red-100 text-red-600' : '',
-              blockPoints ? 'bg-red-600 text-white' : '',
-              getHelps(opponentTeam).block === 0
-                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                : 'cursor-pointer',
-            ]">
-              <img src="../../../assets/imgs/block.svg" class="w-5 h-5" />
-              {{ $t("blockPoints") }}
-            </button>
+<button
+  @click="useHelp('block', opponentTeam)"
+  :disabled="getHelps(opponentTeam).block === 0"
+  :class="[
+    'flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-bold transition',
+    !blockPoints ? 'bg-red-100 text-red-600' : '',
+    blockPoints ? 'bg-red-600 text-white' : '',
+    isHelpUsed('block', opponentTeam) ? 'bg-gray-500 text-white cursor-not-allowed' : '',
+  ]"
+>
+  <img src="../../../assets/imgs/block.svg" class="w-5 h-5" />
+  {{ $t('blockPoints') }}
+</button>
             <!-- خصم نصف النقاط -->
-            <button @click="useHelp('half', opponentTeam)" :disabled="getHelps(opponentTeam).half === 0" :class="[
-              // ستايل أساسي ثابت
-              'flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-bold transition',
-              // الحالة العادية
-              'bg-rose-100 text-rose-600',
-              // الحالة المفعلة
-              halfPoints ? 'bg-rose-600 text-white' : '',
-              // الحالة المعطلة
-              getHelps(opponentTeam).half === 0
-                ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                : 'cursor-pointer',
-            ]">
-              <img src="../../../assets/imgs/half.png" class="w-5 h-5" />
-              {{ $t("halfPoints") }}
-            </button>
+<button
+  @click="useHelp('half', opponentTeam)"
+  :disabled="getHelps(opponentTeam).half === 0"
+  :class="[
+    'flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-bold transition',
+    'bg-rose-100 text-rose-600',
+    halfPoints ? 'bg-rose-600 text-white' : '',
+    isHelpUsed('half', opponentTeam) ? 'bg-gray-500 text-white cursor-not-allowed' : '',
+  ]"
+>
+  <img src="../../../assets/imgs/half.png" class="w-5 h-5" />
+  {{ $t('halfPoints') }}
+</button>
           </div>
         </div>
       </div>
@@ -315,6 +317,7 @@ const games = ref([]);
 const loading = ref(true);
 const error = ref(null);
 import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 const { locale } = useI18n() // ناخد اللغة الحالية من i18n
 onMounted(async () => {
   try {
@@ -461,6 +464,11 @@ if ((type === "block" && halfPoints.value) || (type === "half" && blockPoints.va
     if (type === "half") halfPoints.value = true;
   }
 };
+// 🆕 دالة جديدة لتتبع حالة زر المساعدة بعد الاستخدام
+const isHelpUsed = (type, team) => {
+  const helps = getHelps(team);
+  return helps[type] === 0; // بيرجع true لو المساعدة خلصت
+};
 const toggleTeam = () => {
   currentTeam.value = currentTeam.value === 1 ? 2 : 1;
 };
@@ -502,10 +510,19 @@ const goTo = (path, message) => {
 };
 const currentHelpMessages = computed(() => {
   const messages = [];
-  if (doublePoints.value) messages.push(' تم مضاعفة نقاط السؤال');
-  if (blockPoints.value) messages.push(' تم منع الخصم من الإجابة');
-  if (halfPoints.value) messages.push(' تم خصم نصف نقاط السؤال');
+  if (doublePoints.value) messages.push(t('doublePointsActivated'))
+  if (blockPoints.value) messages.push(t('blockOpponent'))
+  if (halfPoints.value) messages.push(t('halfPointsLost'))
   return messages;
+});
+// 🧮 حساب النقاط بعد تطبيق المساعدات
+const finalPoints = computed(() => {
+  if (!currentQuestion.value) return 0;
+  let pts = currentQuestion.value.points || 0;
+  if (blockPoints.value) pts = 0;
+  if (doublePoints.value) pts *= 2;
+  if (halfPoints.value) pts = Math.floor(pts / 2);
+  return pts;
 });
 const team1Name = ref(localStorage.getItem("team1Name") || "الفريق الأول");
 const team2Name = ref(localStorage.getItem("team2Name") || "الفريق الثاني");
