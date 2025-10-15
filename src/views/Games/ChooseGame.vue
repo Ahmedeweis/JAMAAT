@@ -56,9 +56,9 @@
 <script setup>
 import bg from '../../assets/imgs/splash.png'
 import { ref } from 'vue';
-import game1 from '../../assets/imgs/games/1.png';
-import game2 from '../../assets/imgs/games/2.png';
-import game3 from '../../assets/imgs/games/3.png';
+import game1 from '../../assets/imgs/games/1.webp';
+import game2 from '../../assets/imgs/games/2.webp';
+import game3 from '../../assets/imgs/games/3.webp';
 // Array للألعاب
 const games = [
   {

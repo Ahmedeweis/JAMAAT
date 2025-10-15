@@ -19,7 +19,7 @@
   ]"
 >
   <span class="text-sm sm:text-base font-bold">
-    {{ $t("teamTurn") }} {{ currentTeam === 1 ? team1Name : team2Name }}
+    {{ $t("teamTurni") }} {{ currentTeam === 1 ? team1Name : team2Name }}
   </span>
   <img
     src="../../../assets/imgs/switch.svg"
@@ -258,7 +258,7 @@ v-if="showModal2"
     </div>
     <!-- النقاط -->
     <div class="text-center sm:text-left">
-      <p class="text-purple-700 font-semibold text-lg">نقاط: {{ currentPoints }}</p>
+      <p class="text-purple-700 font-semibold text-lg">{{$t('point')}}: {{ currentPoints }}</p>
     </div>
     <!-- أزرار التحكم -->
     <div class="flex gap-2 sm:gap-4">
@@ -308,14 +308,14 @@ v-if="showModal2"
           v-if="currentTeamIndex === 2"
           v-model="team2Inputs[switchCount]"
           class="p-2 border rounded w-[100px] bg-amber-300 text-black font-bold  text-center ml-3"
-          placeholder="أدخل الإجابة"
+       :placeholder="$t('enter word')"
         />
         </div>
       </div>
     </div>
         <!-- الفريق الأول -->
     <div class="flex-1  bg-white rounded-lg p-6 shadow-md">
-      <h3 class="text-lg font-semibold text-center text-purple-900 mb-4">الفريق الأول</h3>
+      <h3 class="text-lg font-semibold text-center text-purple-900 mb-4"> {{ $t("fristTeam") }}</h3>
       <!-- النقاط الحالية -->
       <!-- <div v-if="currentTeamIndex === 1" class="text-center text-2xl font-bold text-purple-900 mb-4">
         {{ currentPoints }}
@@ -337,13 +337,13 @@ v-if="showModal2"
           @click="submitTeam1"
           class="bg-purple-600 text-white px-4 w-[100px]  cursor-pointer py-2 rounded-lg hover:bg-purple-700 shadow-md transition"
         >
-          أرسل
+          {{ $t("send") }}
         </button>
         <input
           v-if="currentTeamIndex === 1"
           v-model="team1Inputs[switchCount]"
           class="p-2 border rounded w-[100px] bg-amber-300 text-black font-bold  text-center ml-3"
-          placeholder="أدخل الإجابة"
+         :placeholder="$t('enter word')"
         />
 </div>
       </div>
@@ -687,9 +687,9 @@ v-if="showModal2"
 <transition name="slide-fade">
   <div
     v-if="showTransferNotice"
-    class="absolute top-0 left-0 w-full bg-orange-500 text-white font-bold text-center py-3 z-50 rounded-lg animate-slideDown"
+    class="absolute top-0 left-0 w-full bg-[#ECE1FB] text-white font-bold text-center py-3 z-50 rounded-lg animate-slideDown"
   >
-    <span class="text-white">تم نقل السؤال لفريق </span>
+    <span class="text-[#24054D]">  {{ $t("movedToTeam") }}   </span>
     <span class="text-black font-bold text-xl">
       {{ currentTeam === 1 ? team1Name : team2Name }}
     </span>
