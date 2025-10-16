@@ -2,7 +2,7 @@
   <div class="bg-cover bg-center min-h-screen w-full  flex flex-col items-center justify-center p-4 text-white relative"
    :style="`background-image: url(${bg});`">
           <div class="text-center mb-6">
-      <div class="flex justify-center mb-2">
+      <div class="flex justify-center mb-2" dir="ltr">
         <img src="../../assets/imgs/image.png" class="w-[150px]">
       </div>
       <p class="text-2xl mb-5">التحقق من البريد الإلكتروني</p>
@@ -21,16 +21,7 @@
     @input="(e) => focusNext(e, index)"
   />
 </div>
-  <!-- <p class="text-sm text-gray-300 mb-2">
-     إعادة الإرسال بعد <span class="font-bold text-white">{{ formattedTimer }}</span>
-  </p> -->
-  <!-- <button
-    class="px-4 py-2 cursor-pointer   bg-white text-[#3F0092] font-bold rounded-xl transition disabled:opacity-50 disabled:cursor-not-allowed"
-    :disabled="isWaiting"
-    @click="handleResend"
-  >
-    إعادة إرسال الرمز
-  </button> -->
+
   <div class="text-center mt-4 mb-8 w-full">
       <button  @click="handleVerify" class="w-1/2 cursor-pointer bg-[#E3614E] text-white p-3 rounded-4xl mt-6 hover:bg-red-600 transition duration-200">
         تأكيد
