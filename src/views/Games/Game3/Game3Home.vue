@@ -214,8 +214,17 @@ v-if="showModal2"
   <!-- لو السؤال لسه ما اتكشفش -->
 <div v-if="!questionRevealed3" class="flex flex-col justify-center items-center h-full">
     <div class="p-6 flex flex-col items-centerrounded-lg  mb-6">
-    <h1 class="text-xl font-bold mb-4 text-black"> {{ $t("scanToShowQR") }}</h1>
-    <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" />
+      <div v-if="qrCodeData"   class="flex flex-col items-center justify-center">
+            <h1 class="text-xl font-bold mb-4 text-black"> {{ $t("scanToShowQR") }}</h1>
+   <img  :src="qrCodeData" alt="QR Code" class="w-48 h-48 " />
+      </div>
+  <div
+    v-else-if="showDefaultImage"
+    class="text-gray-600 bg-gray-100 p-4 rounded-lg font-semibold flex flex-col items-center justify-center"
+  >
+   سؤال غير صالح لا يوجد به صورة
+    <img  :src="defulteImg" alt="QR Code" class="w-48 h-48text-center" />
+  </div>
   </div>
     <button
       @click="questionRevealed3 = true"
@@ -224,21 +233,28 @@ v-if="showModal2"
     </button>
   </div>
   <!-- لو السؤال اتكشف -->
-<div v-else>
-  <h2 class="text-2xl font-bold text-[#24054D] mb-6">
+<div v-else class="p-6 flex flex-col items-centerrounded-lg  mb-6">
+  <h2 class="text-2xl font-bold text-[#24054D] ">
     <!-- {{ currentQuestion3?.question_text || $t("noTitle") }} -->
   </h2>
-        <div class="media-container mx-auto">
-          <!-- صورة -->
-           <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" class="mx-auto max-h-[150px] rounded-md"  />
-        </div>
+      <div v-if="qrCodeData"   class="flex flex-col items-center justify-center">
+            <h1 class="text-xl font-bold mb-4 text-black"> {{ $t("scanToShowQR") }}</h1>
+   <img  :src="qrCodeData" alt="QR Code" class="w-48 h-48 " />
+      </div>
+  <div
+    v-else-if="showDefaultImage"
+    class="text-gray-600 bg-gray-100 p-4 rounded-lg font-semibold flex flex-col items-center justify-center"
+  >
+   سؤال غير صالح لا يوجد به صورة
+    <img  :src="defulteImg" alt="QR Code" class="w-48 h-48text-center" />
+  </div>
 <!-- زر جاهز / أظهر الإجابة / تقييم الإجابة -->
 <div class="flex justify-center flex-col items-center w-full">
   <!-- زر جاهز -->
   <button
     v-if="!isReady3 && !awaitingValidation3"
     @click="handleReady3"
-    class="bg-indigo-600 cursor-pointer hover:bg-indigo-800 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
+    class="bg-indigo-600 mt-4 cursor-pointer hover:bg-indigo-800 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
     {{ $t('Ready') }}
   </button>
   <!-- زر أظهر الإجابة -->
@@ -649,10 +665,26 @@ v-if="showModal2"
   </button>
 </div>
         <div class="media-container mx-auto mb-6">
-               <div class="p-6 text-center flex flex-col justify-center items-center">
-    <h1 class="text-xl font-bold mb-4">{{ $t("scanToShowQR") }}</h1>
-    <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" />
+<div class="p-6 text-center flex flex-col justify-center items-center">
+  <h1  v-if="qrCodeData"  class="text-xl font-bold mb-4 text-black">{{ $t("scanToShowQR") }}</h1>
+  <!-- ✅ لو فيه QR -->
+  <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" class="w-48 h-48" />
+  <!-- ✅ لو مافيش وسائط -->
+  <div
+    v-else-if="showDefaultImage"
+    class="text-gray-600 bg-gray-100 p-4 rounded-lg font-semibold flex flex-col items-center "
+  >
+   سؤال غير صالح لا يوجد به صورة
+    <img  :src="defulteImg" alt="QR Code" class="w-48 h-48" />
   </div>
+  <!-- ✅ لو حصل خطأ -->
+  <div
+    v-else
+    class="text-red-600 bg-red-100 p-4 rounded-lg font-semibold"
+  >
+    حصل خطأ أثناء تحميل الوسائط
+  </div>
+</div>
           <!-- صورة -->
           <!-- <img v-if="currentQuestion?.question_image" :src="getMediaUrl(currentQuestion)"
             :alt="$t('questionImage')" class="mx-auto max-h-[150px] rounded-md" /> -->
@@ -765,6 +797,7 @@ import { ref, onMounted ,watch ,computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 // import data from './sports-category.json';
 import playIcon from '../../../assets/imgs/play.png';
+import defulteImg from '/no-media.png'
 import scan from '../../../assets/imgs/scan.png';
 import pauseIcon from '../../../assets/imgs/pause.svg';
 import bg from '../../../assets/imgs/splash.png';
@@ -778,7 +811,7 @@ const showHelp = ref(false)
 import QRCode from 'qrcode';
 const qrCodeData = ref('');
 onMounted(async () => {
-  const imageUrl = 'https://game-wise.smartleadtech.com/images/questions/1757344336.jpg';
+  // const imageUrl = 'https://game-wise.smartleadtech.com/images/questions/1757344336.jpg';
   try {
     qrCodeData.value = await QRCode.toDataURL(imageUrl);
   } catch (err) {
@@ -887,10 +920,24 @@ const selectQuestion3 = async (question) => {
     team2Inputs.value = Array(12).fill('');
     switchCount.value = 0;
     showModal2.value = true;
+    // ✅ فحص هل فيه أي وسائط (صورة / فيديو / صوت)
+    const hasMedia =
+      question.question_image ||
+      question.question_video ||
+      question.question_audio;
     try {
-      qrCodeData.value = await QRCode.toDataURL(getMediaUrl(question)); // توليد QR للصورة الخاصة بالسؤال
+      if (hasMedia) {
+        const mediaUrl = getMediaUrl(question);
+        qrCodeData.value = await QRCode.toDataURL(mediaUrl);
+        showDefaultImage.value = false;
+      } else {
+        qrCodeData.value = null;
+        showDefaultImage.value = true;
+      }
     } catch (err) {
       console.error('خطأ في توليد QR code:', err);
+      qrCodeData.value = null;
+      showDefaultImage.value = true;
     }
   }
 };
@@ -954,36 +1001,39 @@ const questions = ref([]);
 const questionsRound2 = ref([]);
 const answeredQuestions = ref([]);
 const answeredQuestionsRound2 = ref([]);
-import { getCategories } from '../../../services/categoryService';
+import { getCategoryQuestions } from '../../../services/categoryServicee';
 const loadQuestions = async (categoryId, currentLang) => {
   try {
-    const res = await getCategories({ game: 3 }, currentLang);
-    const categoriesData = res?.data?.result?.data || res?.data?.data;
-    if (!categoriesData) {
-      console.error("No categories data received from API");
+    // ✅ جلب الأسئلة من API حسب ID
+    const res = await getCategoryQuestions(categoryId);
+    // ✅ تجهيز البيانات بنفس البنية السابقة
+    const all =
+      (res?.data || res)?.map((q) => ({
+        id: q.id,
+        title: q.title,
+        question_text: q.question_text,
+        question_image: q.question_image,
+        question_video: q.question_video,
+        question_audio: q.question_audio,
+        correct_answer: q.correct_answer,
+        points: q.points,
+      })) || [];
+    if (!all.length) {
+      console.warn(`⚠️ No questions found for category ID: ${categoryId}`);
       return;
     }
-    const category = categoriesData.find(cat => cat.id === categoryId);
-    if (!category || !category.questions) {
-      console.error("No questions found for this category");
-      return;
-    }
-    const all = category.questions.map(q => ({
-      id: q.id,
-      title: q.title,
-      question_text: q.question_text,
-      question_image: q.question_image,
-      question_video: q.question_video,
-      question_audio: q.question_audio,
-      correct_answer: q.correct_answer,
-      points: q.points
-    }));
-    // slice مع التحقق من عدد الأسئلة المتوفرة
-    questions.value = all.slice(0, Math.min(8, all.length));
-    questionsRound2.value = all.slice(8, Math.min(16, all.length));
-    questionsRound3.value = all.slice(16); // لو ما فيش حاجه هتكون فاضية تلقائياً
+    // ✅ تقسيم الأسئلة حسب الجولات
+    const total = all.length;
+    questions.value = all.slice(0, Math.min(8, total)); // الجولة 1
+    questionsRound2.value = all.slice(8, Math.min(16, total)); // الجولة 2
+    // ✅ الجولة 3 (بحد أقصى 6 أسئلة فقط)
+    const remaining = all.slice(16);
+    questionsRound3.value = remaining.slice(0, Math.min(6, remaining.length));
+    console.log(
+      `✅ Loaded ${all.length} questions for Category ID ${categoryId} | Round3: ${questionsRound3.value.length}`
+    );
   } catch (error) {
-    console.error("Error loading questions from API:", error);
+    console.error("❌ Error loading questions from API:", error);
   }
 };
 /*------------------------------------------*/
@@ -998,6 +1048,10 @@ const doublePoints = ref(false);
 const blockPoints = ref(false);
 const currentLang = ref('ar');
 const selectQuestion = async (question, column) => {
+  const hasMedia =
+    question.question_image ||
+    question.question_video ||
+    question.question_audio;
   if (selectedRound.value === 1) {
     if (!answeredQuestions.value.includes(question.id)) {
       selectedQuestion.value = question.points;
@@ -1007,11 +1061,20 @@ const selectQuestion = async (question, column) => {
       doublePoints.value = false;
       blockPoints.value = false;
       questionRevealed.value = false;
-      // توليد QR ديناميكي للصورة أو الرابط الخاص بالسؤال
-      try {
-        qrCodeData.value = await QRCode.toDataURL(getMediaUrl(question));
-      } catch (err) {
-        console.error('خطأ في توليد QR code:', err);
+      // ✅ فحص إذا فيه وسائط (صورة / فيديو / صوت)
+      if (hasMedia) {
+        try {
+          const mediaUrl = getMediaUrl(question);
+          qrCodeData.value = await QRCode.toDataURL(mediaUrl);
+          showDefaultImage.value = false;
+        } catch (err) {
+          console.error("خطأ في توليد QR code:", err);
+          qrCodeData.value = null;
+          showDefaultImage.value = true;
+        }
+      } else {
+        qrCodeData.value = null;
+        showDefaultImage.value = true;
       }
     }
   } else if (selectedRound.value === 2) {
@@ -1024,10 +1087,20 @@ const selectQuestion = async (question, column) => {
       doublePoints.value = false;
       blockPoints.value = false;
       questionRevealed.value = false;
-      try {
-        qrCodeData.value = await QRCode.toDataURL(getMediaUrl(question));
-      } catch (err) {
-        console.error('خطأ في توليد QR code:', err);
+      // ✅ نفس الفكرة للجولة الثانية
+      if (hasMedia) {
+        try {
+          const mediaUrl = getMediaUrl(question);
+          qrCodeData.value = await QRCode.toDataURL(mediaUrl);
+          showDefaultImage.value = false;
+        } catch (err) {
+          console.error("خطأ في توليد QR code:", err);
+          qrCodeData.value = null;
+          showDefaultImage.value = true;
+        }
+      } else {
+        qrCodeData.value = null;
+        showDefaultImage.value = true;
       }
     }
   }
@@ -1048,57 +1121,77 @@ const handleReveal = () => {
 };
 const isTransferred = ref(false)
 const showTransferNotice = ref(false);
+// إضافة متغيرات عرض صورة للسؤال عند النهاية (جولة 1)
+const serverImageRound1 = ref('');
+const showServerImageRound1 = ref(false);
 const validateAnswer = (isCorrect) => {
-    disableValidationBtn.value = true;
+  disableValidationBtn.value = true;
   setTimeout(() => {
     disableValidationBtn.value = false;
-  }, 3000); // مدة التعطيل بالمللي ثانية
+  }, 3000); // مدة التعطيل
   if (isCorrect) {
     if (isTransferred.value) {
-      // ✅ لو السؤال منقول → الفريق الثاني ياخد 15 نقطة ثابتة
-      if (currentTeam.value === 1) {
-        score1.value += 15
-         toggleTeam();
-      } else {
-        score2.value += 15
-         toggleTeam();
-      }
+      // لو السؤال منقول → الفريق الثاني ياخد 15 نقطة ثابتة
+      if (currentTeam.value === 1) score1.value += 15;
+      else score2.value += 15;
+      toggleTeam();
     } else {
-      // ✅ لو الفريق الأساسي جاوب صح → ياخد عدد الثواني المتبقية
-      if (currentTeam.value === 1) {
-        score1.value += timer.value
-      } else {
-        score2.value += timer.value
-      }
+      // لو الفريق الأساسي جاوب صح → ياخد عدد الثواني المتبقية
+      if (currentTeam.value === 1) score1.value += timer.value;
+      else score2.value += timer.value;
     }
-    isTransferred.value = false
-    awaitingValidation.value = false
-    showAnswer.value = false
-    isPaused.value = true
-    timer.value = 0
+    // إعادة تهيئة وحفظ السؤال كمجاب عليه
+    isTransferred.value = false;
+    awaitingValidation.value = false;
+    showAnswer.value = false;
+    isPaused.value = true;
+    timer.value = 0;
+    answeredQuestions.value.push(currentQuestion.value.id);
+    showModal.value = false;
+    // لا ننسى تبديل الدور بعد المعالجة النهائية
     toggleTeam();
-        answeredQuestions.value.push(currentQuestion.value.id);
-    showModal.value = false
   } else {
     if (!isTransferred.value) {
-      // ❌ الفريق الأساسي جاوب غلط → ننقل السؤال
-      isTransferred.value = true
-      currentTeam.value = currentTeam.value === 1 ? 2 : 1
-     toast.info("تم نقل السؤال للفريق الآخر ✅", { timeout: 3000 })
- showTransferNotice.value = true;
-setTimeout(() => {
-  showTransferNotice.value = false;
-}, 3000);
+      // الفريق الأساسي جاوب غلط → ننقل السؤال للفريق الآخر مع إشعار، لا نغلق المودال
+      isTransferred.value = true;
+      currentTeam.value = currentTeam.value === 1 ? 2 : 1;
+      toast.info("تم نقل السؤال للفريق الآخر ✅", { timeout: 3000 });
+      showTransferNotice.value = true;
+      setTimeout(() => {
+        showTransferNotice.value = false;
+      }, 3000);
     } else {
-      isTransferred.value = false
-      awaitingValidation.value = false
-      showAnswer.value = false
-      isPaused.value = true
-      timer.value = 0
-          answeredQuestions.value.push(currentQuestion.value.id);
-      showModal.value = false
-      currentTeam.value = currentTeam.value === 1 ? 2 : 1
-      toggleTeam();
+      // الفريق الثاني جاوب غلط بعد النقل → ننهي السؤال:
+      // نعرض صورة السؤال (إن وجدت) ثم نغلق المودال بعد دلَي (مثلاً 3 ثواني)
+      isTransferred.value = false;
+      awaitingValidation.value = false;
+      showAnswer.value = false;
+      isPaused.value = true;
+      timer.value = 0;
+      // جلب رابط الصورة من السؤال (إن وجد)
+      const mediaUrl = getMediaUrl(currentQuestion.value);
+      if (mediaUrl) {
+        serverImageRound1.value = mediaUrl;
+        showServerImageRound1.value = true;
+      }
+      // اعلم أن السؤال انتهى الآن (تحسبه منتهي)
+      answeredQuestions.value.push(currentQuestion.value.id);
+      // أظهر رسالة/توست، اترك العرض لثواني ثم اقفل المودال وأعد التهيئة
+      toast.info('انتهى السؤال');
+      setTimeout(() => {
+        showServerImageRound1.value = false;
+        serverImageRound1.value = '';
+        showModal.value = false;
+        // إعادة تهيئة حالات المودال/تايمر
+        isTransferred.value = false;
+        awaitingValidation.value = false;
+        showAnswer.value = false;
+        isPaused.value = true;
+        timer.value = 0;
+        // أخيراً بدّل الدور للي بعده
+        currentTeam.value = currentTeam.value === 1 ? 2 : 1;
+        toggleTeam();
+      }, 3000);
     }
   }
 }
@@ -1106,12 +1199,14 @@ setTimeout(() => {
 const awaitingValidation = ref(false);
 /*----------------------------------------------------- */
 /* -------------------- 7. الميديا -------------------- */
+const defaultImage = '/imgs/no-media.png'; // داخل مجلد public
+const showDefaultImage = ref(false);
 const getMediaUrl = (question) => {
   const baseUrl = 'https://game-wise.smartleadtech.com/';
   if (question.question_image) return baseUrl + question.question_image;
   if (question.question_video) return baseUrl + question.question_video;
   if (question.question_audio) return baseUrl + question.question_audio;
-  return '';
+  return null; // مفيش ميديا
 };
 const revealAnswer = () => {
   showAnswer.value = true;

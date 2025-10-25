@@ -126,7 +126,7 @@ const toggleHint = (id) => {
 onMounted(async () => {
   try {
     const currentLang = locale.value;
-    const res = await getCategories({ game: 3 }, currentLang);
+    const res = await getCategories({}, currentLang);
     categories.value = res.data.result.data.map(cat => ({
       ...cat,
       image_url: cat.image.startsWith('http')
@@ -139,7 +139,7 @@ onMounted(async () => {
 });
 onMounted(async () => {
   const currentLang = locale.value
-     const res = await getCategories({ game: 3 }, currentLang)
+     const res = await getCategories({}, currentLang)
   categories.value = res.data.data
 })
 const visibleCategories = computed(() => categories.value.slice(0, itemsToShow.value));

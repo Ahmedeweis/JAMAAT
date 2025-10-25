@@ -54,31 +54,29 @@
         <h2 class="text-red-600 font-bold text-2xl">{{ $t("noQuestions") }}</h2>
         <button @click="router.push('/connectintro')"
           class="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-bold px-6 py-3 rounded-full shadow-lg transition">
-         {{ $t("backHome") }}
+          {{ $t("backHome") }}
         </button>
       </div>
       <!-- الأسئلة العادية -->
       <div v-else-if="currentQuestion" class="modal-container w-full flex flex-col items-center gap-4">
         <h1 class="rounded-3xl self-start text-white text-end p-3 text-2xl bg-[#01004C] w-full"
-           :dir="currentLang === 'ar' ? 'ltr' : 'rtl'">
+          :dir="currentLang === 'ar' ? 'ltr' : 'rtl'">
           {{ currentQuestion.category_name || $t("noCategory") }}
         </h1>
-<button
-  v-if="currentQuestion && currentQuestion.id !== -1 && !showAnswer"
-  @click="skipQuestion"
-  class="flex items-center gap-2  self-start active:scale-95 cursor-pointer rounded-xl text-black text-lg font-bold px-1   transition-transform duration-200">
-  <img src="../../../assets/imgs/skip.png" class="w-12 h-12" alt="skip" />
-  <span v-if="currentPlayer === 'red'" class="bg-white/20 px-2 py-0.5 rounded-md t text-lg text-[#01004C]">
-    {{ player1Skips }}
-  </span>
-  <span v-else class="bg-white/20 px-2 py-0.5 rounded-md text-lg text-[#01004C]">
-    {{ player2Skips }}
-  </span>
-</button>
+        <button v-if="currentQuestion && currentQuestion.id !== -1 && !showAnswer" @click="skipQuestion"
+          class="flex items-center gap-2  self-start active:scale-95 cursor-pointer rounded-xl text-black text-lg font-bold px-1   transition-transform duration-200">
+          <img src="../../../assets/imgs/skip.png" class="w-12 h-12" alt="skip" />
+          <span v-if="currentPlayer === 'red'" class="bg-white/20 px-2 py-0.5 rounded-md t text-lg text-[#01004C]">
+            {{ player1Skips }}
+          </span>
+          <span v-else class="bg-white/20 px-2 py-0.5 rounded-md text-lg text-[#01004C]">
+            {{ player2Skips }}
+          </span>
+        </button>
         <h2 class="text-[#024E28] text-xl font-bold text-center w-full mb-6">
-          {{ currentQuestion.title || $t("noTitle")  }}
+          {{ currentQuestion.title || $t("noTitle") }}
         </h2>
-                <div class="media-container mx-auto mb-6">
+        <div class="media-container mx-auto mb-6">
           <!-- فيديو -->
           <video v-if="currentQuestion?.question_video" :src="getMediaUrl(currentQuestion)" controls
             class="max-h-[250px] w-auto mx-auto rounded-md"></video>
@@ -112,7 +110,7 @@
           </button>
           <button @click="handleAnswer(false)"
             class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-6 rounded-full cursor-pointer">
-          {{ $t("wrong") }}
+            {{ $t("wrong") }}
           </button>
         </div>
       </div>
@@ -133,7 +131,7 @@
         <img src="../../../assets/imgs/closeo.svg" alt="Close" @click="closeModale"
           class="absolute -top-4 -right-4 cursor-pointer bg-[#FFE4E4] hover:bg-[#ffcccc] text-[#FF4B4B] w-10 h-10 rounded-full flex items-center justify-center shadow-md z-40" />
         <!-- العنوان -->
-        <h1 class="text-green-700 font-bold text-4xl mt-14 z-40">  {{ $t("connectwin") }}  </h1>
+        <h1 class="text-green-700 font-bold text-4xl mt-14 z-40"> {{ $t("connectwin") }} </h1>
         <!-- بيانات الفائز -->
         <div class="flex items-center justify-between mt-4 z-40 text-4xl p-2 rounded-xl"
           :class="currentPlayer === 'red' ? ' bg-green-700' : 'bg-amber-400'">
@@ -151,6 +149,7 @@
 import { ref, onMounted } from 'vue';
 import Swal from 'sweetalert2';
 import { getCategories } from '../../../services/categoryService';
+import { getCategoryQuestions } from '../../../services/categoryServicee'; // 👈 استبدال
 import buy from '../../../components/buy.vue'
 import bg from '../../../assets/imgs/splash.png';
 import { useToast } from 'vue-toastification';
@@ -188,57 +187,67 @@ onMounted(() => {
 const routeCategories = Array.isArray(route.query.categories)
   ? route.query.categories.map(Number)
   : route.query.categories?.split(',').map(Number) || [];
-onMounted(async () => {
-  if (routeCategories.length === 0) {
-    toast.error('لم يتم تحديد أي كاتيجوري في الرابط')
-    loading.value = false
-    return
-  }
+/* 🧩 جلب الأسئلة لكاتيجوري معين */
+const fetchCategoryQuestions = async (categoryId) => {
   try {
-      const currentLang = locale.value
-const res = await getCategories({ game: 2 }, currentLang)
-    const apiData = res?.data?.result?.data || res?.data?.data
-    if (!apiData) {
-      throw new Error('الـ API لم يرجع بيانات صحيحة')
+    loading.value = true;
+    const res = await getCategoryQuestions(categoryId);
+    const questionsData = res?.data || res; // لو الـ API بيرجع مباشرة
+    if (!questionsData || !questionsData.length) {
+      toast.warning(`لا توجد أسئلة لهذا الكاتيجوري (ID: ${categoryId})`);
+      return [];
     }
-    const allCategories = apiData.map(cat => ({
-      ...cat,
-      image_url: cat.image?.startsWith('http')
-        ? cat.image
-        : `http://game-wise.smartleadtech.com/${cat.image?.replace(/^\/+/, '')}`
-    }))
-    console.log('📌 الكاتيجوريز قبل الفلترة:', allCategories)
-    const filteredCategories = allCategories.filter(cat =>
-      routeCategories.includes(cat.id)
-    )
-    categories.value = filteredCategories
-    allQuestions.value = filteredCategories.flatMap(cat =>
-      (cat.questions || []).map(q => ({
-        ...q,
-        category_name: cat.name
-      }))
-    )
-    // إضافة السؤال الافتراضي في نهاية القايمة
-    const defaultQuestion = {
-      id: -1, // ID مميز عشان تميزه
-      question_text: 'هل تريد إعادة اللعبة للبداية ؟',
-      correct_answer: 'العودة للصفحة الرئيسية',
-      category_name: 'افتراضي',
-      question_image: null,
-      question_video: null
-    }
-    allQuestions.value.push(defaultQuestion) // إضافة السؤال الافتراضي
-console.log(allQuestions.value)
-    remainingQuestions.value = [...allQuestions.value]
-    console.log('📌 الكاتيجوريز بعد الفلترة:', categories.value)
-    console.log('📌 الأسئلة:', allQuestions.value)
-  } catch (err) {
-    console.error('❌ خطأ في جلب الكاتيجوريز:', err)
-    toast.error('فشل في تحميل الكاتيج وريز')
+    // تجهيز الأسئلة بالشكل المناسب
+    const formatted = questionsData.map((q) => ({
+      id: q.id,
+      title: q.title,
+      question_text: q.question_text,
+      correct_answer: q.correct_answer,
+      question_image: q.question_image,
+      question_video: q.question_video,
+      question_audio: q.question_audio,
+      points: q.points || 10,
+    }));
+    return formatted;
+  } catch (error) {
+    console.error("❌ فشل جلب الأسئلة:", error);
+    toast.error("حدث خطأ أثناء تحميل الأسئلة");
+    return [];
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-})
+};
+/* 🚀 عند التحميل */
+onMounted(async () => {
+  // نجيب الـ ID من الـ Route
+  const routeCategories = Array.isArray(route.query.categories)
+    ? route.query.categories.map(Number)
+    : route.query.categories?.split(',').map(Number) || [];
+  if (routeCategories.length === 0) {
+    toast.error('لم يتم تحديد أي كاتيجوري في الرابط');
+    loading.value = false;
+    return;
+  }
+  // نجيب الأسئلة لكل كاتيجوري
+  let allQs = [];
+  for (const catId of routeCategories) {
+    const catQuestions = await fetchCategoryQuestions(catId);
+    allQs.push(...catQuestions);
+  }
+  // ✅ تخزين الأسئلة في الحالة العامة
+  allQuestions.value = allQs;
+  // ✅ نضيف السؤال الافتراضي
+  const defaultQuestion = {
+    id: -1,
+    question_text: 'هل تريد إعادة اللعبة للبداية؟',
+    correct_answer: 'العودة للصفحة الرئيسية',
+    question_image: null,
+    question_video: null,
+  };
+  allQuestions.value.push(defaultQuestion);
+  remainingQuestions.value = [...allQuestions.value];
+  console.log("✅ الأسئلة النهائية:", allQuestions.value);
+});
 const selectRandomQuestion = () => {
   if (remainingQuestions.value.length === 0) return null
   // لو في سؤال واحد بس وهو الافتراضي

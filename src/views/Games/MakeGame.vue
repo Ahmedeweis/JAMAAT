@@ -163,13 +163,19 @@ const createGameHandler = async () => {
 onMounted(async () => {
   try {
     const lang = localStorage.getItem('locale') || locale.value || 'ar'
-    const res = await getCategories({ game: 1 }, lang)
-    categories.value = res.data.data.map(cat => ({
+    const res = await getCategories(
+      { no_pagination: true },
+      lang
+    )
+    console.log('📦 Categories response:', res.data)
+    // تأكد إذا كانت البيانات داخل data أو data.data
+    const cats = res.data.data || res.data
+    categories.value = cats.map(cat => ({
       ...cat,
       image_url: cat.image_url
     }))
   } catch (err) {
-    console.error("فشل في جلب التصنيفات", err)
+    console.error("⚠️ فشل في جلب التصنيفات", err)
   }
 })
 // حساب parentCategories

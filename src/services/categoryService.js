@@ -1,9 +1,13 @@
 import api from "./axios";
 // جلب جميع الكاتيجوريز بناءً على أي باراميتر، بما فيها اللعبة
-export const getCategories = (params = {}, lang) => {
+export const getCategories = (
+  { game, no_pagination = true } = {},
+  lang = 'en'
+) => {
   return api.get('/categories', {
     params: {
-      ...params, // هنا ممكن تبعت game: 1 أو 2
+      game,
+      no_pagination,
     },
     headers: {
       'lang': lang

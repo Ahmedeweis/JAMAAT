@@ -65,7 +65,7 @@ const routes = [
     name: "Apitest",
     component: () => import("../views/test/apitest.vue"),
   },
-    {
+  {
     path: "/startgame",
     name: "StartGame",
     component: () => import("../views/Games/Game1/Gameintro.vue"),
@@ -85,12 +85,12 @@ const routes = [
     name: "Homescreen",
     component: () => import("../views/Games/Game1/Homescreen.vue"),
   },
-    {
+  {
     path: "/WinGame",
     name: "WinGame",
     component: () => import("../views/Games/Game1/WinGame.vue"),
   },
-      {
+  {
     path: "/connectintro",
     name: "connectintro",
     component: () => import("../views/Games/Game2/connectintro.vue"),
@@ -130,7 +130,7 @@ const routes = [
     name: "chooseplayer3",
     component: () => import("../views/Games/Game3/chooseplayer3.vue"),
   },
-    {
+  {
     path: "/Game3Home",
     name: "Game3Home",
     component: () => import("../views/Games/Game3/Game3Home.vue"),
@@ -149,6 +149,11 @@ const routes = [
     path: "/apitest",
     name: "apitest",
     component: () => import("../views/test/apitest.vue"),
+  },
+  {
+    path: "/AllCat",
+    name: "AllCat",
+    component: () => import("../views/AllCategoriesView.vue"),
   },
 ];
 const router = createRouter({
