@@ -10,7 +10,7 @@
       <div class="mt-30 flex flex-col items-center">
         <img src="../../../assets/imgs/Group 12.svg">
         <h2 class="text-[#D9D9D9] text-3xl mt-7 font-bold">{{ $t("cat") }}</h2>
-<div class="space-y-6 my-3" style="margin: 20px 10px;"
+<div class="space-y-6 my-3 mb-8"
   >
   <!-- عرض الفئات حسب التصنيف الرئيسي -->
   <div v-for="parentName in parentCategories" :key="parentName">
@@ -47,9 +47,9 @@
     </div>
   </div>
   <!-- زر تحميل المزيد -->
-  <div class="load-more-container mt-8 flex h-fit  justify-center self-center">
+  <div class="load-more-container mt-8 flex h-fit  justify-start self-center">
     <button v-if="itemsToShow < categories.length" @click="itemsToShow += 10"
-      class="px-6 py-3  text-white rounded-lg shadow-lg cursor-pointer bg-gradient-to-l from-red-500 to-yellow-400 transition font-semibold">
+      class="px-6 py-3  self-end  text-white rounded-lg shadow-lg cursor-pointer bg-gradient-to-l from-red-500 to-yellow-400 transition font-semibold">
       تحميل المزيد
     </button>
   </div>
@@ -79,84 +79,94 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { getCategories } from '../../../services/categoryService'
 import buy from '../../../components/buy.vue'
 import bg from '../../../assets/imgs/splash.png'
 import { useToast } from 'vue-toastification'
 const { locale } = useI18n()
 const currentLang = locale.value
-import { useI18n } from 'vue-i18n'
 const toast = useToast()
 const router = useRouter()
-const itemsToShow = ref(10);
-// const gameName = ref('')
-const activeHintId = ref(null);
+// ✅ المتغيرات الأساسية
+const itemsToShow = ref(10) // أول 10 من غير تصنيف رئيسي فقط
+const activeHintId = ref(null)
 const categories = ref([])
 const selectedCategories = ref([])
-const toggleCategory = (id) => {
-  if (selectedCategories.value.includes(id)) {
-    selectedCategories.value = selectedCategories.value.filter((i) => i !== id)
-  } else {
-    if (selectedCategories.value.length < 1) {
-      selectedCategories.value.push(id)
-    } else {
-      toast.info('لا يمكنك اختيار أكثر من تصنيف ')
-    }
+// ✅ تحميل التصنيفات من API
+onMounted(async () => {
+  try {
+    const res = await getCategories({}, currentLang)
+    const data = res.data?.result?.data || res.data?.data || []
+    categories.value = data.map(cat => {
+      const imageSrc =
+        cat.image_url || cat.image || cat.image_path || cat?.media?.original_url || null
+      const fullImage = imageSrc
+        ? imageSrc.startsWith('http')
+          ? imageSrc
+          : `https://game-wise.smartleadtech.com/${imageSrc.replace(/^\/+/, '')}`
+        : '/default-placeholder.png'
+      return { ...cat, image_url: fullImage }
+    })
+  } catch (err) {
+    console.error('فشل في جلب التصنيفات:', err)
+    toast.error('حدث خطأ أثناء تحميل التصنيفات')
+  }
+})
+// ✅ تقسيم التصنيفات إلى قسمين
+const withParent = computed(() => categories.value.filter(c => c.parent?.name)) // ليها parent
+const withoutParent = computed(() => categories.value.filter(c => !c.parent?.name)) // بدون parent
+// ✅ التصنيفات المعروضة: الأول كل اللي ليها parent، وبعدين 10 من اللي بدون
+const visibleCategories = computed(() => [
+  ...withParent.value,
+  ...withoutParent.value.slice(0, itemsToShow.value)
+])
+// ✅ تحميل المزيد: يزود من اللي بدون parent فقط
+const loadMore = () => {
+  if (itemsToShow.value < withoutParent.value.length) {
+    itemsToShow.value += 10
   }
 }
+// ✅ ترتيب أسماء الأقسام الرئيسية
+const parentCategories = computed(() => {
+  const parents = visibleCategories.value.map(c => c.parent?.name || 'بدون تصنيف رئيسي')
+  const uniqueParents = [...new Set(parents)]
+  return uniqueParents.sort((a, b) =>
+    a === 'بدون تصنيف رئيسي' ? 1 : b === 'بدون تصنيف رئيسي' ? -1 : 0
+  )
+})
+// ✅ اختيار تصنيف واحد فقط + Toast للتأكيد
+const toggleCategory = (id) => {
+  if (selectedCategories.value.includes(id)) {
+    selectedCategories.value = []
+  } else {
+    selectedCategories.value = [id]
+    toast.success('اضغط زر "التالي" للمتابعة', {
+      timeout: 4000,
+      position: 'top-right'
+    })
+  }
+}
+// ✅ عرض التلميح لمدة 5 ثوانٍ
 const toggleHint = (id) => {
   if (activeHintId.value === id) {
     activeHintId.value = null
   } else {
     activeHintId.value = id
     setTimeout(() => {
-      if (activeHintId.value === id) {
-        activeHintId.value = null
-      }
+      if (activeHintId.value === id) activeHintId.value = null
     }, 5000)
   }
 }
-// const chunkedCategories = computed(() => {
-//   const chunks = []
-//   for (let i = 0; i < categories.value.length; i += 10) {
-//     chunks.push(categories.value.slice(i, i + 10))
-//   }
-//   return chunks
-// })
-onMounted(async () => {
-  try {
-    const currentLang = locale.value;
-    const res = await getCategories({}, currentLang);
-    categories.value = res.data.result.data.map(cat => ({
-      ...cat,
-      image_url: cat.image.startsWith('http')
-        ? cat.image
-        : `http://game-wise.smartleadtech.com/${cat.image.replace(/^\/+/, '')}`,
-    }));
-  } catch (err) {
-    console.error("فشل في جلب التصنيفات", err);
-  }
-});
-onMounted(async () => {
-  const currentLang = locale.value
-     const res = await getCategories({}, currentLang)
-  categories.value = res.data.data
-})
-const visibleCategories = computed(() => categories.value.slice(0, itemsToShow.value));
+// ✅ بدء اللعبة
 const startGame = () => {
   if (selectedCategories.value.length === 0) {
-    toast.error('اختر فئة واحدة  للمتابعة')
+    toast.error('اختر فئة واحدة للمتابعة')
     return
   }
   router.push({
     path: '/chooseplayer3',
-    query: {
-      categories: selectedCategories.value.join(',')
-    }
+    query: { categories: selectedCategories.value.join(',') }
   })
 }
-const parentCategories = computed(() => {
-  const parents = visibleCategories.value.map(c => c.parent?.name || 'بدون تصنيف رئيسي')
-  return [...new Set(parents)]
-})
 </script>

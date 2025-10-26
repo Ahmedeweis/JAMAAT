@@ -46,12 +46,17 @@
       </div>
     </div>
   </div>
-  <!-- زر تحميل المزيد -->
-  <div class="load-more-container mt-8 flex h-fit  justify-center self-center">
-    <button v-if="itemsToShow < categories.length" @click="itemsToShow += 10"
-      class="px-6 py-3  text-white rounded-lg shadow-lg cursor-pointer bg-gradient-to-l from-red-500 to-yellow-400 transition font-semibold">
-      تحميل المزيد
+                        <button v-if="itemsToShow < categories.length" @click="itemsToShow += 10"
+      class="px-6 py-3  self-end mx-2 text-white rounded-lg shadow-lg cursor-pointer bg-gradient-to-l from-red-500 to-yellow-400 transition font-semibold">
+      {{ $t("loadmore") }}
     </button>
+  <!-- زر تحميل المزيد -->
+  <div class="load-more-container mt-8 flex h-fit items-center  justify-around self-center">
+    <button
+  @click="startGame"
+ class="px-6 py-3 w-full mx-2 text-white rounded-lg shadow-lg cursor-pointer bg-gradient-to-l from-red-500 to-yellow-400 transition font-semibold">
+ {{ $t("next") }}
+</button>
   </div>
 </div>
         <!-- هذا هو بار التلميح الثابت أسفل الشاشة -->
@@ -66,12 +71,6 @@
             </div>
           </div>
         </div>
-<button
-  @click="startGame"
-  class="flex justify-center items-center w-full cursor-pointer p-4 mx-4 mb-5 bg-gradient-to-l from-red-500 to-yellow-400 text-white rounded-lg py-2 font-semibold hover:bg-red-600 transition"
->
- {{ $t("next") }}
-</button>
       </div>
     </div>
   </div>
@@ -79,31 +78,79 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { getCategories } from '../../../services/categoryService'
 import buy from '../../../components/buy.vue'
 import bg from '../../../assets/imgs/splash.png'
 import { useToast } from 'vue-toastification'
 const { locale } = useI18n()
 const currentLang = locale.value
-import { useI18n } from 'vue-i18n'
 const toast = useToast()
 const router = useRouter()
-const itemsToShow = ref(10);
-// const gameName = ref('')
-const activeHintId = ref(null);
+// 🟡 عدد العناصر اللي بتظهر كل مرة
+const itemsToShow = ref(10)
+const activeHintId = ref(null)
 const categories = ref([])
 const selectedCategories = ref([])
-const toggleCategory = (id) => {
-  if (selectedCategories.value.includes(id)) {
-    selectedCategories.value = selectedCategories.value.filter((i) => i !== id)
-  } else {
-    if (selectedCategories.value.length < 1) {
-      selectedCategories.value.push(id)
-    } else {
-      toast.info('لا يمكنك اختيار أكثر من تصنيف ')
-    }
+// ✅ تحميل الفئات مرة واحدة
+onMounted(async () => {
+  try {
+    const res = await getCategories({ game: 2 }, currentLang)
+    const data = res.data?.result?.data || res.data?.data || []
+    categories.value = data.map(cat => {
+      const imageSrc =
+        cat.image_url ||
+        cat.image ||
+        cat.image_path ||
+        cat?.media?.original_url ||
+        null
+      const fullImage = imageSrc
+        ? imageSrc.startsWith('http')
+          ? imageSrc
+          : `https://game-wise.smartleadtech.com/${imageSrc.replace(/^\/+/, '')}`
+        : '/default-placeholder.png'
+      return { ...cat, image_url: fullImage }
+    })
+  } catch (err) {
+    console.error('فشل في جلب التصنيفات:', err)
+    toast.error('حدث خطأ أثناء تحميل التصنيفات')
+  }
+})
+// ✅ فصل التصنيفات: اللي ليها Parent واللي بدون
+const withParent = computed(() => categories.value.filter(c => c.parent?.name))
+const withoutParent = computed(() => categories.value.filter(c => !c.parent?.name))
+// ✅ ترتيب العرض: كل اللي ليهم Parent فوق، واللي بدون Parent يظهر 10 10
+const visibleCategories = computed(() => [
+  ...withParent.value,
+  ...withoutParent.value.slice(0, itemsToShow.value)
+])
+// ✅ ترتيب أسماء التصنيفات الرئيسية بحيث "بدون تصنيف رئيسي" ييجي في الآخر
+const parentCategories = computed(() => {
+  const parents = visibleCategories.value.map(c => c.parent?.name || 'بدون تصنيف رئيسي')
+  const uniqueParents = [...new Set(parents)]
+  return uniqueParents.sort((a, b) =>
+    a === 'بدون تصنيف رئيسي' ? 1 : b === 'بدون تصنيف رئيسي' ? -1 : 0
+  )
+})
+// ✅ زرار تحميل المزيد يزود من اللي بدون Parent فقط
+const loadMore = () => {
+  if (itemsToShow.value < withoutParent.value.length) {
+    itemsToShow.value += 10
   }
 }
+// ✅ اختيار تصنيف واحد فقط
+const toggleCategory = (id) => {
+  if (selectedCategories.value.includes(id)) {
+    selectedCategories.value = []
+  } else {
+    selectedCategories.value = [id]
+    toast.success('اضغط زر "التالي" للمتابعة', {
+      timeout: 4000,
+      position: 'top-right',
+    })
+  }
+}
+// ✅ عرض التلميح لمدة 5 ثواني
 const toggleHint = (id) => {
   if (activeHintId.value === id) {
     activeHintId.value = null
@@ -116,47 +163,15 @@ const toggleHint = (id) => {
     }, 5000)
   }
 }
-// const chunkedCategories = computed(() => {
-//   const chunks = []
-//   for (let i = 0; i < categories.value.length; i += 10) {
-//     chunks.push(categories.value.slice(i, i + 10))
-//   }
-//   return chunks
-// })
-onMounted(async () => {
-  try {
-     const currentLang = locale.value
-    const res = await getCategories({ game: 2 }, currentLang)
-    categories.value = res.data.result.data.map(cat => ({
-      ...cat,
-      image_url: cat.image.startsWith('http')
-        ? cat.image
-        : `http://game-wise.smartleadtech.com/${cat.image.replace(/^\/+/, '')}`
-    }));
-  } catch (err) {
-    console.error("فشل في جلب التصنيفات", err);
-  }
-});
-onMounted(async () => {
-  const currentLang = locale.value
-const res = await getCategories({ game: 2 }, currentLang)
-  categories.value = res.data.data
-})
-const visibleCategories = computed(() => categories.value.slice(0, itemsToShow.value));
+// ✅ بدء اللعبة
 const startGame = () => {
   if (selectedCategories.value.length === 0) {
-    toast.error('اختر فئة واحدة  للمتابعة')
+    toast.error('اختر فئة واحدة للمتابعة')
     return
   }
   router.push({
     path: '/chooseplayer',
-    query: {
-      categories: selectedCategories.value.join(',')
-    }
+    query: { categories: selectedCategories.value.join(',') }
   })
 }
-const parentCategories = computed(() => {
-  const parents = visibleCategories.value.map(c => c.parent?.name || 'بدون تصنيف رئيسي')
-  return [...new Set(parents)]
-})
 </script>

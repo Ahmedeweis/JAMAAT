@@ -164,7 +164,7 @@ onMounted(async () => {
   try {
     const lang = localStorage.getItem('locale') || locale.value || 'ar'
     const res = await getCategories(
-      { no_pagination: true },
+      { no_pagination: true, game : 1 },
       lang
     )
     console.log('📦 Categories response:', res.data)

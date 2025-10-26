@@ -632,7 +632,7 @@ v-if="showModal2"
     </button>
     <!-- الجانب الأيسر -->
 <!-- داخل المودال -->
-<div class="flex-1 text-center " >
+<div class="flex-1 text-center" >
   <!-- لو السؤال لسه ما اتكشفش -->
 <div v-if="!questionRevealed" class="flex flex-col justify-center items-center h-full text-center px-4">
 <h2 class="text-xl sm:text-2xl font-semibold text-[#24054D] mb-4 leading-relaxed">
@@ -696,7 +696,7 @@ v-if="showModal2"
 <div class="flex justify-center flex-col items-center ">
   <!-- زر جاهز -->
   <button
-    v-if="!isReady && !awaitingValidation"
+    v-if="!isReady && !awaitingValidation && qrCodeData "
     @click="handleReady"
     class="bg-indigo-600 cursor-pointer hover:bg-indigo-800 text-white text-lg font-bold px-6 py-3 rounded-full shadow-lg transition">
     {{ $t("Ready") }}
@@ -1341,6 +1341,35 @@ watch(round3Completed, (val) => {
     showEndGameModal.value = true
   }
 })
+const resetQuestionState = () => {
+  // المؤقت
+  clearInterval(countdownInterval);
+  timer.value = 60;
+  isPaused.value = false;
+  // متغيرات عرض السؤال
+  showModal.value = false;
+  showAnswer.value = false;
+  awaitingValidation.value = false;
+  isTransferred.value = false;
+  showTransferNotice.value = false;
+  questionRevealed.value = false;
+  isReady.value = false;
+  // الصورة
+  showDefaultImage.value = false;
+  qrCodeData.value = null;
+  // الفريق
+  currentTeamIndex.value = 1;
+  timor.value = 15;
+  showTimor.value = false;
+  switchCount.value = 0;
+  currentPoints.value = pointsSteps[0];
+  // الجولة الثالثة
+  showModal2.value = false;
+  isReady3.value = false;
+  showAnswer3.value = false;
+  questionRevealed3.value = false;
+  showServerImage.value = false;
+};
 </script>
 <style scoped>
 /* .rouned {

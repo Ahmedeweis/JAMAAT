@@ -235,7 +235,7 @@ const parentCategories = computed(() => {
 onMounted(async () => {
   try {
     const currentLang = locale.value
-    const res = await getCategories({}, currentLang)
+    const res = await getCategories({ game : 1}, currentLang)
     categories.value = res.data.data
   } catch (err) {
     console.error("Failed to fetch categories", err)
