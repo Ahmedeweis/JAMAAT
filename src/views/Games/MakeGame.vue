@@ -180,9 +180,17 @@ onMounted(async () => {
 })
 // حساب parentCategories
 const parentCategories = computed(() => {
-  const parents = categories.value.map(c => c.parent?.name || 'بدون تصنيف رئيسي')
-  return [...new Set(parents)]
-})
+  // التصنيفات التي لها parent
+  const withParent = categories.value
+    .filter(c => c.parent?.name)
+    .map(c => c.parent.name);
+  // التصنيفات التي بدون parent
+  const withoutParent = categories.value
+    .filter(c => !c.parent?.name)
+    .map(() => 'بدون تصنيف رئيسي');
+  // دمج مع إزالة التكرار
+  return [...new Set([...withParent, ...withoutParent])];
+});
 // تحديد اتجاه الصفحة حسب اللغة
 const dir = computed(() => (locale.value === "ar" ? "rtl" : "ltr"))
 </script>

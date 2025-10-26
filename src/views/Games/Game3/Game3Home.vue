@@ -214,7 +214,25 @@ v-if="showModal2"
   <!-- لو السؤال لسه ما اتكشفش -->
 <div v-if="!questionRevealed3" class="flex flex-col justify-center items-center h-full">
     <div class="p-6 flex flex-col items-centerrounded-lg  mb-6">
-      <div v-if="qrCodeData"   class="flex flex-col items-center justify-center">
+      <div v-if="qrCodeData" class="flex flex-col items-center justify-center">
+            <div v-if="showFinalMedia3" class="mt-6 p-4 bg-gray-100 rounded-lg">
+  <h3 class="text-lg font-bold text-gray-800 mb-2">وسائط السؤال</h3>
+  <div v-if="finalMediaType3 === 'image'" class="flex justify-center">
+    <img :src="finalMediaUrl3" alt="الصورة" class="max-w-full max-h-64 rounded shadow" />
+  </div>
+  <div v-else-if="finalMediaType3 === 'video'" class="flex justify-center">
+    <video controls class="max-w-full max-h-64 rounded shadow">
+      <source :src="finalMediaUrl3" type="video/mp4" />
+      متصفحك لا يدعم الفيديو.
+    </video>
+  </div>
+  <div v-else-if="finalMediaType === 'audio'" class="flex justify-center">
+    <audio controls class="w-full max-w-xs">
+      <source :src="finalMediaUrl" type="audio/mpeg" />
+      متصفحك لا يدعم الصوت.
+    </audio>
+  </div>
+</div>
             <h1 class="text-xl font-bold mb-4 text-black"> {{ $t("scanToShowQR") }}</h1>
    <img  :src="qrCodeData" alt="QR Code" class="w-48 h-48 " />
       </div>
@@ -233,11 +251,11 @@ v-if="showModal2"
     </button>
   </div>
   <!-- لو السؤال اتكشف -->
-<div v-else class="p-6 flex flex-col items-centerrounded-lg  mb-6">
+<div v-else class="p-6 flex flex-col items-centerrounded-lg  mb-6"  >
   <h2 class="text-2xl font-bold text-[#24054D] ">
     <!-- {{ currentQuestion3?.question_text || $t("noTitle") }} -->
   </h2>
-      <div v-if="qrCodeData"   class="flex flex-col items-center justify-center">
+      <div v-if="qrCodeData "    class="flex flex-col items-center justify-center">
             <h1 class="text-xl font-bold mb-4 text-black"> {{ $t("scanToShowQR") }}</h1>
    <img  :src="qrCodeData" alt="QR Code" class="w-48 h-48 " />
       </div>
@@ -665,7 +683,26 @@ v-if="showModal2"
   </button>
 </div>
         <div class="media-container mx-auto mb-6">
-<div class="p-6 text-center flex flex-col justify-center items-center">
+          <div class="flex justify-center flex-col items-center ">
+  <div v-if="showFinalMedia" class="mt-6 p-4 bg-gray-100 rounded-lg">
+  <h3 class="text-lg font-bold text-gray-800 mb-2">وسائط السؤال</h3>
+  <div v-if="finalMediaType === 'image'" class="flex justify-center">
+    <img :src="finalMediaUrl" alt="الصورة" class="max-w-full max-h-64 rounded shadow" />
+  </div>
+  <div v-else-if="finalMediaType === 'video'" class="flex justify-center">
+    <video controls class="max-w-full max-h-64 rounded shadow">
+      <source :src="finalMediaUrl" type="video/mp4" />
+      متصفحك لا يدعم الفيديو.
+    </video>
+  </div>
+  <div v-else-if="finalMediaType === 'audio'" class="flex justify-center">
+    <audio controls class="w-full max-w-xs">
+      <source :src="finalMediaUrl" type="audio/mpeg" />
+      متصفحك لا يدعم الصوت.
+    </audio>
+  </div>
+</div>
+<div class="p-6 text-center flex flex-col justify-center items-center"  v-if="endor">
   <h1  v-if="qrCodeData"  class="text-xl font-bold mb-4 text-black">{{ $t("scanToShowQR") }}</h1>
   <!-- ✅ لو فيه QR -->
   <img v-if="qrCodeData" :src="qrCodeData" alt="QR Code" class="w-48 h-48" />
@@ -693,7 +730,6 @@ v-if="showModal2"
         </div>
 <DrowBoard v-if="selectedRound === 2 && showDrawingBoard" />
 <!-- زر جاهز / أظهر الإجابة / تقييم الإجابة -->
-<div class="flex justify-center flex-col items-center ">
   <!-- زر جاهز -->
   <button
     v-if="!isReady && !awaitingValidation && qrCodeData "
@@ -734,7 +770,7 @@ v-if="showModal2"
   })"
 ></p>
   <!-- الأزرار -->
-  <div class="flex gap-4 mt-4">
+  <div class="flex gap-4 mt-4" v-if="endor">
 <button
   @click="validateAnswer(true)"
   :disabled="disableValidationBtn"
@@ -838,15 +874,16 @@ const startTimor = (points) => {
   timor.value = 15;
   clearInterval(timerInterval);
   timerInterval = setInterval(() => {
-    if (timor.value > 0 && currentPoints.value > 0) { // شرط جديد
+    if (timor.value > 0 && currentPoints.value > 0) {
       timor.value--;
     } else {
       clearInterval(timerInterval);
-      // الوقت انتهى أو النقاط وصلت 0 → بدّل الفريق أو انهي السؤال
       if (currentPoints.value <= 0) {
-        endQuestion3(); // ننهي السؤال فورًا
+        // ✅ أنهِ السؤال فورًا مع عرض الميديا
+        endQuestion3(currentQuestion3.value); // ✅
       } else {
         switchTeam();
+        endor3 = false;
       }
     }
   }, 1000);
@@ -858,8 +895,11 @@ const submitTeam1 = () => {
 const submitTeam2 = () => {
   startTimor(currentPoints.value);
 };
+const finalMediaType3 = ref('');
+const finalMediaUrl3 = ref('');
+const showFinalMedia3 = ref(false);
 // دالة لإنهاء السؤال وإعادة كل شيء للديفولت
-const endQuestion3 = async (imageUrl = null) => {
+const endQuestion3 = async (question = null) => {
   timor.value = 15;
   showTimor.value = false;
   switchCount.value = 0;
@@ -869,16 +909,36 @@ const endQuestion3 = async (imageUrl = null) => {
   isReady3.value = false;
   showAnswer3.value = false;
   questionRevealed3.value = false;
-  // لو فيه رابط صورة من السيرفر
-  if (imageUrl) {
-    serverImage.value = imageUrl; // متغير ref لعرض الصورة
-    showServerImage.value = true; // نتحكم بالعرض
+  // ✅ عرض الميديا مباشرة من السؤال (إن وُجد)
+  if (question) {
+    let mediaType = null;
+    let mediaUrl = null;
+    if (question.question_image) {
+      mediaType = 'image';
+      mediaUrl = getMediaUrl(question);
+    } else if (question.question_video) {
+      mediaType = 'video';
+      mediaUrl = getMediaUrl(question);
+    } else if (question.question_audio) {
+      mediaType = 'audio';
+      mediaUrl = getMediaUrl(question);
+    }
+    if (mediaType && mediaUrl) {
+      finalMediaType3.value = mediaType;
+      finalMediaUrl3.value = mediaUrl;
+      showFinalMedia3.value = true;
+    } else {
+      showFinalMedia3.value = false;
+    }
+  } else {
+    showFinalMedia3.value = false;
   }
-  toast.info('انتهى السؤال ');
-  // تأخير قبل غلق المودال (مثلاً 3 ثواني)
+  toast.info('انتهى السؤال');
   setTimeout(() => {
     showModal2.value = false;
-    showServerImage.value = false; // اخفي الصورة بعد غلق المودال
+    showFinalMedia3.value = false;
+    finalMediaType3.value = '';
+    finalMediaUrl3.value = '';
   }, 3000);
 };
 // متغيرات جديدة
@@ -887,8 +947,9 @@ const showServerImage = ref(false); // هل نعرض الصورة قبل غلق 
 // تعديل switchTeam لتتحقق من النقاط
 const switchTeam = () => {
   switchCount.value++;
-  if (switchCount.value >= pointsSteps.length) {
-    endQuestion3();
+  if (switchCount.value >= pointsSteps.length - 1 || currentPoints.value <= 0) {
+     endQuestion3(currentQuestion3.value);
+     endor3 = false;
     return;
   }
   currentPoints.value = pointsSteps[switchCount.value];
@@ -1048,6 +1109,7 @@ const doublePoints = ref(false);
 const blockPoints = ref(false);
 const currentLang = ref('ar');
 const selectQuestion = async (question, column) => {
+  endor.value = true;
   const hasMedia =
     question.question_image ||
     question.question_video ||
@@ -1124,77 +1186,93 @@ const showTransferNotice = ref(false);
 // إضافة متغيرات عرض صورة للسؤال عند النهاية (جولة 1)
 const serverImageRound1 = ref('');
 const showServerImageRound1 = ref(false);
-const validateAnswer = (isCorrect) => {
+const finalMediaType = ref(''); // 'image' | 'video' | 'audio'
+const finalMediaUrl = ref('');
+const showFinalMedia = ref(false);
+const endor = ref(true);
+const endor3 =ref(true);
+const validateAnswer = async (isCorrect) => {
   disableValidationBtn.value = true;
   setTimeout(() => {
     disableValidationBtn.value = false;
-  }, 3000); // مدة التعطيل
+  }, 3000);
   if (isCorrect) {
     if (isTransferred.value) {
-      // لو السؤال منقول → الفريق الثاني ياخد 15 نقطة ثابتة
+      // الفريق الثاني أجاب صحيحًا بعد النقل → 15 نقطة
       if (currentTeam.value === 1) score1.value += 15;
       else score2.value += 15;
-      toggleTeam();
     } else {
-      // لو الفريق الأساسي جاوب صح → ياخد عدد الثواني المتبقية
-      if (currentTeam.value === 1) score1.value += timer.value;
-      else score2.value += timer.value;
+      // الفريق الأساسي أجاب صحيحًا → يأخذ الوقت المتبقي
+      const points = selectedRound.value === 1 ? timer.value : (currentQuestion.value?.points || 0);
+      if (currentTeam.value === 1) score1.value += points;
+      else score2.value += points;
     }
-    // إعادة تهيئة وحفظ السؤال كمجاب عليه
-    isTransferred.value = false;
-    awaitingValidation.value = false;
-    showAnswer.value = false;
-    isPaused.value = true;
-    timer.value = 0;
+    // إنهاء السؤال بنجاح
     answeredQuestions.value.push(currentQuestion.value.id);
-    showModal.value = false;
-    // لا ننسى تبديل الدور بعد المعالجة النهائية
+    resetModalState();
     toggleTeam();
+    showModal.value = false;
   } else {
     if (!isTransferred.value) {
-      // الفريق الأساسي جاوب غلط → ننقل السؤال للفريق الآخر مع إشعار، لا نغلق المودال
+      // الفريق الأول أجاب غلط → ننقل للفريق الثاني
       isTransferred.value = true;
       currentTeam.value = currentTeam.value === 1 ? 2 : 1;
       toast.info("تم نقل السؤال للفريق الآخر ✅", { timeout: 3000 });
       showTransferNotice.value = true;
-      setTimeout(() => {
-        showTransferNotice.value = false;
-      }, 3000);
+      setTimeout(() => showTransferNotice.value = false, 3000);
     } else {
-      // الفريق الثاني جاوب غلط بعد النقل → ننهي السؤال:
-      // نعرض صورة السؤال (إن وجدت) ثم نغلق المودال بعد دلَي (مثلاً 3 ثواني)
+      // الفريق الثاني أجاب غلط أيضًا → ننهي السؤال ونعرض الميديا مباشرة
       isTransferred.value = false;
-      awaitingValidation.value = false;
-      showAnswer.value = false;
-      isPaused.value = true;
-      timer.value = 0;
-      // جلب رابط الصورة من السؤال (إن وجد)
-      const mediaUrl = getMediaUrl(currentQuestion.value);
-      if (mediaUrl) {
-        serverImageRound1.value = mediaUrl;
-        showServerImageRound1.value = true;
+      endor.value = false;
+      const question = currentQuestion.value;
+      // ✅ تحديد نوع الميديا وعرضها مباشرة
+      let mediaType = null;
+      let mediaUrl = null;
+      if (question.question_image) {
+        mediaType = 'image';
+        mediaUrl = getMediaUrl(question);
+      } else if (question.question_video) {
+        mediaType = 'video';
+        mediaUrl = getMediaUrl(question);
+      } else if (question.question_audio) {
+        mediaType = 'audio';
+        mediaUrl = getMediaUrl(question);
       }
-      // اعلم أن السؤال انتهى الآن (تحسبه منتهي)
-      answeredQuestions.value.push(currentQuestion.value.id);
-      // أظهر رسالة/توست، اترك العرض لثواني ثم اقفل المودال وأعد التهيئة
+      // عرض الميديا مباشرة في المودال (بدون QR)
+      if (mediaType && mediaUrl) {
+        // نخزن النوع والرابط لعرضهما في الـ template
+        finalMediaType.value = mediaType;
+        finalMediaUrl.value = mediaUrl;
+        showFinalMedia.value = true;
+      } else {
+        showFinalMedia.value = false;
+      }
+      // تسجيل السؤال كـ "منتهي"
+      answeredQuestions.value.push(question.id);
       toast.info('انتهى السؤال');
+      // إغلاق المودال بعد 3 ثوانٍ
       setTimeout(() => {
-        showServerImageRound1.value = false;
-        serverImageRound1.value = '';
+        resetModalState();
         showModal.value = false;
-        // إعادة تهيئة حالات المودال/تايمر
-        isTransferred.value = false;
-        awaitingValidation.value = false;
-        showAnswer.value = false;
-        isPaused.value = true;
-        timer.value = 0;
-        // أخيراً بدّل الدور للي بعده
+        // تبديل الدور للفريق التالي
         currentTeam.value = currentTeam.value === 1 ? 2 : 1;
         toggleTeam();
       }, 3000);
     }
   }
-}
+};
+const resetModalState = () => {
+  awaitingValidation.value = false;
+  showAnswer.value = false;
+  isPaused.value = true;
+  timer.value = 0;
+  isTransferred.value = false;
+  showTransferNotice.value = false;
+  showFinalMedia.value = false;
+  finalMediaType.value = '';
+  finalMediaUrl.value = '';
+  clearInterval(countdownInterval);
+};
 /* ---------------------------------------------- */
 const awaitingValidation = ref(false);
 /*----------------------------------------------------- */

@@ -1,56 +1,67 @@
 <template>
-  <div class="min-h-screen w-full bg-cover bg-center relative h-screen flex flex-col items-center justify-center"
-       :style="`background-image: url(${bg});`">
+  <div
+    class="min-h-screen w-full bg-cover bg-center relative flex flex-col items-center justify-center"
+    :style="`background-image: url(${bg});`"
+  >
     <!-- زر الإغلاق -->
-    <router-link to="/main"
-      class="fixed top-5 left-0 m-4 flex justify-between items-center text-start bg-[#010035] shadow-lg rounded-lg z-50">
-      <img src="../../assets/imgs/close_btn.svg" alt="Logo" class="w-10 z-10" />
+    <router-link
+      to="/main"
+      class="fixed top-5 left-0 m-4 flex justify-between items-center text-start bg-[#010035] shadow-lg rounded-lg z-50"
+    >
+      <img src="../../assets/imgs/close_btn.svg" alt="Close" class="w-10 z-10" />
     </router-link>
     <!-- العنوان -->
     <h1 class="text-white text-4xl mb-8 z-10">{{ $t("games") }}</h1>
-    <img src="../../assets/imgs/JAMAAT.svg" alt="Logo" class="w-64 mb-6 z-10">
+    <img src="../../assets/imgs/JAMAAT.svg" alt="Logo" class="w-64 mb-6 z-10" />
     <p class="text-white text-lg mb-8 z-10">{{ $t("chooseGame") }}</p>
-    <!-- الألعاب -->
-<div class="grid gap-6 w-full max-w-4xl sm:grid-cols-1 md:grid-cols-2">
-  <div
-    v-for="(game, index) in games"
-    :key="index"
-    class="relative bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform transition hover:scale-105 hover:shadow-2xl"
-  >
-    <!-- رابط اللعبة -->
-    <router-link :to="game.link" class="block relative">
-      <!-- صورة اللعبة -->
-      <img :src="game.img" alt="Game Image" class="w-full  object-cover">
-      <!-- اسم اللعبة فوق يمين الصورة -->
+    <!-- قائمة الألعاب -->
+    <div class="grid gap-6 w-full max-w-4xl sm:grid-cols-1 md:grid-cols-2">
       <div
-        class="absolute top-3 right-3 bg-white/80 text-gray-900 text-sm font-semibold px-3 py-1 rounded-full shadow-md backdrop-blur-[2px]"
+        v-for="(game, index) in games"
+        :key="index"
+        class="relative bg-white rounded-xl shadow-lg overflow-hidden cursor-pointer transform transition hover:scale-105 hover:shadow-2xl"
       >
-        {{ $t(game.name) }}
+        <!-- رابط اللعبة -->
+        <router-link :to="game.link" class="block relative">
+          <img :src="game.img" alt="Game Image" class="w-full object-cover" />
+          <!-- اسم اللعبة فوق الصورة -->
+          <div
+            class="absolute top-3 right-3 bg-white/80 text-gray-900 text-sm font-semibold px-3 py-1 rounded-full shadow-md backdrop-blur-[2px]"
+          >
+            {{ $t(game.nameKey) }}
+          </div>
+        </router-link>
+        <!-- أيقونة الاستفهام -->
+        <button
+          @click.stop="openModal(index)"
+          class="absolute top-3 left-3 bg-[#BB4D84] text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-lg hover:scale-110 transition"
+        >
+          ?
+        </button>
       </div>
-    </router-link>
-    <!-- أيقونة الاستفهام -->
-    <button
-      @click.stop="openModal(index)"
-      class="absolute top-3 left-3 bg-[#BB4D84] cursor-pointer text-white w-8 h-8 rounded-full flex items-center justify-center font-bold shadow-lg hover:scale-110 transition"
-    >
-      ?
-    </button>
-  </div>
-</div>
-<transition name="fade">
-  <div v-if="modalOpen !== null"
-       class="fixed inset-0 flex items-center justify-center z-[999] p-6 bg-black/50">
-    <!-- المودال -->
-    <div class="relative bg-white rounded-xl max-w-md w-full p-6 shadow-2xl transform transition duration-300 scale-95 animate-fadeIn">
-      <!-- زر الغلق -->
-      <button @click="closeModal"
-              class="absolute top-3 right-3 text-gray-600 cursor-pointer hover:text-gray-900 font-bold text-lg">✕</button>
-      <!-- محتوى المودال -->
-      <h3 class="text-2xl font-semibold mb-4">{{ $t(games[modalOpen].name) }}</h3>
-      <p class="text-gray-700">{{ $t(games[modalOpen].description) }}</p>
     </div>
-  </div>
-</transition>
+    <!-- مودال وصف اللعبة -->
+    <transition name="fade">
+      <div
+        v-if="modalOpen !== null"
+        class="fixed inset-0 flex items-center justify-center z-[999] p-6 bg-black/50"
+      >
+        <div
+          class="relative bg-white rounded-xl max-w-md w-full p-6 shadow-2xl transform transition duration-300 scale-95 animate-fadeIn"
+        >
+          <!-- زر الغلق -->
+          <button
+            @click="closeModal"
+            class="absolute top-3 right-3 text-gray-600 cursor-pointer hover:text-gray-900 font-bold text-lg"
+          >
+            ✕
+          </button>
+          <!-- محتوى المودال -->
+          <h3 class="text-2xl font-semibold mb-4">{{ $t(games[modalOpen].nameKey) }}</h3>
+          <p class="text-gray-700">{{ $t(games[modalOpen].descKey) }}</p>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 <script setup>
@@ -62,42 +73,21 @@ import game3 from '../../assets/imgs/games/3.webp';
 // Array للألعاب
 const games = [
   {
-    name: "تحدي الأسئلة",
-     img: game1,
-    logo: "path/to/logo1.png", // شعار اللعبة لمودال الشرح
-    description: `قسم اصدقائك الى مجموعتين وقم بالاختيار من تصنيفات الأسئلة وابدأ اللعب.
-احتساب النقاط:
-200 سهل
-400 متوسط
-600 صعب.
-استخدم وسائل المساعدة لتعزيز نقاطك أو لتعطيل خصمك.`,
+    nameKey: "quizChallenge",
+    descKey: "quizChallengeDesc",
+    img: game1,
     link: "/main"
   },
   {
-    name: "وصل أربعة",
-  img: game2,
-    logo: "path/to/logo2.png",
-    description: `قسم اصدقائك الى مجموعتين واختار تصنيف واحد فقط للعب.
-احتساب النقاط:
-- هناك طريقتين للفوز، الأولوية أن تقوم بتوصيل 4 قطع من النرد بشكل متتالي.
-- في حال لم يقم احد بتوصيلها، يفوز من لديه قطع نرد أكثر على اللوح.`,
+    nameKey: "connectFour",
+    descKey: "connectFourDesc",
+    img: game2,
     link: "/connectintro"
   },
   {
-    name: "بدون كلام",
-     img: game3,
-    logo: "path/to/logo3.png",
-    description: `لديك ثلاثة جولات مختلفة للتنافس، والوقت هو العامل الرئيسي للفوز.
-مناسبة لفريقين مكونة من شخصين وأكثر.
-- الجولة الأولى (التمثيل)
-قم بمسح الباركود الظاهر من جهاز آخر، واشرح لزميلك بالحركات فقط بدون صوت أو كلام أو تلميح.
-احتساب النقاط: الثواني هي نقاطك، كلما اجبت بسرعة حصلت على نقاط اكثر.
-- الجولة الثانية (الرسم)
-قم بمسح الباركود الظاهر من جهاز آخر، واشرح لزميلك بالرسم فقط بدون صوت أو كلام، ولا تستخدم الحروف والارقام في الرسم.
-احتساب النقاط: الثواني هي نقاطك، كلما اجبت بسرعة حصلت على نقاط اكثر.
-- الجولة الثالثة (كلمة واحدة)
-قم بمسح الباركود الظاهر من جهاز آخر، واشرح لزميلك بكلمة واحدة فقط، بدون ذكر اسم الشيء الظاهر في الصورة.
-احتساب النقاط: اذا اجبت من كلمات اقل تحصل على نقاط اكثر.`,
+    nameKey: "noWords",
+    descKey: "noWordsDesc",
+    img: game3,
     link: "/Game3intro"
   }
 ];

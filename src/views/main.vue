@@ -229,9 +229,17 @@ const toggleHint = (id) => {
 }
 // دالة استخراج أسماء التصنيفات الرئيسية (parent)
 const parentCategories = computed(() => {
-  const parents = categories.value.map(c => c.parent?.name || 'بدون تصنيف رئيسي')
-  return [...new Set(parents)]
-})
+  // اجلب جميع أسماء التصنيفات الرئيسية
+  const parentsWithCategory = categories.value
+    .filter(c => c.parent?.name) // لديهم تصنيف رئيسي
+    .map(c => c.parent.name);
+  // اجلب التصنيفات التي ليس لها parent
+  const parentsWithoutCategory = categories.value
+    .filter(c => !c.parent?.name)
+    .map(() => 'بدون تصنيف رئيسي');
+  // دمجهم بحيث الأول لديهم parent ثم بدون parent
+  return [...new Set([...parentsWithCategory, ...parentsWithoutCategory])];
+});
 onMounted(async () => {
   try {
     const currentLang = locale.value

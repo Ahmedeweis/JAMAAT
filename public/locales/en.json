@@ -279,5 +279,10 @@
   "teamHelp": "Team Assistance",
   "doublePointsActivated": "Double points activated",
   "blockOpponent": "Opponent blocked from answering",
-  "halfPointsLost": "Half points deducted"
+  "halfPointsLost": "Half points deducted",
+  "quizChallenge": "Quiz Challenge",
+  "noWords": "No Words",
+  "quizChallengeDesc": "Divide your friends into two teams and choose question categories to start playing.\nPoints:\n200 easy\n400 medium\n600 hard.\nUse aids to boost your points or block your opponent.",
+  "connectFourDesc": "Divide your friends into two teams and choose a single category.\nWays to win:\n1- Connect 4 pieces consecutively.\n2- If no one connects, the one with more pieces wins.",
+  "noWordsDesc": "You have three rounds to compete; time is the key factor.\nRound 1: Acting...\nRound 2: Drawing...\nRound 3: One word..."
 }
