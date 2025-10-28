@@ -324,6 +324,7 @@ const closeModal = () => {
   currentQuestion.value = null;
   showAnswer.value = false;
 };
+const playerAnswer = ref('');
 const revealAnswer = () => {
   showAnswer.value = true;
   if (playerAnswer.value === currentQuestion.value?.correct_answer) {

@@ -11,8 +11,8 @@
       <img src="../../assets/imgs/close_btn.svg" alt="Close" class="w-10 z-10" />
     </router-link>
     <!-- العنوان -->
-    <h1 class="text-white text-4xl mb-8 z-10">{{ $t("games") }}</h1>
-    <img src="../../assets/imgs/JAMAAT.svg" alt="Logo" class="w-64 mb-6 z-10" />
+    <h1 class="text-white text-4xl mb-8 mt-10 z-10">{{ $t("games") }}</h1>
+    <img src="../../assets/imgs/JAMAAT.svg" alt="Logo" class="w-50 mb-6 z-10" />
     <p class="text-white text-lg mb-8 z-10">{{ $t("chooseGame") }}</p>
     <!-- قائمة الألعاب -->
     <div class="grid gap-6 w-full max-w-4xl sm:grid-cols-1 md:grid-cols-2">

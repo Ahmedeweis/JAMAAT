@@ -65,7 +65,14 @@ style="  display: flex;
       <div class="bg-white text-gray-800 rounded-2xl p-3 sm:p-6 mb-2 sm:mb-4 text-center"
         style="font-family: 'Kufam', sans-serif;margin: 10px 5px;">
         <router-link to="/GameLib">
-          <h2 class="text-lg sm:text-2xl font-bold text-purple-700" style="font-family: 'Rubik';">{{ $t("jamaatGameLibrary") }}</h2>
+<div class="flex justify-center">
+            <h2 class="text-lg ml-2 sm:text-2xl font-bold text-purple-700" style="font-family: 'Rubik';">{{ $t("jamaatGameLibrary") }}</h2>
+        <h1
+        style=" font-family:'Andalus','Kufam', 'sans-serif'"
+         class="mb-2 sm:mb-4 text-[#E3614D] text-2xl  tracking-wide select-none">
+  جمعات
+</h1>
+</div>
           <p class="text-xs sm:text-base"> {{ $t("findo") }}</p>
         </router-link>
       </div>
