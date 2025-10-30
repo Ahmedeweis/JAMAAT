@@ -5,7 +5,7 @@
   <!-- Hero Content -->
   <img src="../assets/imgs/JAMAAT.svg" alt="JAMAAT Logo" class="w-36 mb-6 animate-bounce z-10" />
   <h1 class="text-5xl sm:text-6xl font-extrabold mb-4 leading-snug z-10">
-    مرحبًا بك في عالم <span class="text-yellow-400">JAMAAT</span>
+    مرحبًا بك في عالم <span class="text-[#E3614D] "  style=" font-family:'Andalus','Kufam', 'sans-serif'">جمعات</span>
   </h1>
   <p class="text-lg sm:text-xl mb-8 text-gray-300 max-w-2xl mx-auto z-10">
     جرب المتعة والتحدي في لعبتين مشوّقتين 👾
