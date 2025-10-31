@@ -1228,6 +1228,7 @@ const validateAnswer = async (isCorrect) => {
       // ✅ تحديد نوع الميديا وعرضها مباشرة
       let mediaType = null;
       let mediaUrl = null;
+      showDrawingBoard.value = false;
       if (question.question_image) {
         mediaType = 'image';
         mediaUrl = getMediaUrl(question);
