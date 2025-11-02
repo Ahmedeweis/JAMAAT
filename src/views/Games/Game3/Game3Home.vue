@@ -214,8 +214,8 @@ v-if="showModal2"
   <!-- لو السؤال لسه ما اتكشفش -->
 <div v-if="!questionRevealed3" class="flex flex-col justify-center items-center h-full">
     <div class="p-6 flex flex-col items-centerrounded-lg  mb-6">
-      <div v-if="qrCodeData" class="flex flex-col items-center justify-center">
-            <div v-if="showFinalMedia3" class="mt-6 p-4 bg-gray-100 rounded-lg">
+<!-- ✅ عرض الوسائط أولاً -->
+<div v-if="showFinalMedia3" class="mt-6 p-4 bg-gray-100 rounded-lg">
   <h3 class="text-lg font-bold text-gray-800 mb-2">وسائط السؤال</h3>
   <div v-if="finalMediaType3 === 'image'" class="flex justify-center">
     <img :src="finalMediaUrl3" alt="الصورة" class="max-w-full max-h-64 rounded shadow" />
@@ -223,19 +223,27 @@ v-if="showModal2"
   <div v-else-if="finalMediaType3 === 'video'" class="flex justify-center">
     <video controls class="max-w-full max-h-64 rounded shadow">
       <source :src="finalMediaUrl3" type="video/mp4" />
-      متصفحك لا يدعم الفيديو.
     </video>
   </div>
-  <div v-else-if="finalMediaType === 'audio'" class="flex justify-center">
+  <div v-else-if="finalMediaType3 === 'audio'" class="flex justify-center">
     <audio controls class="w-full max-w-xs">
-      <source :src="finalMediaUrl" type="audio/mpeg" />
-      متصفحك لا يدعم الصوت.
+      <source :src="finalMediaUrl3" type="audio/mpeg" />
     </audio>
   </div>
 </div>
-            <h1 class="text-xl font-bold mb-4 text-black"> {{ $t("scanToShowQR") }}</h1>
-   <img  :src="qrCodeData" alt="QR Code" class="w-48 h-48 " />
-      </div>
+<!-- ✅ بعدين الـ QR Code (لو موجود) -->
+<div v-if="qrCodeData" class="flex flex-col items-center justify-center">
+  <h1 class="text-xl font-bold mb-4 text-black">{{ $t("scanToShowQR") }}</h1>
+  <img :src="qrCodeData" alt="QR Code" class="w-48 h-48" />
+</div>
+<!-- ✅ fallback لو مافيش صورة -->
+<div
+  v-else-if="showDefaultImage"
+  class="text-gray-600 bg-gray-100 p-4 rounded-lg font-semibold flex flex-col items-center justify-center"
+>
+  سؤال غير صالح لا يوجد به صورة
+  <img :src="defulteImg" alt="QR Code" class="w-48 h-48 text-center" />
+</div>
   <div
     v-else-if="showDefaultImage"
     class="text-gray-600 bg-gray-100 p-4 rounded-lg font-semibold flex flex-col items-center justify-center"
@@ -828,277 +836,43 @@ v-if="showModal2"
 <!-- ---------- -->
 </template>
 <script setup>
-/* -------------------- 1. الإستيراد -------------------- */
-import { ref, onMounted ,watch ,computed } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-// import data from './sports-category.json';
 import playIcon from '../../../assets/imgs/play.png';
-import defulteImg from '/no-media.png'
+import defulteImg from '/no-media.png';
 import scan from '../../../assets/imgs/scan.png';
 import pauseIcon from '../../../assets/imgs/pause.svg';
 import bg from '../../../assets/imgs/splash.png';
 import placeholderImg from '../../../assets/imgs/upload.png';
-import { useToast } from "vue-toastification"
+import { useToast } from "vue-toastification";
 import DrowBoard from '../../../components/DrowBoard.vue';
 import { getCategoryById } from '../../../services/categoryService';
 import { useI18n } from 'vue-i18n';
-const { locale } = useI18n()
-const showHelp = ref(false)
 import QRCode from 'qrcode';
-const qrCodeData = ref('');
-onMounted(async () => {
-  // const imageUrl = 'https://game-wise.smartleadtech.com/images/questions/1757344336.jpg';
-  try {
-    qrCodeData.value = await QRCode.toDataURL(imageUrl);
-  } catch (err) {
-    console.error('خطأ في توليد QR code:', err);
-  }
-});
-const disableValidationBtn = ref(false);
-/* ----------------  Round 3 ----------------------  */
-const changer = ref(false);
-// بيانات الفريقين
-const team1Inputs = ref(Array(12).fill(''));
-const team2Inputs = ref(Array(12).fill(''));
-const pointsSteps = [60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10, 5,0];
-const switchCount = ref(0);
-const currentTeamIndex = ref(1); // الفريق الحالي (1 أو 2)
-const showTimor = ref(false);
-const timor = ref(15);
-const currentPoints = ref(60); // مهم جدا
-let timerInterval = null;
-// دالة بدء المؤقت
-const startTimor = (points) => {
-  showTimor.value = true;
-  currentPoints.value = points;
-  timor.value = 15;
-  clearInterval(timerInterval);
-  timerInterval = setInterval(() => {
-    if (timor.value > 0 && currentPoints.value > 0) {
-      timor.value--;
-    } else {
-      clearInterval(timerInterval);
-      if (currentPoints.value <= 0) {
-        // ✅ أنهِ السؤال فورًا مع عرض الميديا
-        endQuestion3(currentQuestion3.value); // ✅
-      } else {
-        switchTeam();
-        endor3 = false;
-      }
-    }
-  }, 1000);
-};
-// إرسال الفريق الأول
-const submitTeam1 = () => {
-  startTimor(currentPoints.value);
-};
-const submitTeam2 = () => {
-  startTimor(currentPoints.value);
-};
-const finalMediaType3 = ref('');
-const finalMediaUrl3 = ref('');
-const showFinalMedia3 = ref(false);
-// دالة لإنهاء السؤال وإعادة كل شيء للديفولت
-const endQuestion3 = async (question = null) => {
-  timor.value = 15;
-  showTimor.value = false;
-  switchCount.value = 0;
-  team1Inputs.value = Array(12).fill('');
-  team2Inputs.value = Array(12).fill('');
-  currentPoints.value = pointsSteps[0];
-  isReady3.value = false;
-  showAnswer3.value = false;
-  questionRevealed3.value = false;
-  // ✅ عرض الميديا مباشرة من السؤال (إن وُجد)
-  if (question) {
-    let mediaType = null;
-    let mediaUrl = null;
-    if (question.question_image) {
-      mediaType = 'image';
-      mediaUrl = getMediaUrl(question);
-    } else if (question.question_video) {
-      mediaType = 'video';
-      mediaUrl = getMediaUrl(question);
-    } else if (question.question_audio) {
-      mediaType = 'audio';
-      mediaUrl = getMediaUrl(question);
-    }
-    if (mediaType && mediaUrl) {
-      finalMediaType3.value = mediaType;
-      finalMediaUrl3.value = mediaUrl;
-      showFinalMedia3.value = true;
-    } else {
-      showFinalMedia3.value = false;
-    }
-  } else {
-    showFinalMedia3.value = false;
-  }
-  toast.info('انتهى السؤال');
-  setTimeout(() => {
-    showModal2.value = false;
-    showFinalMedia3.value = false;
-    finalMediaType3.value = '';
-    finalMediaUrl3.value = '';
-  }, 3000);
-};
-// متغيرات جديدة
-const serverImage = ref(''); // رابط الصورة من السيرفر
-const showServerImage = ref(false); // هل نعرض الصورة قبل غلق المودال؟
-// تعديل switchTeam لتتحقق من النقاط
-const switchTeam = () => {
-  switchCount.value++;
-  if (switchCount.value >= pointsSteps.length - 1 || currentPoints.value <= 0) {
-     endQuestion3(currentQuestion3.value);
-     endor3 = false;
-    return;
-  }
-  currentPoints.value = pointsSteps[switchCount.value];
-  currentTeamIndex.value = currentTeamIndex.value === 1 ? 2 : 1;
-  timor.value = 15;
-  showTimor.value = false;
-};
-const currentQuestion3 = ref(null);
-const questionsRound3 = ref([]);
-const qrCodes = ref({}); // { [questionId]: qrCodeData }
-const answeredQuestionsRound3 = ref([]);
-const questionRevealed3 = ref(false);
-const showModal2 = ref(false);
-const isReady3 = ref(false);
-const awaitingValidation3 = ref(false);
-const showAnswer3 = ref(false);
-const selectQuestion3 = async (question) => {
-  if (!answeredQuestionsRound3.value.includes(question.id)) {
-    answeredQuestionsRound3.value.push(question.id);
-    currentQuestion3.value = question;
-    questionRevealed3.value = false;
-    isReady3.value = false;
-    awaitingValidation3.value = false;
-    showAnswer3.value = false;
-    showTimor.value = false;
-    timor.value = 15;
-    currentPoints.value = pointsSteps[0];
-    team1Inputs.value = Array(12).fill('');
-    team2Inputs.value = Array(12).fill('');
-    switchCount.value = 0;
-    showModal2.value = true;
-    // ✅ فحص هل فيه أي وسائط (صورة / فيديو / صوت)
-    const hasMedia =
-      question.question_image ||
-      question.question_video ||
-      question.question_audio;
-    try {
-      if (hasMedia) {
-        const mediaUrl = getMediaUrl(question);
-        qrCodeData.value = await QRCode.toDataURL(mediaUrl);
-        showDefaultImage.value = false;
-      } else {
-        qrCodeData.value = null;
-        showDefaultImage.value = true;
-      }
-    } catch (err) {
-      console.error('خطأ في توليد QR code:', err);
-      qrCodeData.value = null;
-      showDefaultImage.value = true;
-    }
-  }
-};
-const handleReady3 = () => {
-  isReady3.value = true;
-};
-const handleReveal3 = () => {
-  showAnswer3.value = true;
-  awaitingValidation3.value = false;
-};
-const markCorrect = () => {
-  if (!currentQuestion3.value) return;
-  const points = currentPoints.value || 0;
-  // إضافة النقاط للفريق الحالي
-  if (currentTeamIndex.value === 1) {
-    score1.value += points;
-  } else {
-    score2.value += points;
-  }
-  toast.success(`تم إضافة ${points} نقطة للفريق ${currentTeamIndex.value === 1 ? team1Name.value : team2Name.value}`);
-  // أعد ضبط القيم قبل تبديل الفريق
-  timor.value = 15;
-  showTimor.value = false;
-  switchCount.value = 0;
-  team1Inputs.value = Array(12).fill('');
-  team2Inputs.value = Array(12).fill('');
-  currentPoints.value = pointsSteps[0];
-  isReady3.value = false;
-  showAnswer3.value = false;
-  questionRevealed3.value = false;
-  // بدل الفريق تلقائيًا
-  currentTeamIndex.value = currentTeamIndex.value === 1 ? 2 : 1;
-  // ابقي المودال مفتوحًا للفريق التالي
-  showModal2.value = false;
-};
-/*  -------------------- Round 3 ------------------------- */
-const toast = useToast()
-const selectedRound = ref(1);
-/* -------------------- 2. التوجيه (Router + Params) -------------------- */
+import { getCategoryQuestions } from '../../../services/categoryServicee';
+const { locale } = useI18n();
+const toast = useToast();
 const route = useRoute();
 const router = useRouter();
+const showHelp = ref(false);
+const qrCodeData = ref('');
+const disableValidationBtn = ref(false);
+const selectedRound = ref(1);
 const categories = route.query.categories?.split(',').map(Number) || [];
 const players1 = Number(route.query.players1) || 2;
 const players2 = Number(route.query.players2) || 2;
-/* -------------------- 3. الفرق والنقاط -------------------- */
 const currentTeam = ref(1);
 const score1 = ref(0);
 const score2 = ref(0);
-// ✅ أسماء الفرق من localStorage
-const team1Name = ref(localStorage.getItem("team1Name") || "الفريق الأول")
-const team2Name = ref(localStorage.getItem("team2Name") || "الفريق الثاني")
-const toggleTeam = () => {
-  currentTeam.value = currentTeam.value === 1 ? 2 : 1;
-};
-const increaseScore1 = () => score1.value += 10;
-const decreaseScore1 = () => score1.value = Math.max(0, score1.value - 10);
-const increaseScore2 = () => score2.value += 10;
-const decreaseScore2 = () => score2.value = Math.max(0, score2.value - 10);
-/* -------------------- 4. الأسئلة -------------------- */
+const team1Name = ref(localStorage.getItem("team1Name") || "الفريق الأول");
+const team2Name = ref(localStorage.getItem("team2Name") || "الفريق الثاني");
 const questions = ref([]);
 const questionsRound2 = ref([]);
+const questionsRound3 = ref([]);
 const answeredQuestions = ref([]);
 const answeredQuestionsRound2 = ref([]);
-import { getCategoryQuestions } from '../../../services/categoryServicee';
-const loadQuestions = async (categoryId, currentLang) => {
-  try {
-    // ✅ جلب الأسئلة من API حسب ID
-    const res = await getCategoryQuestions(categoryId);
-    // ✅ تجهيز البيانات بنفس البنية السابقة
-    const all =
-      (res?.data || res)?.map((q) => ({
-        id: q.id,
-        title: q.title,
-        question_text: q.question_text,
-        question_image: q.question_image,
-        question_video: q.question_video,
-        question_audio: q.question_audio,
-        correct_answer: q.correct_answer,
-        points: q.points,
-      })) || [];
-    if (!all.length) {
-      console.warn(`⚠️ No questions found for category ID: ${categoryId}`);
-      return;
-    }
-    // ✅ تقسيم الأسئلة حسب الجولات
-    const total = all.length;
-    questions.value = all.slice(0, Math.min(8, total)); // الجولة 1
-    questionsRound2.value = all.slice(8, Math.min(16, total)); // الجولة 2
-    // ✅ الجولة 3 (بحد أقصى 6 أسئلة فقط)
-    const remaining = all.slice(16);
-    questionsRound3.value = remaining.slice(0, Math.min(6, remaining.length));
-    console.log(
-      `✅ Loaded ${all.length} questions for Category ID ${categoryId} | Round3: ${questionsRound3.value.length}`
-    );
-  } catch (error) {
-    console.error("❌ Error loading questions from API:", error);
-  }
-};
-/*------------------------------------------*/
-/* -------------------- 5. عرض السؤال والإجابة -------------------- */
+const answeredQuestionsRound3 = ref([]);
+const currentLang = ref('ar');
 const showModal = ref(false);
 const currentQuestion = ref(null);
 const showAnswer = ref(false);
@@ -1107,7 +881,231 @@ const selectedQuestion = ref(null);
 const selectedColumn = ref(null);
 const doublePoints = ref(false);
 const blockPoints = ref(false);
-const currentLang = ref('ar');
+const questionRevealed = ref(false);
+const isReady = ref(false);
+const awaitingValidation = ref(false);
+const isTransferred = ref(false);
+const showTransferNotice = ref(false);
+const serverImageRound1 = ref('');
+const showServerImageRound1 = ref(false);
+const finalMediaType = ref('');
+const finalMediaUrl = ref('');
+const showFinalMedia = ref(false);
+const showDefaultImage = ref(false);
+const defaultImage = '/imgs/no-media.png';
+const timer = ref(60);
+const isPaused = ref(false);
+let countdownInterval = null;
+const showDrawingBoard = ref(false);
+const endor = ref(true);
+function startTimer() {
+  if (countdownInterval) clearInterval(countdownInterval);
+  timer.value = 60;
+  isPaused.value = false;
+  countdownInterval = setInterval(() => {
+    if (!isPaused.value && timer.value > 0) {
+      timer.value--;
+    }
+    if (timer.value === 0) {
+      clearInterval(countdownInterval);
+      revealAnswer();
+    }
+  }, 1000);
+}
+function togglePause() {
+  isPaused.value = !isPaused.value;
+  if (!isPaused.value && timer.value > 0) {
+    countdownInterval = setInterval(() => {
+      if (!isPaused.value && timer.value > 0) {
+        timer.value--;
+      }
+      if (timer.value === 0) {
+        clearInterval(countdownInterval);
+        revealAnswer();
+      }
+    }, 1000);
+  } else {
+    clearInterval(countdownInterval);
+  }
+}
+function formatTime(seconds) {
+  const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+  const secs = String(seconds % 60).padStart(2, '0');
+  return `${mins}:${secs}`;
+}
+function revealAnswer() {
+  showAnswer.value = true;
+  answerResult.value = null;
+  clearInterval(countdownInterval);
+}
+function resetModalState() {
+  awaitingValidation.value = false;
+  showAnswer.value = false;
+  isPaused.value = true;
+  timer.value = 0;
+  isTransferred.value = false;
+  showTransferNotice.value = false;
+  showFinalMedia.value = false;
+  finalMediaType.value = '';
+  finalMediaUrl.value = '';
+  clearInterval(countdownInterval);
+}
+function toggleTeam() {
+  currentTeam.value = currentTeam.value === 1 ? 2 : 1;
+}
+function increaseScore1() { score1.value += 10; }
+function decreaseScore1() { score1.value = Math.max(0, score1.value - 10); }
+function increaseScore2() { score2.value += 10; }
+function decreaseScore2() { score2.value = Math.max(0, score2.value - 10); }
+function goTo(path, message) {
+  if (confirm(message)) {
+    router.push(path);
+  }
+}
+function goToWinGame() {
+  if (confirm("هل أنت متأكد من إنهاء اللعبة؟")) {
+    router.push({
+      path: '/WinGame',
+      query: { score1: score1.value, score2: score2.value }
+    });
+  }
+}
+async function loadQuestions(categoryId, currentLangParam) {
+  try {
+    const res = await getCategoryQuestions(categoryId);
+    const all = (res?.data || res)?.map((q) => ({
+      id: q.id,
+      title: q.title,
+      question_text: q.question_text,
+      question_image: q.question_image,
+      question_video: q.question_video,
+      question_audio: q.question_audio,
+      correct_answer: q.correct_answer,
+      points: q.points,
+    })) || [];
+    if (!all.length) {
+      console.warn(`⚠️ No questions found for category ID: ${categoryId}`);
+      return;
+    }
+    const total = all.length;
+    questions.value = all.slice(0, Math.min(8, total));
+    questionsRound2.value = all.slice(8, Math.min(16, total));
+    const remaining = all.slice(16);
+    questionsRound3.value = remaining.slice(0, Math.min(6, remaining.length));
+    console.log(`✅ Loaded ${all.length} questions for Category ID ${categoryId} | Round3: ${questionsRound3.value.length}`);
+  } catch (error) {
+    console.error("❌ Error loading questions from API:", error);
+  }
+}
+function confirmAnswer(isCorrect) {
+  answeredQuestions.value.push(currentQuestion.value.id);
+  showModal.value = false;
+  showAnswer.value = false;
+  let pointsToAdd = 0;
+  if (isCorrect) {
+    pointsToAdd = currentQuestion.value.points || 0;
+    if (blockPoints.value) pointsToAdd = 0;
+    else if (doublePoints.value) pointsToAdd *= 2;
+  }
+  if (currentTeam.value === 1) score1.value += pointsToAdd;
+  else score2.value += pointsToAdd;
+  answerResult.value = isCorrect ? "correct" : "wrong";
+  toggleTeam();
+}
+async function validateAnswer(isCorrect) {
+  disableValidationBtn.value = true;
+  setTimeout(() => {
+    disableValidationBtn.value = false;
+  }, 3000);
+  if (isCorrect) {
+    if (isTransferred.value) {
+      if (currentTeam.value === 1) score1.value += 15;
+      else score2.value += 15;
+    } else {
+      const points = selectedRound.value === 1 ? timer.value : (currentQuestion.value?.points || 0);
+      if (currentTeam.value === 1) score1.value += points;
+      else score2.value += points;
+    }
+    answeredQuestions.value.push(currentQuestion.value.id);
+    resetModalState();
+    toggleTeam();
+    showModal.value = false;
+  } else {
+    if (!isTransferred.value) {
+      isTransferred.value = true;
+      currentTeam.value = currentTeam.value === 1 ? 2 : 1;
+      toast.info("تم نقل السؤال للفريق الآخر ✅", { timeout: 3000 });
+      showTransferNotice.value = true;
+      setTimeout(() => showTransferNotice.value = false, 3000);
+    } else {
+      isTransferred.value = false;
+      endor.value = false;
+      const question = currentQuestion.value;
+      let mediaType = null;
+      let mediaUrl = null;
+      showDrawingBoard.value = false;
+      if (question.question_image) {
+        mediaType = 'image';
+        mediaUrl = getMediaUrl(question);
+      } else if (question.question_video) {
+        mediaType = 'video';
+        mediaUrl = getMediaUrl(question);
+      } else if (question.question_audio) {
+        mediaType = 'audio';
+        mediaUrl = getMediaUrl(question);
+      }
+      if (mediaType && mediaUrl) {
+        finalMediaType.value = mediaType;
+        finalMediaUrl.value = mediaUrl;
+        showFinalMedia.value = true;
+      } else {
+        showFinalMedia.value = false;
+      }
+      answeredQuestions.value.push(question.id);
+      toast.info('انتهى السؤال');
+      setTimeout(() => {
+        resetModalState();
+        showModal.value = false;
+        currentTeam.value = currentTeam.value === 1 ? 2 : 1;
+        toggleTeam();
+      }, 3000);
+    }
+  }
+}
+function resetQuestionState() {
+  clearInterval(countdownInterval);
+  timer.value = 60;
+  isPaused.value = false;
+  showModal.value = false;
+  showAnswer.value = false;
+  awaitingValidation.value = false;
+  isTransferred.value = false;
+  showTransferNotice.value = false;
+  questionRevealed.value = false;
+  isReady.value = false;
+  showDefaultImage.value = false;
+  qrCodeData.value = null;
+  currentTeamIndex.value = 1;
+  timor.value = 15;
+  showTimor.value = false;
+  switchCount.value = 0;
+  currentPoints.value = pointsSteps[0];
+  showModal2.value = false;
+  isReady3.value = false;
+  showAnswer3.value = false;
+  questionRevealed3.value = false;
+  showServerImage.value = false;
+}
+function getMediaUrl(question) {
+  const baseUrl = 'https://game-wise.smartleadtech.com/';
+  if (question.question_image) return baseUrl + question.question_image;
+  if (question.question_video) return baseUrl + question.question_video;
+  if (question.question_audio) return baseUrl + question.question_audio;
+  return null;
+}
+/* Round 1 + Round 2 variables and functions grouped together */
+const currentTeamIndex = ref(1);
+const isReadyLocal = ref(false);
 const selectQuestion = async (question, column) => {
   endor.value = true;
   const hasMedia =
@@ -1123,7 +1121,6 @@ const selectQuestion = async (question, column) => {
       doublePoints.value = false;
       blockPoints.value = false;
       questionRevealed.value = false;
-      // ✅ فحص إذا فيه وسائط (صورة / فيديو / صوت)
       if (hasMedia) {
         try {
           const mediaUrl = getMediaUrl(question);
@@ -1149,7 +1146,6 @@ const selectQuestion = async (question, column) => {
       doublePoints.value = false;
       blockPoints.value = false;
       questionRevealed.value = false;
-      // ✅ نفس الفكرة للجولة الثانية
       if (hasMedia) {
         try {
           const mediaUrl = getMediaUrl(question);
@@ -1167,236 +1163,222 @@ const selectQuestion = async (question, column) => {
     }
   }
 };
-/*---------------------- أول م يدوس جاهز يبدا المؤفت ------------------------------- */
-const questionRevealed = ref(false);
-const isReady = ref(false);
-const handleReady = () => {
+function handleReady() {
   isReady.value = true;
   startTimer();
-};
-const handleReveal = () => {
+}
+function handleReveal() {
   clearInterval(countdownInterval);
   isPaused.value = true;
   revealAnswer();
   isReady.value = false;
   awaitingValidation.value = true;
-};
-const isTransferred = ref(false)
-const showTransferNotice = ref(false);
-// إضافة متغيرات عرض صورة للسؤال عند النهاية (جولة 1)
-const serverImageRound1 = ref('');
-const showServerImageRound1 = ref(false);
-const finalMediaType = ref(''); // 'image' | 'video' | 'audio'
-const finalMediaUrl = ref('');
-const showFinalMedia = ref(false);
-const endor = ref(true);
-const endor3 =ref(true);
-const validateAnswer = async (isCorrect) => {
-  disableValidationBtn.value = true;
-  setTimeout(() => {
-    disableValidationBtn.value = false;
-  }, 3000);
-  if (isCorrect) {
-    if (isTransferred.value) {
-      // الفريق الثاني أجاب صحيحًا بعد النقل → 15 نقطة
-      if (currentTeam.value === 1) score1.value += 15;
-      else score2.value += 15;
+}
+function handleReadyLocal() {
+  isReadyLocal.value = true;
+}
+/* Round 3 variables and functions grouped together */
+const changer = ref(false);
+const team1Inputs = ref(Array(12).fill(''));
+const team2Inputs = ref(Array(12).fill(''));
+const pointsSteps = [10, 5,0];
+const switchCount = ref(0);
+const showTimor = ref(false);
+const timor = ref(15);
+const currentPoints = ref(60);
+let timerInterval = null;
+const finalMediaType3 = ref('');
+const finalMediaUrl3 = ref('');
+const showFinalMedia3 = ref(false);
+const currentQuestion3 = ref(null);
+const qrCodes = ref({});
+const questionRevealed3 = ref(false);
+const showModal2 = ref(false);
+const isReady3 = ref(false);
+const awaitingValidation3 = ref(false);
+const showAnswer3 = ref(false);
+const serverImage = ref('');
+const showServerImage = ref(false);
+const showEndGameModal = ref(false);
+const round3Completed = ref(true);
+const isReadyFlag = ref(false);
+const endor3 = ref(true);
+function startTimor(points) {
+  showTimor.value = true;
+  currentPoints.value = points;
+  timor.value = 15;
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    if (timor.value > 0 && currentPoints.value > 0) {
+      timor.value--;
     } else {
-      // الفريق الأساسي أجاب صحيحًا → يأخذ الوقت المتبقي
-      const points = selectedRound.value === 1 ? timer.value : (currentQuestion.value?.points || 0);
-      if (currentTeam.value === 1) score1.value += points;
-      else score2.value += points;
-    }
-    // إنهاء السؤال بنجاح
-    answeredQuestions.value.push(currentQuestion.value.id);
-    resetModalState();
-    toggleTeam();
-    showModal.value = false;
-  } else {
-    if (!isTransferred.value) {
-      // الفريق الأول أجاب غلط → ننقل للفريق الثاني
-      isTransferred.value = true;
-      currentTeam.value = currentTeam.value === 1 ? 2 : 1;
-      toast.info("تم نقل السؤال للفريق الآخر ✅", { timeout: 3000 });
-      showTransferNotice.value = true;
-      setTimeout(() => showTransferNotice.value = false, 3000);
-    } else {
-      // الفريق الثاني أجاب غلط أيضًا → ننهي السؤال ونعرض الميديا مباشرة
-      isTransferred.value = false;
-      endor.value = false;
-      const question = currentQuestion.value;
-      // ✅ تحديد نوع الميديا وعرضها مباشرة
-      let mediaType = null;
-      let mediaUrl = null;
-      showDrawingBoard.value = false;
-      if (question.question_image) {
-        mediaType = 'image';
-        mediaUrl = getMediaUrl(question);
-      } else if (question.question_video) {
-        mediaType = 'video';
-        mediaUrl = getMediaUrl(question);
-      } else if (question.question_audio) {
-        mediaType = 'audio';
-        mediaUrl = getMediaUrl(question);
-      }
-      // عرض الميديا مباشرة في المودال (بدون QR)
-      if (mediaType && mediaUrl) {
-        // نخزن النوع والرابط لعرضهما في الـ template
-        finalMediaType.value = mediaType;
-        finalMediaUrl.value = mediaUrl;
-        showFinalMedia.value = true;
+      clearInterval(timerInterval);
+      if (currentPoints.value <= 0) {
+        endQuestion3(currentQuestion3.value);
       } else {
-        showFinalMedia.value = false;
+        switchTeam();
+        endor3 = false;
       }
-      // تسجيل السؤال كـ "منتهي"
-      answeredQuestions.value.push(question.id);
-      toast.info('انتهى السؤال');
-      // إغلاق المودال بعد 3 ثوانٍ
-      setTimeout(() => {
-        resetModalState();
-        showModal.value = false;
-        // تبديل الدور للفريق التالي
-        currentTeam.value = currentTeam.value === 1 ? 2 : 1;
-        toggleTeam();
-      }, 3000);
-    }
-  }
-};
-const resetModalState = () => {
-  awaitingValidation.value = false;
-  showAnswer.value = false;
-  isPaused.value = true;
-  timer.value = 0;
-  isTransferred.value = false;
-  showTransferNotice.value = false;
-  showFinalMedia.value = false;
-  finalMediaType.value = '';
-  finalMediaUrl.value = '';
-  clearInterval(countdownInterval);
-};
-/* ---------------------------------------------- */
-const awaitingValidation = ref(false);
-/*----------------------------------------------------- */
-/* -------------------- 7. الميديا -------------------- */
-const defaultImage = '/imgs/no-media.png'; // داخل مجلد public
-const showDefaultImage = ref(false);
-const getMediaUrl = (question) => {
-  const baseUrl = 'https://game-wise.smartleadtech.com/';
-  if (question.question_image) return baseUrl + question.question_image;
-  if (question.question_video) return baseUrl + question.question_video;
-  if (question.question_audio) return baseUrl + question.question_audio;
-  return null; // مفيش ميديا
-};
-const revealAnswer = () => {
-  showAnswer.value = true;
-  answerResult.value = null;
-  clearInterval(countdownInterval);
-};
-const confirmAnswer = (isCorrect) => {
-      answeredQuestions.value.push(currentQuestion.value.id);
-    showModal.value = false;
-    showAnswer.value = false;
-    let pointsToAdd = 0;
-    if (isCorrect) {
-      pointsToAdd = currentQuestion.value.points || 0;
-      if (blockPoints.value) pointsToAdd = 0;
-      else if (doublePoints.value) pointsToAdd *= 2;
-    }
-    if (currentTeam.value === 1) score1.value += pointsToAdd;
-    else score2.value += pointsToAdd;
-    answerResult.value = isCorrect ? "correct" : "wrong";
-    toggleTeam();
-};
-/* -------------------- 6. المؤقت -------------------- */
-const timer = ref(60);
-const isPaused = ref(false);
-let countdownInterval = null;
-const startTimer = () => {
-    if (countdownInterval) clearInterval(countdownInterval);
-    timer.value = 60;
-  isPaused.value = false;
-  countdownInterval = setInterval(() => {
-    if (!isPaused.value && timer.value > 0) {
-      timer.value--;
-    }
-    if (timer.value === 0) {
-      clearInterval(countdownInterval);
-      revealAnswer();
     }
   }, 1000);
-};
-const togglePause = () => {
-  isPaused.value = !isPaused.value;
-  if (!isPaused.value && timer.value > 0) {
-    countdownInterval = setInterval(() => {
-      if (!isPaused.value && timer.value > 0) {
-        timer.value--;
-      }
-      if (timer.value === 0) {
-        clearInterval(countdownInterval);
-        revealAnswer();
-      }
-    }, 1000);
-  } else {
-    clearInterval(countdownInterval);
-  }
-};
-const formatTime = (seconds) => {
-  const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-  const secs = String(seconds % 60).padStart(2, '0');
-  return `${mins}:${secs}`;
-};
-/* -------------------- 7. التنقل -------------------- */
-const goTo = (path, message) => {
-  if (confirm(message)) {
-    router.push(path);
-  }
-};
-const goToWinGame = () => {
-  if (confirm("هل أنت متأكد من إنهاء اللعبة؟")) {
-    router.push({
-      path: '/WinGame',
-      query: { score1: score1.value, score2: score2.value }
-    })
-  }
 }
-/* -------------------- 8. عند التحميل -------------------- */
-onMounted(() => {
-const team1Name = ref(localStorage.getItem("team1Name") || "الفريق الأول")
-const team2Name = ref(localStorage.getItem("team2Name") || "الفريق الثاني")
-});
-onMounted(() => {
-  const categoryId = categories[0] || 1; // الكاتيجوري الافتراضي أو من الـ query
-  loadQuestions(categoryId);
-});
-/* ----------------------------------------------- */
-const showDrawingBoard = ref(false)
-// نراقب isReady
-watch(isReady, (newVal, oldVal) => {
-  if (newVal === true) {
-    // أول مرة بس يبدأ، نفعّل اللوحة
-    showDrawingBoard.value = true
+function submitTeam1() {
+  startTimor(currentPoints.value);
+}
+function submitTeam2() {
+  startTimor(currentPoints.value);
+}
+function switchTeam() {
+  switchCount.value++;
+  if (switchCount.value >= pointsSteps.length - 1 || currentPoints.value <= 0) {
+    endQuestion3(currentQuestion3.value);
+    endor3 = false;
+    return;
   }
-})
-// نراقب إغلاق المودال
+  currentPoints.value = pointsSteps[switchCount.value];
+  currentTeamIndex.value = currentTeamIndex.value === 1 ? 2 : 1;
+  timor.value = 15;
+  showTimor.value = false;
+}
+async function endQuestion3(question = null) {
+  timor.value = 15;
+  showTimor.value = false;
+  switchCount.value = 0;
+  team1Inputs.value = Array(12).fill('');
+  team2Inputs.value = Array(12).fill('');
+  currentPoints.value = pointsSteps[0];
+  isReady3.value = false;
+  showAnswer3.value = false;
+  questionRevealed3.value = false;
+  if (question) {
+    let mediaType = null;
+    let mediaUrl = null;
+    if (question.question_image) {
+      mediaType = 'image';
+      mediaUrl = getMediaUrl(question);
+    } else if (question.question_video) {
+      mediaType = 'video';
+      mediaUrl = getMediaUrl(question);
+    } else if (question.question_audio) {
+      mediaType = 'audio';
+      mediaUrl = getMediaUrl(question);
+    }
+    if (mediaType && mediaUrl) {
+      finalMediaType3.value = mediaType;
+      finalMediaUrl3.value = mediaUrl;
+      showFinalMedia3.value = true;
+      console.log('endQuestion3 -> media will show:', mediaType, mediaUrl);
+    } else {
+      finalMediaType3.value = '';
+      finalMediaUrl3.value = '';
+      showFinalMedia3.value = false;
+      console.log('endQuestion3 -> no media for this question');
+    }
+  } else {
+    finalMediaType3.value = '';
+    finalMediaUrl3.value = '';
+    showFinalMedia3.value = false;
+  }
+  toast.info('انتهى السؤال');
+  setTimeout(() => {
+    showModal2.value = false;
+    showFinalMedia3.value = false;
+    finalMediaType3.value = '';
+    finalMediaUrl3.value = '';
+  }, 3000);
+}
+function handleReady3() {
+  isReady3.value = true;
+}
+function handleReveal3() {
+  showAnswer3.value = true;
+  awaitingValidation3.value = false;
+}
+function markCorrect() {
+  if (!currentQuestion3.value) return;
+  const points = currentPoints.value || 0;
+  if (currentTeamIndex.value === 1) {
+    score1.value += points;
+  } else {
+    score2.value += points;
+  }
+  toast.success(`تم إضافة ${points} نقطة للفريق ${currentTeamIndex.value === 1 ? team1Name.value : team2Name.value}`);
+  timor.value = 15;
+  showTimor.value = false;
+  switchCount.value = 0;
+  team1Inputs.value = Array(12).fill('');
+  team2Inputs.value = Array(12).fill('');
+  currentPoints.value = pointsSteps[0];
+  isReady3.value = false;
+  showAnswer3.value = false;
+  questionRevealed3.value = false;
+  currentTeamIndex.value = currentTeamIndex.value === 1 ? 2 : 1;
+  showModal2.value = false;
+}
+const selectQuestion3 = async (question) => {
+  if (!answeredQuestionsRound3.value.includes(question.id)) {
+    answeredQuestionsRound3.value.push(question.id);
+    currentQuestion3.value = question;
+    questionRevealed3.value = false;
+    isReady3.value = false;
+    awaitingValidation3.value = false;
+    showAnswer3.value = false;
+    showTimor.value = false;
+    timor.value = 15;
+    currentPoints.value = pointsSteps[0];
+    team1Inputs.value = Array(12).fill('');
+    team2Inputs.value = Array(12).fill('');
+    switchCount.value = 0;
+    showModal2.value = true;
+    const hasMedia =
+      question.question_image ||
+      question.question_video ||
+      question.question_audio;
+    try {
+      if (hasMedia) {
+        const mediaUrl = getMediaUrl(question);
+        finalMediaType3.value = question.question_image ? 'image' : (question.question_video ? 'video' : 'audio');
+        finalMediaUrl3.value = mediaUrl || '';
+        qrCodeData.value = await QRCode.toDataURL(mediaUrl);
+        showDefaultImage.value = false;
+      } else {
+        qrCodeData.value = null;
+        showDefaultImage.value = true;
+        finalMediaType3.value = '';
+        finalMediaUrl3.value = '';
+      }
+    } catch (err) {
+      console.error('خطأ في توليد QR code:', err);
+      qrCodeData.value = null;
+      showDefaultImage.value = true;
+      finalMediaType3.value = '';
+      finalMediaUrl3.value = '';
+    }
+  }
+};
+/* watchers and computed */
+watch(isReady, (newVal) => {
+  if (newVal === true) {
+    showDrawingBoard.value = true;
+  }
+});
 watch(showModal, (newVal) => {
   if (newVal === false) {
-    // لما المودال يتقفل نخفي اللوحة
-    showDrawingBoard.value = false
+    showDrawingBoard.value = false;
   }
-})
+});
 const round1Completed = computed(() => {
-  return answeredQuestions.value.length >= questions.value.length
-})
+  return answeredQuestions.value.length >= questions.value.length;
+});
 watch(round1Completed, (completed) => {
   if (completed) {
     toast.success("✅ أحسنت! الانتقال للجولة الثانية...", {
       timeout: 3000,
       position: "top-center",
-    })
-    selectedRound.value = 2
+    });
+    selectedRound.value = 2;
   }
-})
+});
 const round2Completed = computed(() => {
   return answeredQuestionsRound2.value.length >= questionsRound2.value.length;
 });
@@ -1408,47 +1390,31 @@ watch(round2Completed, (completed) => {
     });
   }
 });
-const round3Completed  = ref(true);
 watch(round1Completed, (val) => {
-  if (val) selectedRound.value = 2
-})
+  if (val) selectedRound.value = 2;
+});
 watch(round2Completed, (val) => {
-  if (val) selectedRound.value = 3
-})
+  if (val) selectedRound.value = 3;
+});
 watch(round3Completed, (val) => {
   if (val) {
-    showEndGameModal.value = true
+    showEndGameModal.value = true;
   }
-})
-const resetQuestionState = () => {
-  // المؤقت
-  clearInterval(countdownInterval);
-  timer.value = 60;
-  isPaused.value = false;
-  // متغيرات عرض السؤال
-  showModal.value = false;
-  showAnswer.value = false;
-  awaitingValidation.value = false;
-  isTransferred.value = false;
-  showTransferNotice.value = false;
-  questionRevealed.value = false;
-  isReady.value = false;
-  // الصورة
-  showDefaultImage.value = false;
-  qrCodeData.value = null;
-  // الفريق
-  currentTeamIndex.value = 1;
-  timor.value = 15;
-  showTimor.value = false;
-  switchCount.value = 0;
-  currentPoints.value = pointsSteps[0];
-  // الجولة الثالثة
-  showModal2.value = false;
-  isReady3.value = false;
-  showAnswer3.value = false;
-  questionRevealed3.value = false;
-  showServerImage.value = false;
-};
+});
+watch(isReady, (newVal, oldVal) => {
+  if (newVal === true) {
+    showDrawingBoard.value = true;
+  }
+});
+/* onMounted */
+onMounted(() => {
+  const categoryId = categories[0] || 1;
+  loadQuestions(categoryId);
+  const team1NameLocal = localStorage.getItem("team1Name") || "الفريق الأول";
+  const team2NameLocal = localStorage.getItem("team2Name") || "الفريق الثاني";
+  team1Name.value = team1NameLocal;
+  team2Name.value = team2NameLocal;
+});
 </script>
 <style scoped>
 /* .rouned {
