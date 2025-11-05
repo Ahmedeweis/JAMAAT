@@ -110,7 +110,7 @@
   <!-- ✅ مودال تأكيد حذف الحساب -->
   <div
     v-if="showDeleteModal"
-    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4"
+    class="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50 px-4"
   >
     <div
       class="bg-white p-4 sm:p-6 rounded-2xl shadow-xl w-full max-w-xs sm:max-w-md text-center space-y-4"
@@ -119,7 +119,7 @@
         {{ $t('confirmDeleteAccount') }}
       </h2>
       <p class="text-gray-700 text-sm sm:text-base">
-        ⚠️ {{ $t('areYouSureToDeleteAccount') }}
+         {{ $t('areYouSureToDeleteAccount') }}
       </p>
       <!-- تحذير الاشتراك -->
       <div

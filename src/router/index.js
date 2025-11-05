@@ -135,26 +135,6 @@ const routes = [
     name: "Game3Home",
     component: () => import("../views/Games/Game3/Game3Home.vue"),
   },
-  {
-    path: "/Game3HomeII",
-    name: "Game3HomeII",
-    component: () => import("../views/Games/Game3/Game3HomeII.vue"),
-  },
-  {
-    path: "/testo",
-    name: "testo",
-    component: () => import("../views/test/testo.vue"),
-  },
-  {
-    path: "/apitest",
-    name: "apitest",
-    component: () => import("../views/test/apitest.vue"),
-  },
-  {
-    path: "/AllCat",
-    name: "AllCat",
-    component: () => import("../views/AllCategoriesView.vue"),
-  },
 ];
 const router = createRouter({
   history: createWebHistory(),

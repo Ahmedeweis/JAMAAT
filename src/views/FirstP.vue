@@ -8,7 +8,7 @@
     مرحبًا بك في عالم <span class="text-[#E3614D] "  style=" font-family:'Andalus','Kufam', 'sans-serif'">جمعات</span>
   </h1>
   <p class="text-lg sm:text-xl mb-8 text-gray-300 max-w-2xl mx-auto z-10">
-    جرب المتعة والتحدي في لعبتين مشوّقتين 👾
+    جرب المتعة والتحدي في 3 ألعاب مشوقة 👾
   </p>
   <div class="flex flex-col sm:flex-row gap-4 z-10 relative">
     <router-link
