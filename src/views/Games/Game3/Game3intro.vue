@@ -96,7 +96,7 @@ const selectedCategories = ref([])
 // ✅ تحميل التصنيفات من API
 onMounted(async () => {
   try {
-    const res = await getCategories({}, currentLang)
+    const res = await getCategories({ game : 3}, currentLang)
     const data = res.data?.result?.data || res.data?.data || []
     categories.value = data.map(cat => {
       const imageSrc =
