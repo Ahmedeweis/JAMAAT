@@ -1181,7 +1181,7 @@ function handleReadyLocal() {
 const changer = ref(false);
 const team1Inputs = ref(Array(12).fill(''));
 const team2Inputs = ref(Array(12).fill(''));
-const pointsSteps = [10, 5,0];
+const pointsSteps = [60,55,50,45,40,35,30,25,20,15,10, 5,0];
 const switchCount = ref(0);
 const showTimor = ref(false);
 const timor = ref(15);
