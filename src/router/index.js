@@ -60,11 +60,11 @@ const routes = [
     name: "MakeGame",
     component: () => import("../views/Games/MakeGame.vue"),
   },
-  {
-    path: "/apitest",
-    name: "Apitest",
-    component: () => import("../views/test/apitest.vue"),
-  },
+  // {
+  //   path: "/apitest",
+  //   name: "Apitest",
+  //   component: () => import("../views/test/apitest.vue"),
+  // },
   {
     path: "/startgame",
     name: "StartGame",
