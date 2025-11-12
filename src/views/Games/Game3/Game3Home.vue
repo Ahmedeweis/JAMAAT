@@ -259,7 +259,7 @@ v-if="showModal2"
     </button>
   </div>
   <!-- لو السؤال اتكشف -->
-<div v-else class="p-6 flex flex-col items-centerrounded-lg  mb-6"  >
+<div v-else class=" flex flex-col items-centerrounded-lg  mb-6"  >
   <h2 class="text-2xl font-bold text-[#24054D] ">
     <!-- {{ currentQuestion3?.question_text || $t("noTitle") }} -->
   </h2>
@@ -284,7 +284,7 @@ v-if="showModal2"
     {{ $t('Ready') }}
   </button>
   <!-- زر أظهر الإجابة -->
-<div v-if="isReady3" class="flex flex-col gap-6 p-4 relative bg-gray-50 w-full rounded-lg">
+<div v-if="isReady3" class="flex flex-col gap-6  relative bg-gray-50 w-full rounded-lg">
   <!-- شريط المؤقت والنقاط -->
   <div
     v-if="showTimor"
@@ -306,13 +306,13 @@ v-if="showModal2"
     <div class="flex gap-2 sm:gap-4">
       <button
         @click="markCorrect"
-        class="bg-green-600 hover:bg-green-700  cursor-pointer text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
+        class="text-[13px] sm:text-base bg-green-600 hover:bg-green-700  cursor-pointer text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
       >
          {{ $t("RightAnswer") }}
       </button>
       <button
         @click="switchTeam"
-        class="bg-red-600 hover:bg-red-700 cursor-pointer text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
+        class="text-[13px] sm:text-base bg-red-600 hover:bg-red-700 cursor-pointer text-white font-semibold px-4 py-2 rounded-lg shadow-lg transition-transform transform hover:-translate-y-1"
       >
       {{ $t("teamTurn") }}
       </button>
