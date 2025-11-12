@@ -609,23 +609,29 @@ const skipQuestion = () => {
   display: flex;
   flex-direction: column;
   background: #F2FCE0;
-  padding: 10px;
+  padding: clamp(4px, 2vw, 10px);
   border-radius: 30px;
-  width: fit-content;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
   border: solid 4px #A3611F;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
 }
 .row {
   display: flex;
+  justify-content: center;
 }
 .cell {
-  width: clamp(40px, 10vw, 70px);
-  /* أصغر 40px، أكبر 70px، تتغير حسب الشاشة */
-  height: clamp(40px, 10vw, 70px);
+  width: clamp(38px, 10vw, 60px);
+  height: clamp(38px, 10vw, 60px);
   border-radius: 50%;
   background: #01004C;
-  margin: 4px;
-  /* قللت المسافة لتناسب الشاشات الصغيرة */
+  margin: clamp(2px, 1vw, 4px);
   cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.cell:hover {
+  transform: scale(1.05);
 }
 .cell.red {
   background: #66FD84;

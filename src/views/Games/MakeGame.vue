@@ -25,18 +25,18 @@
               </div>
             </div>
             <!-- إرشادات -->
-            <p class="text-lg text-black font-bold" >
+            <p class="text-lg text-black font-bold"  style="margin-bottom: 0;">
               {{ $t("chooseCategories") }}
             </p>
-            <div class="space-y-6 my-3" style="margin: 20px 10px; padding: 20px 0;">
+            <div class="space-y-6 my-3" >
               <!-- عرض حسب parent -->
-              <div v-for="parentName in parentCategories" :key="parentName" class="bg-white rounded-2xl p-4 ">
+              <div v-for="parentName in parentCategories" :key="parentName" class="bg-white rounded-2xl p-4 " style="margin-bottom: 0;">
                 <!-- عنوان التصنيف الأب -->
                 <h2 class="text-xl sm:text-2xl font-bold text-purple-700 mb-4"
                     :class="dir === 'rtl' ? 'text-right' : 'text-left'">
                   {{ parentName }}
                 </h2>
-                <div class="grid grid-cols-2 gap-1 sm:gap-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4">
                   <div v-for="category in categories.filter(c => (c.parent?.name || 'بدون تصنيف رئيسي') === parentName)"
                        :key="category.id"
                        @click="toggleCategory(category.id)"
