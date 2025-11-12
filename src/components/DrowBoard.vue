@@ -86,6 +86,10 @@
   @mousemove="draw"
   @mouseup="stopDrawing"
   @mouseleave="stopDrawing"
+  @touchstart="startTouchDrawing"
+  @touchmove="drawTouch"
+  @touchend="stopTouchDrawing"
+  @touchcancel="stopTouchDrawing"
 ></canvas>
     <!-- Toast -->
     <transition name="fade">
@@ -178,6 +182,36 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("resize", resizeCanvas)
 })
+// 🎯 دعم اللمس للموبايل
+const getTouchPos = (touchEvent) => {
+  const rect = canvas.value.getBoundingClientRect()
+  const touch = touchEvent.touches[0] || touchEvent.changedTouches[0]
+  return {
+    x: touch.clientX - rect.left,
+    y: touch.clientY - rect.top
+  }
+}
+const startTouchDrawing = (e) => {
+  e.preventDefault()
+  drawing.value = true
+  const pos = getTouchPos(e)
+  ctx.value.beginPath()
+  ctx.value.moveTo(pos.x, pos.y)
+}
+const drawTouch = (e) => {
+  if (!drawing.value) return
+  e.preventDefault()
+  const pos = getTouchPos(e)
+  ctx.value.strokeStyle = isErasing.value ? "#ffffff" : color.value
+  ctx.value.lineWidth = size.value
+  ctx.value.lineTo(pos.x, pos.y)
+  ctx.value.stroke()
+}
+const stopTouchDrawing = (e) => {
+  e.preventDefault()
+  drawing.value = false
+  ctx.value.closePath()
+}
 </script>
 <style scoped>
 /* سلايدر مخصص */
